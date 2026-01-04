@@ -1,4 +1,4 @@
-module github.com/odysseia-greek/alexandria/anaximander
+module github.com/odysseia-greek/alexandreia/anaximander
 
 go 1.25.5
 

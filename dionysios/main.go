@@ -11,7 +11,7 @@ import (
 
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/models"
-	"github.com/odysseia-greek/alexandria/dionysios/grammar"
+	"github.com/odysseia-greek/alexandreia/dionysios/grammar"
 )
 
 const standardPort = ":5000"
