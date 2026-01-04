@@ -8,7 +8,6 @@ require (
 	github.com/odysseia-greek/agora/plato v0.2.10
 	github.com/odysseia-greek/attike/aristophanes v0.6.3
 	github.com/odysseia-greek/delphi/aristides v0.0.1
-	github.com/odysseia-greek/olympia/aristarchos v0.0.15
 	github.com/stretchr/testify v1.11.1
 	google.golang.org/grpc v1.78.0
 	google.golang.org/protobuf v1.36.11

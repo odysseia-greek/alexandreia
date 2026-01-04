@@ -4,12 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/transform"
+	v1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
-	pbar "github.com/odysseia-greek/attike/aristophanes/proto"
-	pb "github.com/odysseia-greek/olympia/aristarchos/proto"
+	v1ar "github.com/odysseia-greek/attike/aristophanes/proto"
+
 	"io"
 	"strings"
 	"time"
@@ -19,17 +21,17 @@ const (
 	ROOTWORD = "rootWord"
 )
 
-func (a *AggregatorServiceImpl) Health(context.Context, *pb.HealthRequest) (*pb.HealthResponse, error) {
-	return &pb.HealthResponse{
+func (a *AggregatorServiceImpl) Health(context.Context, *v1.HealthRequest) (*v1.HealthResponse, error) {
+	return &v1.HealthResponse{
 		Health: true,
 	}, nil
 }
 
-func (a *AggregatorServiceImpl) CreateNewEntry(stream pb.Aristarchos_CreateNewEntryServer) error {
+func (a *AggregatorServiceImpl) CreateNewEntry(stream v1.Aristarchos_CreateNewEntryServer) error {
 	for {
 		in, err := stream.Recv()
 		if err == io.EOF {
-			return stream.SendAndClose(&pb.AggregatorStreamResponse{
+			return stream.SendAndClose(&v1.AggregatorStreamResponse{
 				Ack: "acknowledged",
 			})
 		}
@@ -41,7 +43,7 @@ func (a *AggregatorServiceImpl) CreateNewEntry(stream pb.Aristarchos_CreateNewEn
 	}
 }
 
-func (a *AggregatorServiceImpl) createOrUpdate(request *pb.AggregatorCreationRequest) {
+func (a *AggregatorServiceImpl) createOrUpdate(request *v1.AggregatorCreationRequest) {
 	startTime := time.Now()
 	splitID := strings.Split(request.TraceId, "+")
 
@@ -109,11 +111,11 @@ func (a *AggregatorServiceImpl) createOrUpdate(request *pb.AggregatorCreationReq
 				hits = response.Hits.Total.Value
 				took = response.Took
 			}
-			dataBaseSpan := &pbar.ParabasisRequest{
+			dataBaseSpan := &v1ar.ParabasisRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       spanID,
-				RequestType: &pbar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &pbar.DatabaseSpanRequest{
+				RequestType: &v1ar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &v1ar.DatabaseSpanRequest{
 					Action:   "search",
 					Query:    string(parsedQuery),
 					Hits:     hits,
@@ -227,12 +229,12 @@ func (a *AggregatorServiceImpl) createOrUpdate(request *pb.AggregatorCreationReq
 
 	if traceCall {
 		go func() {
-			parabasis := &pbar.ParabasisRequest{
+			parabasis := &v1ar.ParabasisRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       comedy.GenerateSpanID(),
-				RequestType: &pbar.ParabasisRequest_Span{
-					Span: &pbar.SpanRequest{
+				RequestType: &v1ar.ParabasisRequest_Span{
+					Span: &v1ar.SpanRequest{
 						Action: "CloseSpan",
 						Took:   fmt.Sprintf("%v", time.Since(startTime)),
 						Status: "updated document",
@@ -249,7 +251,7 @@ func (a *AggregatorServiceImpl) createOrUpdate(request *pb.AggregatorCreationReq
 	return
 }
 
-func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *pb.AggregatorRequest) (*pb.RootWordResponse, error) {
+func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *v1.AggregatorRequest) (*v1.RootWordResponse, error) {
 	startTime := time.Now()
 	requestID, ok := ctx.Value(config.DefaultTracingName).(string)
 	if !ok {
@@ -310,11 +312,11 @@ func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *pb.A
 				took = response.Took
 			}
 			parsedQuery, _ := json.Marshal(query)
-			dataBaseSpan := &pbar.ParabasisRequest{
+			dataBaseSpan := &v1ar.ParabasisRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       spanID,
-				RequestType: &pbar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &pbar.DatabaseSpanRequest{
+				RequestType: &v1ar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &v1ar.DatabaseSpanRequest{
 					Action:   "search",
 					Query:    string(parsedQuery),
 					Hits:     hits,
@@ -335,35 +337,35 @@ func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *pb.A
 		return nil, fmt.Errorf("no entry can be found")
 	}
 
-	var responsePB pb.RootWordResponse
+	var responsev1 v1.RootWordResponse
 	jsonHit, _ := json.Marshal(response.Hits.Hits[0].Source)
 	rootWord, _ := UnmarshalRootWordEntry(jsonHit)
 
-	responsePB.RootWord = rootWord.RootWord
-	responsePB.Translations = rootWord.Translations
-	responsePB.PartOfSpeech = mapCategoryToEnum(rootWord.PartOfSpeech)
+	responsev1.RootWord = rootWord.RootWord
+	responsev1.Translations = rootWord.Translations
+	responsev1.PartOfSpeech = mapCategoryToEnum(rootWord.PartOfSpeech)
 	for _, conj := range rootWord.Categories {
-		conjPB := &pb.GrammaticalCategory{}
+		conjv1 := &v1.GrammaticalCategory{}
 
 		for _, form := range conj.Forms {
-			formPB := &pb.GrammaticalForm{
+			formv1 := &v1.GrammaticalForm{
 				Word: form.Word,
 				Rule: form.Rule,
 			}
-			conjPB.Forms = append(conjPB.Forms, formPB)
+			conjv1.Forms = append(conjv1.Forms, formv1)
 		}
 
-		responsePB.Categories = append(responsePB.Categories, conjPB)
+		responsev1.Categories = append(responsev1.Categories, conjv1)
 	}
 
 	if traceCall {
 		go func() {
-			parabasis := &pbar.ParabasisRequest{
+			parabasis := &v1ar.ParabasisRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       comedy.GenerateSpanID(),
-				RequestType: &pbar.ParabasisRequest_Span{
-					Span: &pbar.SpanRequest{
+				RequestType: &v1ar.ParabasisRequest_Span{
+					Span: &v1ar.SpanRequest{
 						Action: "CloseSpan",
 						Took:   fmt.Sprintf("%v", time.Since(startTime)),
 					},
@@ -375,10 +377,10 @@ func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *pb.A
 		}()
 	}
 
-	return &responsePB, nil
+	return &responsev1, nil
 }
 
-func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request *pb.AggregatorRequest) (*pb.SearchWordResponse, error) {
+func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request *v1.AggregatorRequest) (*v1.SearchWordResponse, error) {
 	startTime := time.Now()
 	requestID, ok := ctx.Value(config.DefaultTracingName).(string)
 	if !ok {
@@ -423,11 +425,11 @@ func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request
 				took = response.Took
 			}
 
-			dataBaseSpan := &pbar.ParabasisRequest{
+			dataBaseSpan := &v1ar.ParabasisRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       spanID,
-				RequestType: &pbar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &pbar.DatabaseSpanRequest{
+				RequestType: &v1ar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &v1ar.DatabaseSpanRequest{
 					Action:   "search",
 					Query:    string(parsedQuery),
 					Hits:     hits,
@@ -442,24 +444,24 @@ func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request
 		}()
 	}
 
-	var responsePB pb.SearchWordResponse
+	var responsev1 v1.SearchWordResponse
 	jsonHit, _ := json.Marshal(response.Hits.Hits[0].Source)
 	rootWord, _ := UnmarshalRootWordEntry(jsonHit)
 
 	for _, conj := range rootWord.Categories {
 		for _, form := range conj.Forms {
-			responsePB.Word = append(responsePB.Word, form.Word)
+			responsev1.Word = append(responsev1.Word, form.Word)
 		}
 	}
 
 	if traceCall {
 		go func() {
-			parabasis := &pbar.ParabasisRequest{
+			parabasis := &v1ar.ParabasisRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       comedy.GenerateSpanID(),
-				RequestType: &pbar.ParabasisRequest_Span{
-					Span: &pbar.SpanRequest{
+				RequestType: &v1ar.ParabasisRequest_Span{
+					Span: &v1ar.SpanRequest{
 						Action: "CloseSpan",
 						Took:   fmt.Sprintf("%v", time.Since(startTime)),
 					},
@@ -471,10 +473,10 @@ func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request
 		}()
 	}
 
-	return &responsePB, nil
+	return &responsev1, nil
 }
 
-func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context, request *pb.AggregatorRequest) (*pb.FormsResponse, error) {
+func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context, request *v1.AggregatorRequest) (*v1.FormsResponse, error) {
 	startTime := time.Now()
 	requestID, ok := ctx.Value(config.DefaultTracingName).(string)
 	if !ok {
@@ -498,10 +500,10 @@ func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context,
 		spanID = splitID[1]
 	}
 
-	var responsePB pb.FormsResponse
-	responsePB.Word = request.RootWord
+	var responsev1 v1.FormsResponse
+	responsev1.Word = request.RootWord
 	parsedWord := transform.RemoveAccents(request.RootWord)
-	responsePB.UnaccentedWord = parsedWord
+	responsev1.UnaccentedWord = parsedWord
 
 	query := map[string]interface{}{
 		"query": map[string]interface{}{
@@ -539,11 +541,11 @@ func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context,
 				took = response.Took
 			}
 
-			dataBaseSpan := &pbar.ParabasisRequest{
+			dataBaseSpan := &v1ar.ParabasisRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       spanID,
-				RequestType: &pbar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &pbar.DatabaseSpanRequest{
+				RequestType: &v1ar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &v1ar.DatabaseSpanRequest{
 					Action:   "search",
 					Query:    string(parsedQuery),
 					Hits:     hits,
@@ -563,31 +565,31 @@ func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context,
 	logging.Debug(fmt.Sprintf("only taken the first hit: %s", string(jsonHit)))
 	rootEntry, _ := UnmarshalRootWordEntry(jsonHit)
 
-	responsePB.RootWord = rootEntry.RootWord
-	responsePB.Translation = rootEntry.Translations
-	responsePB.PartOfSpeech = rootEntry.PartOfSpeech
+	responsev1.RootWord = rootEntry.RootWord
+	responsev1.Translation = rootEntry.Translations
+	responsev1.PartOfSpeech = rootEntry.PartOfSpeech
 	for _, variant := range rootEntry.Variants {
-		responsePB.Variants = append(responsePB.Variants, variant.SearchTerm)
+		responsev1.Variants = append(responsev1.Variants, variant.SearchTerm)
 	}
 
 	for _, conj := range rootEntry.Categories {
 		for _, form := range conj.Forms {
 			wordFormForm := transform.RemoveAccents(form.Word)
 			if wordFormForm == parsedWord {
-				responsePB.Rule = form.Rule
-				responsePB.Word = form.Word
+				responsev1.Rule = form.Rule
+				responsev1.Word = form.Word
 			}
 		}
 	}
 
 	if traceCall {
 		go func() {
-			parabasis := &pbar.ParabasisRequest{
+			parabasis := &v1ar.ParabasisRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       comedy.GenerateSpanID(),
-				RequestType: &pbar.ParabasisRequest_Span{
-					Span: &pbar.SpanRequest{
+				RequestType: &v1ar.ParabasisRequest_Span{
+					Span: &v1ar.SpanRequest{
 						Action: "CloseSpan",
 						Took:   fmt.Sprintf("%v", time.Since(startTime)),
 					},
@@ -599,10 +601,10 @@ func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context,
 		}()
 	}
 
-	return &responsePB, nil
+	return &responsev1, nil
 }
 
-func (a *AggregatorServiceImpl) mapAndHandleGrammaticalCategories(request *pb.AggregatorCreationRequest) (*RootWordEntry, error) {
+func (a *AggregatorServiceImpl) mapAndHandleGrammaticalCategories(request *v1.AggregatorCreationRequest) (*RootWordEntry, error) {
 	// example: 3th sing - impf - ind - act
 	// example: 1st plur - aor - ind - act
 	// example: noun - plural - masc - nom
@@ -628,50 +630,50 @@ func (a *AggregatorServiceImpl) mapAndHandleGrammaticalCategories(request *pb.Ag
 	return &entry, nil
 }
 
-func mapCategoryToEnum(category string) pb.PartOfSpeech {
+func mapCategoryToEnum(category string) v1.PartOfSpeech {
 	switch category {
 	case "verb":
-		return pb.PartOfSpeech_VERB
+		return v1.PartOfSpeech_VERB
 	case "noun":
-		return pb.PartOfSpeech_NOUN
+		return v1.PartOfSpeech_NOUN
 	case "participle":
-		return pb.PartOfSpeech_PARTICIPLE
+		return v1.PartOfSpeech_PARTICIPLE
 	case "preposition":
-		return pb.PartOfSpeech_PREPOSITION
+		return v1.PartOfSpeech_PREPOSITION
 	case "adverb":
-		return pb.PartOfSpeech_ADVERB
+		return v1.PartOfSpeech_ADVERB
 	case "article":
-		return pb.PartOfSpeech_ARTICLE
+		return v1.PartOfSpeech_ARTICLE
 	case "conjunction":
-		return pb.PartOfSpeech_CONJUNCTION
+		return v1.PartOfSpeech_CONJUNCTION
 	case "pronoun":
-		return pb.PartOfSpeech_PRONOUN
+		return v1.PartOfSpeech_PRONOUN
 	case "particle":
-		return pb.PartOfSpeech_PARTICLE
+		return v1.PartOfSpeech_PARTICLE
 	default:
-		return pb.PartOfSpeech_UNKNOWN_CATEGORY
+		return v1.PartOfSpeech_UNKNOWN_CATEGORY
 	}
 }
 
-func mapEnumToCategory(category pb.PartOfSpeech) string {
+func mapEnumToCategory(category v1.PartOfSpeech) string {
 	switch category {
-	case pb.PartOfSpeech_VERB:
+	case v1.PartOfSpeech_VERB:
 		return "verb"
-	case pb.PartOfSpeech_NOUN:
+	case v1.PartOfSpeech_NOUN:
 		return "noun"
-	case pb.PartOfSpeech_PARTICIPLE:
+	case v1.PartOfSpeech_PARTICIPLE:
 		return "participle"
-	case pb.PartOfSpeech_PREPOSITION:
+	case v1.PartOfSpeech_PREPOSITION:
 		return "preposition"
-	case pb.PartOfSpeech_ADVERB:
+	case v1.PartOfSpeech_ADVERB:
 		return "adverb"
-	case pb.PartOfSpeech_ARTICLE:
+	case v1.PartOfSpeech_ARTICLE:
 		return "article"
-	case pb.PartOfSpeech_CONJUNCTION:
+	case v1.PartOfSpeech_CONJUNCTION:
 		return "conjunction"
-	case pb.PartOfSpeech_PRONOUN:
+	case v1.PartOfSpeech_PRONOUN:
 		return "pronoun"
-	case pb.PartOfSpeech_PARTICLE:
+	case v1.PartOfSpeech_PARTICLE:
 		return "particle"
 	default:
 		return "UNKNOWN"

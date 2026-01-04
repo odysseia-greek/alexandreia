@@ -1,0 +1,8 @@
+# alexandreia/buf.yaml
+version: v2
+modules:
+  - path: aristarchos/proto
+lint:
+  use: [DEFAULT]
+breaking:
+  use: [FILE]

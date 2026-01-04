@@ -146,8 +146,6 @@ github.com/odysseia-greek/attike/sophokles v0.0.5 h1:rVE3POKGLftx4FsAv5PdWYqMZmx
 github.com/odysseia-greek/attike/sophokles v0.0.5/go.mod h1:o5jkqkymZ5Qh2VqjAsHn554KTNuipHYHqeAmN2UTd4Q=
 github.com/odysseia-greek/delphi/aristides v0.0.1 h1:cr1bWw3po+WLNIfrg/CK2ey2uVk2RZLD767zwSdktWk=
 github.com/odysseia-greek/delphi/aristides v0.0.1/go.mod h1:sIQ3MwkvyWoTCtrS1cU84vcjAWoera2qHYeVrF3jeLk=
-github.com/odysseia-greek/olympia/aristarchos v0.0.15 h1:gYDO1b3SEz4OFStE+JidrkiOtAAUu2SLFoN5R5cI7Yc=
-github.com/odysseia-greek/olympia/aristarchos v0.0.15/go.mod h1:QVRZzugNlUTUYYIkMYTQHVRDn9m6QxW+7GFmK8plyOE=
 github.com/onsi/ginkgo/v2 v2.13.0 h1:0jY9lJquiL8fcf3M4LAXN5aMlS/b2BV86HFFPCPMgE4=
 github.com/onsi/ginkgo/v2 v2.13.0/go.mod h1:TE309ZR8s5FsKKpuB1YAQYBzCaAfUgatB/xlT/ETL/o=
 github.com/onsi/gomega v1.29.0 h1:KIA/t2t5UBzoirT4H9tsML45GEbo3ouUnBHsCfD2tVg=

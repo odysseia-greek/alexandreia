@@ -3,19 +3,20 @@ package scholar
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/odysseia-greek/agora/aristoteles"
-	pb "github.com/odysseia-greek/olympia/aristarchos/proto"
+	v1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"time"
 )
 
 type AggregatorService interface {
 	WaitForHealthyState() bool
-	CreateNewEntry(ctx context.Context) (pb.Aristarchos_CreateNewEntryClient, error)
-	RetrieveEntry(ctx context.Context, request *pb.AggregatorRequest) (*pb.RootWordResponse, error)
-	RetrieveRootFromGrammarForm(ctx context.Context, in *pb.AggregatorRequest) (*pb.FormsResponse, error)
-	RetrieveSearchWords(ctx context.Context, in *pb.AggregatorRequest) (*pb.SearchWordResponse, error)
+	CreateNewEntry(ctx context.Context) (v1.Aristarchos_CreateNewEntryClient, error)
+	RetrieveEntry(ctx context.Context, request *v1.AggregatorRequest) (*v1.RootWordResponse, error)
+	RetrieveRootFromGrammarForm(ctx context.Context, in *v1.AggregatorRequest) (*v1.FormsResponse, error)
+	RetrieveSearchWords(ctx context.Context, in *v1.AggregatorRequest) (*v1.SearchWordResponse, error)
 }
 
 const (
@@ -26,7 +27,7 @@ type AggregatorServiceImpl struct {
 	Elastic    aristoteles.Client
 	Index      string
 	PolicyName string
-	pb.UnimplementedAristarchosServer
+	v1.UnimplementedAristarchosServer
 }
 
 type AggregatorServiceClient struct {
@@ -34,7 +35,7 @@ type AggregatorServiceClient struct {
 }
 
 type ClientAggregator struct {
-	scholar pb.AristarchosClient
+	scholar v1.AristarchosClient
 }
 
 func NewClientAggregator(address string) (*ClientAggregator, error) {
@@ -45,7 +46,7 @@ func NewClientAggregator(address string) (*ClientAggregator, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to tracing service: %w", err)
 	}
-	client := pb.NewAristarchosClient(conn)
+	client := v1.NewAristarchosClient(conn)
 	return &ClientAggregator{scholar: client}, nil
 }
 
@@ -55,7 +56,7 @@ func (c *ClientAggregator) WaitForHealthyState() bool {
 	endTime := time.Now().Add(timeout)
 
 	for time.Now().Before(endTime) {
-		response, err := c.Health(context.Background(), &pb.HealthRequest{})
+		response, err := c.Health(context.Background(), &v1.HealthRequest{})
 		if err == nil && response.Health {
 			return true
 		}
@@ -66,22 +67,22 @@ func (c *ClientAggregator) WaitForHealthyState() bool {
 	return false
 }
 
-func (c *ClientAggregator) Health(ctx context.Context, request *pb.HealthRequest) (*pb.HealthResponse, error) {
+func (c *ClientAggregator) Health(ctx context.Context, request *v1.HealthRequest) (*v1.HealthResponse, error) {
 	return c.scholar.Health(ctx, request)
 }
 
-func (c *ClientAggregator) CreateNewEntry(ctx context.Context) (pb.Aristarchos_CreateNewEntryClient, error) {
+func (c *ClientAggregator) CreateNewEntry(ctx context.Context) (v1.Aristarchos_CreateNewEntryClient, error) {
 	return c.scholar.CreateNewEntry(ctx)
 }
 
-func (c *ClientAggregator) RetrieveEntry(ctx context.Context, request *pb.AggregatorRequest) (*pb.RootWordResponse, error) {
+func (c *ClientAggregator) RetrieveEntry(ctx context.Context, request *v1.AggregatorRequest) (*v1.RootWordResponse, error) {
 	return c.scholar.RetrieveEntry(ctx, request)
 }
 
-func (c *ClientAggregator) RetrieveSearchWords(ctx context.Context, request *pb.AggregatorRequest) (*pb.SearchWordResponse, error) {
+func (c *ClientAggregator) RetrieveSearchWords(ctx context.Context, request *v1.AggregatorRequest) (*v1.SearchWordResponse, error) {
 	return c.scholar.RetrieveSearchWords(ctx, request)
 }
 
-func (c *ClientAggregator) RetrieveRootFromGrammarForm(ctx context.Context, request *pb.AggregatorRequest) (*pb.FormsResponse, error) {
+func (c *ClientAggregator) RetrieveRootFromGrammarForm(ctx context.Context, request *v1.AggregatorRequest) (*v1.FormsResponse, error) {
 	return c.scholar.RetrieveRootFromGrammarForm(ctx, request)
 }

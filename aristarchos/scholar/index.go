@@ -2,6 +2,7 @@ package scholar
 
 import (
 	"fmt"
+
 	"github.com/odysseia-greek/agora/aristoteles"
 	"github.com/odysseia-greek/agora/plato/logging"
 )

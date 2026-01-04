@@ -1,8 +1,8 @@
 syntax = "proto3";
-option go_package = "github.com/odysseia-greek/olympia/aristarchos/proto";
+option go_package = "github.com/odysseia-greek/alexanderia/aristarchos/gen/go/v1;aristarchosv1";
+import "google/protobuf/empty.proto";
 
-package olympia_aristarchos;
-
+package aristarchos.v1;
 
 service Aristarchos {
   rpc CreateNewEntry(stream AggregatorCreationRequest) returns (AggregatorStreamResponse);

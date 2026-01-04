@@ -8,8 +8,8 @@ import (
 	"os"
 
 	"github.com/odysseia-greek/agora/plato/logging"
-	pb "github.com/odysseia-greek/olympia/aristarchos/proto"
-	"github.com/odysseia-greek/olympia/aristarchos/scholar"
+	v1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
+	"github.com/odysseia-greek/alexandreia/aristarchos/scholar"
 	"google.golang.org/grpc"
 )
 
@@ -57,7 +57,7 @@ func main() {
 
 	server = grpc.NewServer(grpc.UnaryInterceptor(scholar.AggregatorInterceptor))
 
-	pb.RegisterAristarchosServer(server, config)
+	v1.RegisterAristarchosServer(server, config)
 
 	logging.Info(fmt.Sprintf("Server listening on %s", port))
 	if err := server.Serve(listener); err != nil {

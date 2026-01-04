@@ -5,17 +5,18 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
-	"github.com/google/uuid"
-	"github.com/odysseia-greek/agora/plato/logging"
-	"github.com/odysseia-greek/agora/plato/models"
-	"github.com/odysseia-greek/alexandreia/anaximander/apeiron"
-	pb "github.com/odysseia-greek/delphi/aristides/proto"
 	"log"
 	"os"
 	"path"
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/google/uuid"
+	"github.com/odysseia-greek/agora/plato/logging"
+	"github.com/odysseia-greek/agora/plato/models"
+	"github.com/odysseia-greek/alexandreia/anaximander/apeiron"
+	pb "github.com/odysseia-greek/delphi/aristides/proto"
 )
 
 var documents int

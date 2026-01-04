@@ -4,7 +4,8 @@ import (
 	"context"
 	"time"
 
-	pb "github.com/odysseia-greek/olympia/aristarchos/proto"
+	v1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
+
 	"github.com/stretchr/testify/mock"
 )
 
@@ -20,7 +21,7 @@ func (m *MockAggregatorService) WaitForHealthyState() bool {
 	endTime := time.Now().Add(timeout)
 
 	for time.Now().Before(endTime) {
-		response, err := m.Health(context.Background(), &pb.HealthRequest{})
+		response, err := m.Health(context.Background(), &v1.HealthRequest{})
 		if err == nil && response.Health {
 			return true
 		}
@@ -32,32 +33,32 @@ func (m *MockAggregatorService) WaitForHealthyState() bool {
 }
 
 // Health is a mock implementation of the Health method
-func (m *MockAggregatorService) Health(ctx context.Context, request *pb.HealthRequest) (*pb.HealthResponse, error) {
+func (m *MockAggregatorService) Health(ctx context.Context, request *v1.HealthRequest) (*v1.HealthResponse, error) {
 	args := m.Called(ctx, request)
-	return args.Get(0).(*pb.HealthResponse), args.Error(1)
+	return args.Get(0).(*v1.HealthResponse), args.Error(1)
 }
 
 // CreateNewEntry is a mock implementation of the CreateNewEntry method
-func (m *MockAggregatorService) CreateNewEntry(ctx context.Context) (pb.Aristarchos_CreateNewEntryClient, error) {
+func (m *MockAggregatorService) CreateNewEntry(ctx context.Context) (v1.Aristarchos_CreateNewEntryClient, error) {
 	args := m.Called(ctx)
 	// Ensure that the type assertion matches the interface type
-	return args.Get(0).(pb.Aristarchos_CreateNewEntryClient), args.Error(1)
+	return args.Get(0).(v1.Aristarchos_CreateNewEntryClient), args.Error(1)
 }
 
 // RetrieveEntry is a mock implementation of the RetrieveEntry method
-func (m *MockAggregatorService) RetrieveEntry(ctx context.Context, request *pb.AggregatorRequest) (*pb.RootWordResponse, error) {
+func (m *MockAggregatorService) RetrieveEntry(ctx context.Context, request *v1.AggregatorRequest) (*v1.RootWordResponse, error) {
 	args := m.Called(ctx, request)
-	return args.Get(0).(*pb.RootWordResponse), args.Error(1)
+	return args.Get(0).(*v1.RootWordResponse), args.Error(1)
 }
 
 // RetrieveRootFromGrammarForm is a mock implementation of the RetrieveRootFromGrammarForm method
-func (m *MockAggregatorService) RetrieveRootFromGrammarForm(ctx context.Context, in *pb.AggregatorRequest) (*pb.FormsResponse, error) {
+func (m *MockAggregatorService) RetrieveRootFromGrammarForm(ctx context.Context, in *v1.AggregatorRequest) (*v1.FormsResponse, error) {
 	args := m.Called(ctx, in)
-	return args.Get(0).(*pb.FormsResponse), args.Error(1)
+	return args.Get(0).(*v1.FormsResponse), args.Error(1)
 }
 
 // RetrieveSearchWords is a mock implementation of the RetrieveSearchWords method
-func (m *MockAggregatorService) RetrieveSearchWords(ctx context.Context, in *pb.AggregatorRequest) (*pb.SearchWordResponse, error) {
+func (m *MockAggregatorService) RetrieveSearchWords(ctx context.Context, in *v1.AggregatorRequest) (*v1.SearchWordResponse, error) {
 	args := m.Called(ctx, in)
-	return args.Get(0).(*pb.SearchWordResponse), args.Error(1)
+	return args.Get(0).(*v1.SearchWordResponse), args.Error(1)
 }
