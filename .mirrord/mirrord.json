@@ -1,0 +1,16 @@
+{
+    "internal_proxy": {"log_level": "mirrord=trace", "log_destination": "/tmp/mirrord.log"},
+    "target": "{{ get_env(name="TARGET", default="deploy/dionysios") }}",
+    "agent": {
+        "namespace": "alexandreia",
+        "log_level": "mirrord=trace",
+        "ephemeral": false
+    },
+    "feature": {
+        "network": {
+            "incoming": { "mode": "steal", "ignore_localhost": false },
+            "outgoing": { "tcp": true, "udp": true, "ignore_localhost": false }
+        },
+        "fs": "read"
+    }
+}

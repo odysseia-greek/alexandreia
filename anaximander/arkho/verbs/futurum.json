@@ -1,0 +1,182 @@
+{
+  "name": "futurum",
+  "type": "future",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-σω",
+      "ruleName": "1st sing - futurum - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψω",
+      "ruleName": "1st sing - futurum - ind - act",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξω",
+      "ruleName": "1st sing - futurum - ind - act",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    },
+    {
+      "declension": "-σεις",
+      "ruleName": "2nd sing - futurum - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψεις",
+      "ruleName": "2nd sing - futurum - ind - act",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξεις",
+      "ruleName": "2nd sing - futurum - ind - act",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    },
+    {
+      "declension": "-σει",
+      "ruleName": "3th sing - futurum - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψει",
+      "ruleName": "3th sing - futurum - ind - act",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξει",
+      "ruleName": "3th sing - futurum - ind - act",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    },
+    {
+      "declension": "-σομεν",
+      "ruleName": "1st plural - futurum - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψομεν",
+      "ruleName": "1st plural - futurum - ind - act",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξομεν",
+      "ruleName": "1st plural - futurum - ind - act",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    },
+    {
+      "declension": "-σετε",
+      "ruleName": "2nd plural - futurum - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψετε",
+      "ruleName": "2nd plural - futurum - ind - act",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξετε",
+      "ruleName": "2nd plural - futurum - ind - act",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    },
+    {
+      "declension": "-σουσι",
+      "ruleName": "3th plural - futurum - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψουσι",
+      "ruleName": "3th plural - futurum - ind - act",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξουσι",
+      "ruleName": "3th plural - futurum - ind - act",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    },
+    {
+      "declension": "-σουσιν",
+      "ruleName": "3th plural - futurum - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψουσιν",
+      "ruleName": "3th plural - futurum - ind - act",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξουσιν",
+      "ruleName": "3th plural - futurum - ind - act",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    }
+  ]
+}

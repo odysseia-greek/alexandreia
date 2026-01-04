@@ -1,0 +1,127 @@
+{
+  "name": "misc",
+  "type": "pronoun",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "οὗτος",
+      "ruleName": "demonstrative - sing - masc - nom",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τούτου",
+      "ruleName": "demonstrative - sing - masc - gen",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τούτῳ",
+      "ruleName": "demonstrative - sing - masc - dat",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τούτον",
+      "ruleName": "demonstrative - sing - masc - acc",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "αὕτη",
+      "ruleName": "demonstrative - sing - fem - nom",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "ταύτης",
+      "ruleName": "demonstrative - sing - fem - gen",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "ταύτῃ",
+      "ruleName": "demonstrative - sing - fem - dat",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "ταύτην",
+      "ruleName": "demonstrative - sing - fem - acc",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τοῦτο",
+      "ruleName": "demonstrative - sing - neut - nom",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τούτου",
+      "ruleName": "demonstrative - sing - neut - gen",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τούτῳ",
+      "ruleName": "demonstrative - sing - neut - dat",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τοῦτο",
+      "ruleName": "demonstrative - sing - neut - acc",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "οὗτοι",
+      "ruleName": "demonstrative - plural - masc - nom",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τούτων",
+      "ruleName": "demonstrative - plural - masc - gen",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τούτοις",
+      "ruleName": "demonstrative - plural - masc - dat",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τούτους",
+      "ruleName": "demonstrative - plural - masc - acc",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "αὗται",
+      "ruleName": "demonstrative - plural - fem - nom",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τουτῶν",
+      "ruleName": "demonstrative - plural - fem - gen",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "ταύταις",
+      "ruleName": "demonstrative - plural - fem - dat",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "ταύτας",
+      "ruleName": "demonstrative - plural - fem - acc",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "ταῦτα",
+      "ruleName": "demonstrative - plural - neut - nom",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τούτων",
+      "ruleName": "demonstrative - plural - neut - gen",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "τούτοις",
+      "ruleName": "demonstrative - plural - neut - dat",
+      "searchTerm": ["ουτος"]
+    },
+    {
+      "declension": "ταῦτα",
+      "ruleName": "demonstrative - plural - neut - acc",
+      "searchTerm": ["ουτος"]
+    }
+  ]
+}

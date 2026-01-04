@@ -1,0 +1,56 @@
+{
+  "name": "infinitive",
+  "type": "infinitive",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-ειν",
+      "ruleName": "inf - pres - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-εσθαι",
+      "ruleName": "inf - pres - mid",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-εσθαι",
+      "ruleName": "inf - pres - pas",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-σαι",
+      "ruleName": "inf - aorist - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-σασθαι",
+      "ruleName": "inf - aorist - mid",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-θηναι",
+      "ruleName": "inf - aorist - pas",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-σειν",
+      "ruleName": "inf - futurum - act",
+      "searchTerm": [
+        "ω"
+      ]
+    }
+  ]
+}

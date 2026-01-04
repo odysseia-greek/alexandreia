@@ -1,0 +1,1059 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "# Introduction\nThis API is documented in **OpenAPI format** and is using [ReDoc](https://github.com/Redocly/redoc)",
+    "title": "Dionysios",
+    "termsOfService": "there are no TOS at this moment, use at your own risk we take no responsibility",
+    "contact": {
+      "url": "https://github.com/odysseia-greek",
+      "email": "joerivrijaldenhoven@odysseia.io"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "0.2.4"
+  },
+  "host": "k3s-odysseia.greek",
+  "basePath": "/dionysios/v1",
+  "paths": {
+    "/check": {
+      "get": {
+        "description": "Tries to determine what declensions a word might be or what form it takes when it is a verb",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "http",
+          "https"
+        ],
+        "tags": [
+          "grammar"
+        ],
+        "operationId": "check",
+        "parameters": [
+          {
+            "type": "string",
+            "format": "word",
+            "description": "word or part of word being queried",
+            "name": "word",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "DeclensionTranslationResults",
+            "schema": {
+              "$ref": "#/definitions/DeclensionTranslationResults"
+            }
+          },
+          "400": {
+            "description": "ValidationError",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "404": {
+            "description": "NotFoundError",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "405": {
+            "description": "MethodError",
+            "schema": {
+              "$ref": "#/definitions/MethodError"
+            }
+          },
+          "502": {
+            "description": "ElasticSearchError",
+            "schema": {
+              "$ref": "#/definitions/ElasticSearchError"
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "description": "Checks if api is healthy",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "http",
+          "https"
+        ],
+        "tags": [
+          "status"
+        ],
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "Health",
+            "schema": {
+              "$ref": "#/definitions/Health"
+            }
+          },
+          "502": {
+            "description": "Health",
+            "schema": {
+              "$ref": "#/definitions/Health"
+            }
+          }
+        }
+      }
+    },
+    "/ping": {
+      "get": {
+        "description": "Checks if api is reachable",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "http",
+          "https"
+        ],
+        "tags": [
+          "status"
+        ],
+        "operationId": "ping",
+        "responses": {
+          "200": {
+            "description": "ResultModel",
+            "schema": {
+              "$ref": "#/definitions/ResultModel"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Author": {
+      "type": "object",
+      "required": [
+        "author"
+      ],
+      "properties": {
+        "author": {
+          "type": "string",
+          "x-go-name": "Author",
+          "example": "herodotos"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Authors": {
+      "type": "object",
+      "properties": {
+        "authors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Author"
+          },
+          "x-go-name": "Authors"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Book": {
+      "type": "object",
+      "properties": {
+        "book": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Book",
+          "example": 2
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Books": {
+      "type": "object",
+      "properties": {
+        "books": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Book"
+          },
+          "x-go-name": "Books"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Categories": {
+      "type": "object",
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Category"
+          },
+          "x-go-name": "Category"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Category": {
+      "type": "object",
+      "required": [
+        "category"
+      ],
+      "properties": {
+        "category": {
+          "type": "string",
+          "x-go-name": "Category",
+          "example": "frogs"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "CheckAnswerRequest": {
+      "type": "object",
+      "required": [
+        "quizWord",
+        "answerProvided"
+      ],
+      "properties": {
+        "answerProvided": {
+          "type": "string",
+          "x-go-name": "AnswerProvided",
+          "example": "horse"
+        },
+        "quizWord": {
+          "type": "string",
+          "x-go-name": "QuizWord",
+          "example": "ὄνος"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "CheckAnswerResponse": {
+      "type": "object",
+      "required": [
+        "correct",
+        "quizWord"
+      ],
+      "properties": {
+        "correct": {
+          "type": "boolean",
+          "x-go-name": "Correct",
+          "example": false
+        },
+        "possibilities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Word"
+          },
+          "x-go-name": "Possibilities"
+        },
+        "quizWord": {
+          "type": "string",
+          "x-go-name": "QuizWord",
+          "example": "ὄνος"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "CheckSentenceRequest": {
+      "type": "object",
+      "required": [
+        "sentenceId",
+        "answerSentence",
+        "author"
+      ],
+      "properties": {
+        "answerSentence": {
+          "type": "string",
+          "x-go-name": "ProvidedSentence",
+          "example": "this is an example sentence"
+        },
+        "author": {
+          "type": "string",
+          "x-go-name": "Author",
+          "example": "herodotos"
+        },
+        "sentenceId": {
+          "type": "string",
+          "x-go-name": "SentenceId",
+          "example": "fd4TlogBC__qOhD2dK31"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "CheckSentenceResponse": {
+      "type": "object",
+      "required": [
+        "levenshteinPercentage",
+        "quizSentence",
+        "answerSentence",
+        "splitQuizSentence",
+        "splitAnswerSentence"
+      ],
+      "properties": {
+        "answerSentence": {
+          "type": "string",
+          "x-go-name": "AnswerSentence",
+          "example": "this is an example answer\""
+        },
+        "levenshteinPercentage": {
+          "type": "string",
+          "x-go-name": "LevenshteinPercentage",
+          "example": "9.09"
+        },
+        "matchingWords": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MatchingWord"
+          },
+          "x-go-name": "MatchingWords"
+        },
+        "nonMatchingWords": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NonMatchingWord"
+          },
+          "x-go-name": "NonMatchingWords"
+        },
+        "quizSentence": {
+          "type": "string",
+          "x-go-name": "QuizSentence",
+          "example": "Such a step would not be condemned either by the gods who received our oaths,"
+        },
+        "splitAnswerSentence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "SplitAnswerSentence",
+          "example": [
+            "this",
+            "example"
+          ]
+        },
+        "splitQuizSentence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "SplitQuizSentence",
+          "example": [
+            "Such",
+            "condemned"
+          ]
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "CreateSentenceResponse": {
+      "type": "object",
+      "required": [
+        "sentence",
+        "sentenceId"
+      ],
+      "properties": {
+        "sentence": {
+          "type": "string",
+          "x-go-name": "Sentence",
+          "example": "ὡς δέ οἱ ταῦτα ἔδοξε, καὶ ἐποίεε κατὰ τάχος·"
+        },
+        "sentenceId": {
+          "type": "string",
+          "x-go-name": "SentenceId",
+          "example": "fd4TlogBC__qOhD2dK31"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "DatabaseHealth": {
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "x-go-name": "ClusterName",
+          "example": "aristoteles"
+        },
+        "healthy": {
+          "type": "boolean",
+          "x-go-name": "Healthy",
+          "example": true
+        },
+        "serverName": {
+          "type": "string",
+          "x-go-name": "ServerName",
+          "example": "aristoteles-es-worker-0"
+        },
+        "serverVersion": {
+          "type": "string",
+          "x-go-name": "ServerVersion",
+          "example": "8.8.0"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "DeclensionTranslationResults": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Result"
+          },
+          "x-go-name": "Results"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "ElasticErrorMessage": {
+      "type": "object",
+      "properties": {
+        "elasticError": {
+          "type": "string",
+          "x-go-name": "ElasticError"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "ElasticSearchError": {
+      "type": "object",
+      "required": [
+        "uniqueCode"
+      ],
+      "properties": {
+        "errorModel": {
+          "$ref": "#/definitions/ElasticErrorMessage"
+        },
+        "uniqueCode": {
+          "type": "string",
+          "x-go-name": "UniqueCode",
+          "example": "94374b4f-3dda-4ffb-b33b-2cb6ba092b84"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "ErrorModel": {
+      "type": "object",
+      "required": [
+        "uniqueCode"
+      ],
+      "properties": {
+        "uniqueCode": {
+          "type": "string",
+          "x-go-name": "UniqueCode",
+          "example": "94374b4f-3dda-4ffb-b33b-2cb6ba092b84"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Health": {
+      "type": "object",
+      "properties": {
+        "databaseHealth": {
+          "$ref": "#/definitions/DatabaseHealth"
+        },
+        "healthy": {
+          "type": "boolean",
+          "x-go-name": "Healthy",
+          "example": true
+        },
+        "memory": {
+          "$ref": "#/definitions/Memory"
+        },
+        "time": {
+          "type": "string",
+          "x-go-name": "Time",
+          "example": "2023-06-07 15:02:11.678766777 +0000 UTC m=+5090.268683461"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "LastChapterResponse": {
+      "type": "object",
+      "required": [
+        "lastChapter"
+      ],
+      "properties": {
+        "lastChapter": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "LastChapter",
+          "example": 119
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Logos": {
+      "type": "object",
+      "properties": {
+        "logos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Word"
+          },
+          "x-go-name": "Logos"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Match": {
+      "type": "object",
+      "required": [
+        "match",
+        "levenshtein",
+        "answerIndex",
+        "percentage"
+      ],
+      "properties": {
+        "answerIndex": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "AnswerIndex",
+          "example": 3
+        },
+        "levenshtein": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Levenshtein",
+          "example": 4
+        },
+        "match": {
+          "type": "string",
+          "x-go-name": "Match",
+          "example": "superduperword"
+        },
+        "percentage": {
+          "type": "string",
+          "x-go-name": "Percentage",
+          "example": "25.00"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "MatchingWord": {
+      "type": "object",
+      "required": [
+        "word",
+        "sourceIndex"
+      ],
+      "properties": {
+        "sourceIndex": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "SourceIndex",
+          "example": 4
+        },
+        "word": {
+          "type": "string",
+          "x-go-name": "Word",
+          "example": "thiswordisinthetext"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Memory": {
+      "type": "object",
+      "properties": {
+        "alloc": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Alloc"
+        },
+        "free": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Free"
+        },
+        "sys": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Sys"
+        },
+        "totalAlloc": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "TotalAlloc"
+        },
+        "unit": {
+          "type": "string",
+          "x-go-name": "Unit"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Meros": {
+      "type": "object",
+      "required": [
+        "greek",
+        "english"
+      ],
+      "properties": {
+        "dutch": {
+          "type": "string",
+          "x-go-name": "Dutch",
+          "example": "ezel"
+        },
+        "english": {
+          "type": "string",
+          "x-go-name": "English",
+          "example": "an ass"
+        },
+        "greek": {
+          "type": "string",
+          "x-go-name": "Greek",
+          "example": "ὄνος"
+        },
+        "linkedWord": {
+          "type": "string",
+          "x-go-name": "LinkedWord"
+        },
+        "original": {
+          "type": "string",
+          "x-go-name": "Original"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Method": {
+      "type": "object",
+      "required": [
+        "method"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "x-go-name": "Method",
+          "example": "aristophanes"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "MethodError": {
+      "type": "object",
+      "required": [
+        "uniqueCode"
+      ],
+      "properties": {
+        "errorModel": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MethodMessages"
+          },
+          "x-go-name": "Messages"
+        },
+        "uniqueCode": {
+          "type": "string",
+          "x-go-name": "UniqueCode",
+          "example": "94374b4f-3dda-4ffb-b33b-2cb6ba092b84"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "MethodMessages": {
+      "description": "MethodMessages messages used in method error",
+      "type": "object",
+      "properties": {
+        "allowedMethods": {
+          "type": "string",
+          "x-go-name": "Methods",
+          "example": "GET"
+        },
+        "methodError": {
+          "type": "string",
+          "x-go-name": "Message",
+          "example": "Method DELETE not allowed at this endpoint"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Methods": {
+      "type": "object",
+      "properties": {
+        "methods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Method"
+          },
+          "x-go-name": "Method"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "NonMatchingWord": {
+      "type": "object",
+      "required": [
+        "word",
+        "sourceIndex"
+      ],
+      "properties": {
+        "matches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Match"
+          },
+          "x-go-name": "Matches"
+        },
+        "sourceIndex": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "SourceIndex",
+          "example": 3
+        },
+        "word": {
+          "type": "string",
+          "x-go-name": "Word",
+          "example": "step"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "NotFoundError": {
+      "type": "object",
+      "required": [
+        "uniqueCode"
+      ],
+      "properties": {
+        "errorModel": {
+          "$ref": "#/definitions/NotFoundMessage"
+        },
+        "uniqueCode": {
+          "type": "string",
+          "x-go-name": "UniqueCode",
+          "example": "94374b4f-3dda-4ffb-b33b-2cb6ba092b84"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "NotFoundMessage": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "x-go-name": "Reason",
+          "example": "produced 0 results"
+        },
+        "type": {
+          "type": "string",
+          "x-go-name": "Type",
+          "example": "query for obscura"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "QuizResponse": {
+      "type": "object",
+      "required": [
+        "question",
+        "answer",
+        "quiz"
+      ],
+      "properties": {
+        "answer": {
+          "type": "string",
+          "x-go-name": "Answer",
+          "example": "donkey"
+        },
+        "question": {
+          "type": "string",
+          "x-go-name": "Question",
+          "example": "ὄνος"
+        },
+        "quiz": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "QuizQuestions",
+          "example": [
+            "donkey",
+            "anotheranswer"
+          ]
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Result": {
+      "type": "object",
+      "required": [
+        "word",
+        "rule",
+        "rootWord",
+        "translation"
+      ],
+      "properties": {
+        "rootWord": {
+          "type": "string",
+          "x-go-name": "RootWord",
+          "example": "βαλλω"
+        },
+        "rule": {
+          "type": "string",
+          "x-go-name": "Rule",
+          "example": "3th sing - impf - ind - act"
+        },
+        "translation": {
+          "type": "string",
+          "x-go-name": "Translation",
+          "example": "throw"
+        },
+        "word": {
+          "type": "string",
+          "x-go-name": "Word",
+          "example": "ἔβαλλε"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "ResultModel": {
+      "type": "object",
+      "required": [
+        "result"
+      ],
+      "properties": {
+        "result": {
+          "type": "string",
+          "x-go-name": "Result",
+          "example": "pong"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Rhema": {
+      "type": "object",
+      "properties": {
+        "rhemai": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RhemaSource"
+          },
+          "x-go-name": "Rhemai"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "RhemaSource": {
+      "type": "object",
+      "required": [
+        "author",
+        "greek",
+        "translations",
+        "book",
+        "chapter",
+        "section",
+        "perseusTextLink"
+      ],
+      "properties": {
+        "author": {
+          "type": "string",
+          "x-go-name": "Author",
+          "example": "Herodotos"
+        },
+        "book": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Book",
+          "example": 1
+        },
+        "chapter": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Chapter",
+          "example": 1
+        },
+        "greek": {
+          "type": "string",
+          "x-go-name": "Greek",
+          "example": "ὡς δέ οἱ ταῦτα ἔδοξε, καὶ ἐποίεε κατὰ τάχος·"
+        },
+        "perseusTextLink": {
+          "type": "string",
+          "x-go-name": "PerseusTextLink",
+          "example": "https://externallink"
+        },
+        "section": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Section",
+          "example": 1
+        },
+        "translations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Translations",
+          "example": [
+            "first translation",
+            "second translation"
+          ]
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "SolonCreationRequest": {
+      "type": "object",
+      "required": [
+        "roles",
+        "access",
+        "podName",
+        "username"
+      ],
+      "properties": {
+        "access": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Access",
+          "example": "[grammar dictionary]"
+        },
+        "podName": {
+          "type": "string",
+          "x-go-name": "PodName",
+          "example": "dionysios-544c584d7f-6sp6x"
+        },
+        "roles": {
+          "type": "string",
+          "x-go-name": "Role",
+          "example": "api"
+        },
+        "username": {
+          "type": "string",
+          "x-go-name": "Username",
+          "example": "dionysios"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "SolonResponse": {
+      "type": "object",
+      "required": [
+        "userCreated",
+        "secretCreated"
+      ],
+      "properties": {
+        "secretCreated": {
+          "type": "boolean",
+          "x-go-name": "SecretCreated",
+          "example": true
+        },
+        "userCreated": {
+          "type": "boolean",
+          "x-go-name": "UserCreated",
+          "example": true
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "TokenResponse": {
+      "type": "object",
+      "required": [
+        "token"
+      ],
+      "properties": {
+        "token": {
+          "type": "string",
+          "x-go-name": "Token",
+          "example": "s.1283745jdf83r3"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "ValidationError": {
+      "type": "object",
+      "required": [
+        "uniqueCode"
+      ],
+      "properties": {
+        "errorModel": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ValidationMessages"
+          },
+          "x-go-name": "Messages"
+        },
+        "uniqueCode": {
+          "type": "string",
+          "x-go-name": "UniqueCode",
+          "example": "94374b4f-3dda-4ffb-b33b-2cb6ba092b84"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "ValidationMessages": {
+      "type": "object",
+      "properties": {
+        "validationField": {
+          "type": "string",
+          "x-go-name": "Field",
+          "example": "word"
+        },
+        "validationMessage": {
+          "type": "string",
+          "x-go-name": "Message",
+          "example": "cannot be empty"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    },
+    "Word": {
+      "type": "object",
+      "required": [
+        "method",
+        "category",
+        "greek",
+        "translation",
+        "chapter"
+      ],
+      "properties": {
+        "category": {
+          "type": "string",
+          "x-go-name": "Category",
+          "example": "frogs"
+        },
+        "chapter": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Chapter",
+          "example": 1
+        },
+        "greek": {
+          "type": "string",
+          "x-go-name": "Greek",
+          "example": "ὄνος"
+        },
+        "method": {
+          "type": "string",
+          "x-go-name": "Method",
+          "example": "aristophanes"
+        },
+        "translation": {
+          "type": "string",
+          "x-go-name": "Translation",
+          "example": "donkey"
+        }
+      },
+      "x-go-package": "github.com/odysseia-greek/agora/plato/models"
+    }
+  }
+}

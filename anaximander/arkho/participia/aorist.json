@@ -1,0 +1,137 @@
+{
+  "name": "aorist",
+  "type": "participle",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-σας",
+      "ruleName": "aor act part - sing - masc - nom",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαντος",
+      "ruleName": "aor act part - sing - masc - gen",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαντι",
+      "ruleName": "aor act part - sing - masc - dat",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαντα",
+      "ruleName": "aor act part - sing - masc - acc",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σασα",
+      "ruleName": "aor act part - sing - fem - nom",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σασης",
+      "ruleName": "aor act part - sing - fem - gen",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαση",
+      "ruleName": "aor act part - sing - fem - dat",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σασαν",
+      "ruleName": "aor act part - sing - fem - acc",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαν",
+      "ruleName": "aor act part - sing - neut - nom",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαντος",
+      "ruleName": "aor act part - sing - neut - gen",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαντι",
+      "ruleName": "aor act part - sing - neut - dat",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαν",
+      "ruleName": "aor act part - sing - neut - acc",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαντες",
+      "ruleName": "aor act part - plural - masc - nom",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαντων",
+      "ruleName": "aor act part - plural - masc - gen",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σασι",
+      "ruleName": "aor act part - plural - masc - dat",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σασιν",
+      "ruleName": "aor act part - plural - masc - dat",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαντας",
+      "ruleName": "aor act part - plural - masc - acc",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σασαι",
+      "ruleName": "aor act part - plural - fem - nom",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σασων",
+      "ruleName": "aor act part - plural - fem - gen",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σασαις",
+      "ruleName": "aor act part - plural - fem - dat",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σασας",
+      "ruleName": "aor act part - plural - fem - acc",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαντα",
+      "ruleName": "aor act part - plural - neut - nom",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαντων",
+      "ruleName": "aor act part - plural - neut - gen",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σασι",
+      "ruleName": "aor act part - plural - neut - dat",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σασιν",
+      "ruleName": "aor act part - plural - neut - dat",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-σαντα",
+      "ruleName": "aor act part - plural - neut - acc",
+      "searchTerm": ["ω"]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "name": "imperfectMiddlePassiveContract",
+  "type": "past",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-ούμην",
+      "ruleName": "1st sing - impf - ind - mid/pas",
+      "searchTerm": [
+        "έω"
+      ]
+    },
+    {
+      "declension": "-οῦ",
+      "ruleName": "2nd sing - impf - ind - mid/pas",
+      "searchTerm": [
+        "έω"
+      ]
+    },
+    {
+      "declension": "-εῖτο",
+      "ruleName": "3rd sing - impf - ind - mid/pas",
+      "searchTerm": [
+        "έω"
+      ]
+    },
+    {
+      "declension": "-ούμεθα",
+      "ruleName": "1st plural - impf - ind - mid/pas",
+      "searchTerm": [
+        "έω"
+      ]
+    },
+    {
+      "declension": "-εῖσθε",
+      "ruleName": "2nd plural - impf - ind - mid/pas",
+      "searchTerm": [
+        "έω"
+      ]
+    },
+    {
+      "declension": "-οῦντο",
+      "ruleName": "3rd plural - impf - ind - mid/pas",
+      "searchTerm": [
+        "έω"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "name": "aoristMiddle",
+  "type": "past",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-σαμην",
+      "ruleName": "1st sing - aorist - ind - mid",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψαμην",
+      "ruleName": "1st sing - aorist - ind - mid",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξαμην",
+      "ruleName": "1st sing - aorist - ind - mid",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    },
+    {
+      "declension": "-εσαμην",
+      "ruleName": "1st sing - aorist - ind - mid",
+      "searchTerm": [
+        "ομαι"
+      ]
+    },
+    {
+      "declension": "-σω",
+      "ruleName": "2nd sing - aorist - ind - mid",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψω",
+      "ruleName": "2nd sing - aorist - ind - mid",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξω",
+      "ruleName": "2nd sing - aorist - ind - mid",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    },
+    {
+      "declension": "-εσω",
+      "ruleName": "2nd sing - aorist - ind - mid",
+      "searchTerm": [
+        "ομαι"
+      ]
+    },
+    {
+      "declension": "-σατο",
+      "ruleName": "3th sing - aorist - ind - mid",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψατο",
+      "ruleName": "3th sing - aorist - ind - mid",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξατο",
+      "ruleName": "3th sing - aorist - ind - mid",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    },
+    {
+      "declension": "-εσατο",
+      "ruleName": "3th sing - aorist - ind - mid",
+      "searchTerm": [
+        "ομαι"
+      ]
+    },
+    {
+      "declension": "-σαμεθα",
+      "ruleName": "1st plural - aorist - ind - mid",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψαμεθα",
+      "ruleName": "1st plural - aorist - ind - mid",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξαμεθα",
+      "ruleName": "1st plural - aorist - ind - mid",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    },
+    {
+      "declension": "-εσαμεθα",
+      "ruleName": "1st plural - aorist - ind - mid",
+      "searchTerm": [
+        "ομαι"
+      ]
+    },
+    {
+      "declension": "-σασθε",
+      "ruleName": "2nd plural - aorist - ind - mid",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψασθε",
+      "ruleName": "2nd plural - aorist - ind - mid",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξασθε",
+      "ruleName": "2nd plural - aorist - ind - mid",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    },
+    {
+      "declension": "-εσασθε",
+      "ruleName": "2nd plural - aorist - ind - mid",
+      "searchTerm": [
+        "ομαι"
+      ]
+    },
+    {
+      "declension": "-σαντο",
+      "ruleName": "3th plural - aorist - ind - mid",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ψαντο",
+      "ruleName": "3th plural - aorist - ind - mid",
+      "searchTerm": [
+        "φω",
+        "πτω"
+      ]
+    },
+    {
+      "declension": "-ξαντο",
+      "ruleName": "3th plural - aorist - ind - mid",
+      "searchTerm": [
+        "κω",
+        "σκω",
+        "γω",
+        "χω"
+      ]
+    },
+    {
+      "declension": "-εσαντο",
+      "ruleName": "3th plural - aorist - ind - mid",
+      "searchTerm": [
+        "ομαι"
+      ]
+    }
+  ]
+}

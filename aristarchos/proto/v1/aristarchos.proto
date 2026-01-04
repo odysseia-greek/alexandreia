@@ -1,0 +1,88 @@
+syntax = "proto3";
+option go_package = "github.com/odysseia-greek/alexanderia/aristarchos/gen/go/v1;aristarchosv1";
+import "google/protobuf/empty.proto";
+
+package aristarchos.v1;
+
+service Aristarchos {
+  rpc CreateNewEntry(stream AggregatorCreationRequest) returns (AggregatorStreamResponse);
+  rpc RetrieveEntry (AggregatorRequest) returns (RootWordResponse) {}
+  rpc RetrieveRootFromGrammarForm (AggregatorRequest) returns (FormsResponse) {}
+  rpc RetrieveSearchWords (AggregatorRequest) returns (SearchWordResponse) {}
+  rpc Health (HealthRequest) returns (HealthResponse) {}
+}
+
+message AggregatorRequest {
+  string root_word = 1;
+}
+
+enum PartOfSpeech {
+  UNKNOWN_CATEGORY = 0;
+  VERB = 1;
+  NOUN = 2;
+  PARTICIPLE = 3;
+  PREPOSITION = 4;
+  PARTICLE = 5;
+  ADVERB = 6;
+  CONJUNCTION = 7;
+  ARTICLE = 8;
+  PRONOUN = 9;
+}
+
+message AggregatorCreationRequest {
+  string word = 1;
+  string rule = 2;
+  string root_word = 3;
+  string translation = 4;
+  PartOfSpeech part_of_speech = 5;
+  string trace_id = 6;
+}
+
+message FormsResponse {
+  string word = 1;
+  string unaccented_word = 2;
+  string rule = 3;
+  string root_word = 4;
+  repeated string translation = 5;
+  string part_of_speech = 6;
+  repeated string variants = 7;
+}
+
+message AggregatorCreationResponse {
+  bool created = 1;
+  bool updated = 2;
+}
+
+message AggregatorStreamResponse {
+  string ack = 1;
+}
+
+message SearchWordResponse {
+  repeated string word = 1;
+}
+
+message GrammaticalForm {
+  string word = 1;
+  string rule = 2;
+}
+
+message GrammaticalCategory {
+  repeated GrammaticalForm forms = 4;
+}
+
+message RootWordResponse {
+  string rootWord = 1;
+  PartOfSpeech part_of_speech = 2;
+  repeated string translations = 3;
+  repeated GrammaticalCategory categories = 4;
+  string unaccented_word = 5;
+  repeated string variants = 6;
+}
+
+message HealthResponse {
+  bool health = 1;
+}
+
+message HealthRequest {
+
+}

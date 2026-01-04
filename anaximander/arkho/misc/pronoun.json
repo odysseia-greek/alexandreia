@@ -1,0 +1,217 @@
+{
+  "name": "misc",
+  "type": "pronoun",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "τις",
+      "ruleName": "pronoun - sing - masc/fem - nom",
+      "searchTerm": [
+        "τις"
+      ]
+    },
+    {
+      "declension": "τινός",
+      "ruleName": "pronoun - sing - masc/fem - gen",
+      "searchTerm": [
+        "τις"
+      ]
+    },
+    {
+      "declension": "τινί",
+      "ruleName": "pronoun - sing - masc/fem - dat",
+      "searchTerm": [
+        "τις"
+      ]
+    },
+    {
+      "declension": "τινά",
+      "ruleName": "pronoun - sing - masc/fem - acc",
+      "searchTerm": [
+        "τις"
+      ]
+    },
+    {
+      "declension": "τινές",
+      "ruleName": "pronoun - plural - masc/fem - nom",
+      "searchTerm": [
+        "τις"
+      ]
+    },
+    {
+      "declension": "τινῶν",
+      "ruleName": "pronoun - plural - masc/fem - gen",
+      "searchTerm": [
+        "τις"
+      ]
+    },
+    {
+      "declension": "τισί",
+      "ruleName": "pronoun - plural - masc/fem - dat",
+      "searchTerm": [
+        "τις"
+      ]
+    },
+    {
+      "declension": "τισίν",
+      "ruleName": "pronoun - plural - masc/fem - dat",
+      "searchTerm": [
+        "τις"
+      ]
+    },
+    {
+      "declension": "τινάς",
+      "ruleName": "pronoun - plural - masc/fem - acc",
+      "searchTerm": [
+        "τις"
+      ]
+    },
+    {
+      "declension": "τι",
+      "ruleName": "pronoun - sing - neut - nom",
+      "searchTerm": [
+        "τίς"
+      ]
+    },
+    {
+      "declension": "τινός",
+      "ruleName": "pronoun - sing - neut - gen",
+      "searchTerm": [
+        "τίς"
+      ]
+    },
+    {
+      "declension": "τινί",
+      "ruleName": "pronoun - sing - neut - dat",
+      "searchTerm": [
+        "τίς"
+      ]
+    },
+    {
+      "declension": "τι",
+      "ruleName": "pronoun - sing - neut - acc",
+      "searchTerm": [
+        "τίς"
+      ]
+    },
+    {
+      "declension": "τινά",
+      "ruleName": "pronoun - plural - neut - nom",
+      "searchTerm": [
+        "τίς"
+      ]
+    },
+    {
+      "declension": "τινῶν",
+      "ruleName": "pronoun - plural - neut - gen",
+      "searchTerm": [
+        "τίς"
+      ]
+    },
+    {
+      "declension": "τισί",
+      "ruleName": "pronoun - plural - neut - dat",
+      "searchTerm": [
+        "τίς"
+      ]
+    },
+    {
+      "declension": "τισίν",
+      "ruleName": "pronoun - plural - neut - dat",
+      "searchTerm": [
+        "τίς"
+      ]
+    },
+    {
+      "declension": "τινά",
+      "ruleName": "pronoun - plural - neut - acc",
+      "searchTerm": [
+        "τίς"
+      ]
+    },
+      {
+        "declension": "ἀλλήλων",
+        "ruleName": "pronoun - plural - masc/fem/neut - gen",
+        "searchTerm": [
+          "ἀλλήλων"
+        ]
+      },
+      {
+        "declension": "ἀλλήλοις",
+        "ruleName": "pronoun - plural - masc/neut - dat",
+        "searchTerm": [
+          "ἀλλήλων"
+        ]
+      },
+      {
+        "declension": "ἀλλήλας",
+        "ruleName": "pronoun - plural - fem - acc",
+        "searchTerm": [
+          "ἀλλήλων"
+        ]
+      },
+      {
+        "declension": "ἀλλήλους",
+        "ruleName": "pronoun - plural - masc - acc",
+        "searchTerm": [
+          "ἀλλήλων"
+        ]
+      },
+      {
+        "declension": "ἀλλήλας",
+        "ruleName": "pronoun - plural - fem - acc",
+        "searchTerm": [
+          "ἀλλήλων"
+        ]
+      },
+      {
+        "declension": "ἀλλήλα",
+        "ruleName": "pronoun - plural - neut - acc",
+        "searchTerm": [
+          "ἀλλήλων"
+        ]
+      },
+      {
+        "declension": "ἀλλήλων",
+        "ruleName": "pronoun - plural - masc/fem/neut - gen",
+        "searchTerm": [
+          "ἀλλήλων"
+        ]
+      },
+      {
+        "declension": "ἀλλήλοισι",
+        "ruleName": "pronoun - plural - masc/neut - dat",
+        "searchTerm": [
+          "ἀλλήλων"
+        ]
+      },
+      {
+        "declension": "ἀλλήλῃσι",
+        "ruleName": "pronoun - plural - fem - dat",
+        "searchTerm": [
+          "ἀλλήλων"
+        ]
+      },
+      {
+        "declension": "ἀλλήλους",
+        "ruleName": "pronoun - plural - masc - acc",
+        "searchTerm": [
+          "ἀλλήλων"
+        ]
+      },
+      {
+        "declension": "ἀλλήλας",
+        "ruleName": "pronoun - plural - fem - acc",
+        "searchTerm": [
+          "ἀλλήλων"
+        ]
+      },
+      {
+        "declension": "ἀλλήλα",
+        "ruleName": "pronoun - plural - neut - acc",
+        "searchTerm": [
+          "ἀλλήλων"
+        ]
+      }
+  ]
+}

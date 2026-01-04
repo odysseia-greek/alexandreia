@@ -1,0 +1,776 @@
+openapi: 3.0.1
+info:
+  title: Dionysios
+  description: |-
+    # Introduction
+    This API is documented in **OpenAPI format** and is using [ReDoc](https://github.com/Redocly/redoc)
+  termsOfService: there are no TOS at this moment, use at your own risk we take no
+    responsibility
+  contact:
+    url: https://github.com/odysseia-greek
+    email: joerivrijaldenhoven@odysseia.io
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: 0.2.4
+servers:
+- url: http://k3s-odysseia.greek/dionysios/v1
+- url: https://k3s-odysseia.greek/dionysios/v1
+paths:
+  /check:
+    get:
+      tags:
+      - grammar
+      description: Tries to determine what declensions a word might be or what form
+        it takes when it is a verb
+      operationId: check
+      parameters:
+      - name: word
+        in: query
+        description: word or part of word being queried
+        required: true
+        schema:
+          type: string
+          format: word
+      responses:
+        200:
+          description: DeclensionTranslationResults
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeclensionTranslationResults'
+        400:
+          description: ValidationError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        404:
+          description: NotFoundError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+        405:
+          description: MethodError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MethodError'
+        502:
+          description: ElasticSearchError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ElasticSearchError'
+  /health:
+    get:
+      tags:
+      - status
+      description: Checks if api is healthy
+      operationId: health
+      responses:
+        200:
+          description: Health
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        502:
+          description: Health
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /ping:
+    get:
+      tags:
+      - status
+      description: Checks if api is reachable
+      operationId: ping
+      responses:
+        200:
+          description: ResultModel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultModel'
+components:
+  schemas:
+    Author:
+      required:
+      - author
+      type: object
+      properties:
+        author:
+          type: string
+          example: herodotos
+          x-go-name: Author
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Authors:
+      type: object
+      properties:
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Author'
+          x-go-name: Authors
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Book:
+      type: object
+      properties:
+        book:
+          type: integer
+          format: int64
+          example: 2
+          x-go-name: Book
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Books:
+      type: object
+      properties:
+        books:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+          x-go-name: Books
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Categories:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+          x-go-name: Category
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Category:
+      required:
+      - category
+      type: object
+      properties:
+        category:
+          type: string
+          example: frogs
+          x-go-name: Category
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    CheckAnswerRequest:
+      required:
+      - answerProvided
+      - quizWord
+      type: object
+      properties:
+        answerProvided:
+          type: string
+          example: horse
+          x-go-name: AnswerProvided
+        quizWord:
+          type: string
+          example: ὄνος
+          x-go-name: QuizWord
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    CheckAnswerResponse:
+      required:
+      - correct
+      - quizWord
+      type: object
+      properties:
+        correct:
+          type: boolean
+          example: false
+          x-go-name: Correct
+        possibilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Word'
+          x-go-name: Possibilities
+        quizWord:
+          type: string
+          example: ὄνος
+          x-go-name: QuizWord
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    CheckSentenceRequest:
+      required:
+      - answerSentence
+      - author
+      - sentenceId
+      type: object
+      properties:
+        answerSentence:
+          type: string
+          example: this is an example sentence
+          x-go-name: ProvidedSentence
+        author:
+          type: string
+          example: herodotos
+          x-go-name: Author
+        sentenceId:
+          type: string
+          example: fd4TlogBC__qOhD2dK31
+          x-go-name: SentenceId
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    CheckSentenceResponse:
+      required:
+      - answerSentence
+      - levenshteinPercentage
+      - quizSentence
+      - splitAnswerSentence
+      - splitQuizSentence
+      type: object
+      properties:
+        answerSentence:
+          type: string
+          example: this is an example answer"
+          x-go-name: AnswerSentence
+        levenshteinPercentage:
+          type: string
+          example: "9.09"
+          x-go-name: LevenshteinPercentage
+        matchingWords:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchingWord'
+          x-go-name: MatchingWords
+        nonMatchingWords:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonMatchingWord'
+          x-go-name: NonMatchingWords
+        quizSentence:
+          type: string
+          example: Such a step would not be condemned either by the gods who received
+            our oaths,
+          x-go-name: QuizSentence
+        splitAnswerSentence:
+          type: array
+          example:
+          - this
+          - example
+          items:
+            type: string
+          x-go-name: SplitAnswerSentence
+        splitQuizSentence:
+          type: array
+          example:
+          - Such
+          - condemned
+          items:
+            type: string
+          x-go-name: SplitQuizSentence
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    CreateSentenceResponse:
+      required:
+      - sentence
+      - sentenceId
+      type: object
+      properties:
+        sentence:
+          type: string
+          example: ὡς δέ οἱ ταῦτα ἔδοξε, καὶ ἐποίεε κατὰ τάχος·
+          x-go-name: Sentence
+        sentenceId:
+          type: string
+          example: fd4TlogBC__qOhD2dK31
+          x-go-name: SentenceId
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    DatabaseHealth:
+      type: object
+      properties:
+        clusterName:
+          type: string
+          example: aristoteles
+          x-go-name: ClusterName
+        healthy:
+          type: boolean
+          example: true
+          x-go-name: Healthy
+        serverName:
+          type: string
+          example: aristoteles-es-worker-0
+          x-go-name: ServerName
+        serverVersion:
+          type: string
+          example: 8.8.0
+          x-go-name: ServerVersion
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    DeclensionTranslationResults:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Result'
+          x-go-name: Results
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    ElasticErrorMessage:
+      type: object
+      properties:
+        elasticError:
+          type: string
+          x-go-name: ElasticError
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    ElasticSearchError:
+      required:
+      - uniqueCode
+      type: object
+      properties:
+        errorModel:
+          $ref: '#/components/schemas/ElasticErrorMessage'
+        uniqueCode:
+          type: string
+          example: 94374b4f-3dda-4ffb-b33b-2cb6ba092b84
+          x-go-name: UniqueCode
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    ErrorModel:
+      required:
+      - uniqueCode
+      type: object
+      properties:
+        uniqueCode:
+          type: string
+          example: 94374b4f-3dda-4ffb-b33b-2cb6ba092b84
+          x-go-name: UniqueCode
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Health:
+      type: object
+      properties:
+        databaseHealth:
+          $ref: '#/components/schemas/DatabaseHealth'
+        healthy:
+          type: boolean
+          example: true
+          x-go-name: Healthy
+        memory:
+          $ref: '#/components/schemas/Memory'
+        time:
+          type: string
+          example: 2023-06-07 15:02:11.678766777 +0000 UTC m=+5090.268683461
+          x-go-name: Time
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    LastChapterResponse:
+      required:
+      - lastChapter
+      type: object
+      properties:
+        lastChapter:
+          type: integer
+          format: int64
+          example: 119
+          x-go-name: LastChapter
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Logos:
+      type: object
+      properties:
+        logos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Word'
+          x-go-name: Logos
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Match:
+      required:
+      - answerIndex
+      - levenshtein
+      - match
+      - percentage
+      type: object
+      properties:
+        answerIndex:
+          type: integer
+          format: int64
+          example: 3
+          x-go-name: AnswerIndex
+        levenshtein:
+          type: integer
+          format: int64
+          example: 4
+          x-go-name: Levenshtein
+        match:
+          type: string
+          example: superduperword
+          x-go-name: Match
+        percentage:
+          type: string
+          example: "25.00"
+          x-go-name: Percentage
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    MatchingWord:
+      required:
+      - sourceIndex
+      - word
+      type: object
+      properties:
+        sourceIndex:
+          type: integer
+          format: int64
+          example: 4
+          x-go-name: SourceIndex
+        word:
+          type: string
+          example: thiswordisinthetext
+          x-go-name: Word
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Memory:
+      type: object
+      properties:
+        alloc:
+          type: integer
+          format: uint64
+          x-go-name: Alloc
+        free:
+          type: integer
+          format: uint64
+          x-go-name: Free
+        sys:
+          type: integer
+          format: uint64
+          x-go-name: Sys
+        totalAlloc:
+          type: integer
+          format: uint64
+          x-go-name: TotalAlloc
+        unit:
+          type: string
+          x-go-name: Unit
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Meros:
+      required:
+      - english
+      - greek
+      type: object
+      properties:
+        dutch:
+          type: string
+          example: ezel
+          x-go-name: Dutch
+        english:
+          type: string
+          example: an ass
+          x-go-name: English
+        greek:
+          type: string
+          example: ὄνος
+          x-go-name: Greek
+        linkedWord:
+          type: string
+          x-go-name: LinkedWord
+        original:
+          type: string
+          x-go-name: Original
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Method:
+      required:
+      - method
+      type: object
+      properties:
+        method:
+          type: string
+          example: aristophanes
+          x-go-name: Method
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    MethodError:
+      required:
+      - uniqueCode
+      type: object
+      properties:
+        errorModel:
+          type: array
+          items:
+            $ref: '#/components/schemas/MethodMessages'
+          x-go-name: Messages
+        uniqueCode:
+          type: string
+          example: 94374b4f-3dda-4ffb-b33b-2cb6ba092b84
+          x-go-name: UniqueCode
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    MethodMessages:
+      type: object
+      properties:
+        allowedMethods:
+          type: string
+          example: GET
+          x-go-name: Methods
+        methodError:
+          type: string
+          example: Method DELETE not allowed at this endpoint
+          x-go-name: Message
+      description: MethodMessages messages used in method error
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Methods:
+      type: object
+      properties:
+        methods:
+          type: array
+          items:
+            $ref: '#/components/schemas/Method'
+          x-go-name: Method
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    NonMatchingWord:
+      required:
+      - sourceIndex
+      - word
+      type: object
+      properties:
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Match'
+          x-go-name: Matches
+        sourceIndex:
+          type: integer
+          format: int64
+          example: 3
+          x-go-name: SourceIndex
+        word:
+          type: string
+          example: step
+          x-go-name: Word
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    NotFoundError:
+      required:
+      - uniqueCode
+      type: object
+      properties:
+        errorModel:
+          $ref: '#/components/schemas/NotFoundMessage'
+        uniqueCode:
+          type: string
+          example: 94374b4f-3dda-4ffb-b33b-2cb6ba092b84
+          x-go-name: UniqueCode
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    NotFoundMessage:
+      type: object
+      properties:
+        reason:
+          type: string
+          example: produced 0 results
+          x-go-name: Reason
+        type:
+          type: string
+          example: query for obscura
+          x-go-name: Type
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    QuizResponse:
+      required:
+      - answer
+      - question
+      - quiz
+      type: object
+      properties:
+        answer:
+          type: string
+          example: donkey
+          x-go-name: Answer
+        question:
+          type: string
+          example: ὄνος
+          x-go-name: Question
+        quiz:
+          type: array
+          example:
+          - donkey
+          - anotheranswer
+          items:
+            type: string
+          x-go-name: QuizQuestions
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Result:
+      required:
+      - rootWord
+      - rule
+      - translation
+      - word
+      type: object
+      properties:
+        rootWord:
+          type: string
+          example: βαλλω
+          x-go-name: RootWord
+        rule:
+          type: string
+          example: 3th sing - impf - ind - act
+          x-go-name: Rule
+        translation:
+          type: string
+          example: throw
+          x-go-name: Translation
+        word:
+          type: string
+          example: ἔβαλλε
+          x-go-name: Word
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    ResultModel:
+      required:
+      - result
+      type: object
+      properties:
+        result:
+          type: string
+          example: pong
+          x-go-name: Result
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Rhema:
+      type: object
+      properties:
+        rhemai:
+          type: array
+          items:
+            $ref: '#/components/schemas/RhemaSource'
+          x-go-name: Rhemai
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    RhemaSource:
+      required:
+      - author
+      - book
+      - chapter
+      - greek
+      - perseusTextLink
+      - section
+      - translations
+      type: object
+      properties:
+        author:
+          type: string
+          example: Herodotos
+          x-go-name: Author
+        book:
+          type: integer
+          format: int64
+          example: 1
+          x-go-name: Book
+        chapter:
+          type: integer
+          format: int64
+          example: 1
+          x-go-name: Chapter
+        greek:
+          type: string
+          example: ὡς δέ οἱ ταῦτα ἔδοξε, καὶ ἐποίεε κατὰ τάχος·
+          x-go-name: Greek
+        perseusTextLink:
+          type: string
+          example: https://externallink
+          x-go-name: PerseusTextLink
+        section:
+          type: integer
+          format: int64
+          example: 1
+          x-go-name: Section
+        translations:
+          type: array
+          example:
+          - first translation
+          - second translation
+          items:
+            type: string
+          x-go-name: Translations
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    SolonCreationRequest:
+      required:
+      - access
+      - podName
+      - roles
+      - username
+      type: object
+      properties:
+        access:
+          type: array
+          example: '[grammar dictionary]'
+          items:
+            type: string
+          x-go-name: Access
+        podName:
+          type: string
+          example: dionysios-544c584d7f-6sp6x
+          x-go-name: PodName
+        roles:
+          type: string
+          example: api
+          x-go-name: Role
+        username:
+          type: string
+          example: dionysios
+          x-go-name: Username
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    SolonResponse:
+      required:
+      - secretCreated
+      - userCreated
+      type: object
+      properties:
+        secretCreated:
+          type: boolean
+          example: true
+          x-go-name: SecretCreated
+        userCreated:
+          type: boolean
+          example: true
+          x-go-name: UserCreated
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    TokenResponse:
+      required:
+      - token
+      type: object
+      properties:
+        token:
+          type: string
+          example: s.1283745jdf83r3
+          x-go-name: Token
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    ValidationError:
+      required:
+      - uniqueCode
+      type: object
+      properties:
+        errorModel:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationMessages'
+          x-go-name: Messages
+        uniqueCode:
+          type: string
+          example: 94374b4f-3dda-4ffb-b33b-2cb6ba092b84
+          x-go-name: UniqueCode
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    ValidationMessages:
+      type: object
+      properties:
+        validationField:
+          type: string
+          example: word
+          x-go-name: Field
+        validationMessage:
+          type: string
+          example: cannot be empty
+          x-go-name: Message
+      x-go-package: github.com/odysseia-greek/agora/plato/models
+    Word:
+      required:
+      - category
+      - chapter
+      - greek
+      - method
+      - translation
+      type: object
+      properties:
+        category:
+          type: string
+          example: frogs
+          x-go-name: Category
+        chapter:
+          type: integer
+          format: int64
+          example: 1
+          x-go-name: Chapter
+        greek:
+          type: string
+          example: ὄνος
+          x-go-name: Greek
+        method:
+          type: string
+          example: aristophanes
+          x-go-name: Method
+        translation:
+          type: string
+          example: donkey
+          x-go-name: Translation
+      x-go-package: github.com/odysseia-greek/agora/plato/models

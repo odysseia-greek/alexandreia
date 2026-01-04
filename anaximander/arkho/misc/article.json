@@ -1,0 +1,175 @@
+{
+  "name": "misc",
+  "type": "article",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "ὁ",
+      "ruleName": "article - sing - masc - nom",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τοῦ",
+      "ruleName": "article - sing - masc - gen",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τῷ",
+      "ruleName": "article - sing - masc - dat",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τὸν",
+      "ruleName": "article - sing - masc - acc",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "οἱ",
+      "ruleName": "article - plural - masc - nom",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τῶν",
+      "ruleName": "article - plural - masc - gen",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τοῖς",
+      "ruleName": "article - plural - masc - dat",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τοὺς",
+      "ruleName": "article - plural - masc - acc",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "ἡ",
+      "ruleName": "article - sing - fem - nom",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τῆς",
+      "ruleName": "article - sing - fem - gen",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τῇ",
+      "ruleName": "article - sing - fem - dat",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τὴν",
+      "ruleName": "article - sing - fem - acc",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "αἱ",
+      "ruleName": "article - plural - fem - nom",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τῶν",
+      "ruleName": "article - plural - fem - gen",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "ταῖς",
+      "ruleName": "article - plural - fem - dat",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τὰς",
+      "ruleName": "article - plural - fem - acc",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τὸ",
+      "ruleName": "article - sing - neut - nom",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τοῦ",
+      "ruleName": "article - sing - neut - gen",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τῷ",
+      "ruleName": "article - sing - neut - dat",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τὸ",
+      "ruleName": "article - sing - neut - acc",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τὰ",
+      "ruleName": "article - plural - neut - nom",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τῶν",
+      "ruleName": "article - plural - neut - gen",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τοῖς",
+      "ruleName": "article - plural - neut - dat",
+      "searchTerm": [
+        "ὁ"
+      ]
+    },
+    {
+      "declension": "τὰ",
+      "ruleName": "article - plural - neut - acc",
+      "searchTerm": [
+        "ὁ"
+      ]
+    }
+  ]
+}

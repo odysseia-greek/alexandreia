@@ -1,0 +1,767 @@
+
+{
+  "name": "thirdDeclension",
+  "type": "noun",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-ς",
+      "ruleName": "noun - sing - masc/fem - nom",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-ς",
+      "ruleName": "noun - sing - masc/fem - voc",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-ος",
+      "ruleName": "noun - sing - masc/fem - gen",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-ι",
+      "ruleName": "noun - sing - masc/fem - dat",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-α",
+      "ruleName": "noun - sing - masc/fem - acc",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-ες",
+      "ruleName": "noun - sing - masc/fem - acc",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-ες",
+      "ruleName": "noun - sing - masc/fem - nom",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-ων",
+      "ruleName": "noun - plural - masc/fem - gen",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-ασιν",
+      "ruleName": "noun - plural - masc/fem - dat",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-σι",
+      "ruleName": "noun - plural - masc/fem - dat",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-ας",
+      "ruleName": "noun - plural - masc - acc",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-ες",
+      "ruleName": "noun - plural - masc - voc",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-ις",
+      "ruleName": "noun - sing - fem - nom",
+      "searchTerm": [
+        "ις"
+      ]
+    },
+    {
+      "declension": "-ι",
+      "ruleName": "noun - sing - fem - voc",
+      "searchTerm": [
+        "ις"
+      ]
+    },
+    {
+      "declension": "-εως",
+      "ruleName": "noun - sing - fem - gen",
+      "searchTerm": [
+        "ις"
+      ]
+    },
+    {
+      "declension": "-ει",
+      "ruleName": "noun - sing - fem - dat",
+      "searchTerm": [
+        "ις"
+      ]
+    },
+    {
+      "declension": "-ιν",
+      "ruleName": "noun - sing - fem - acc",
+      "searchTerm": [
+        "ις"
+      ]
+    },
+
+    {
+      "declension": "-εις",
+      "ruleName": "noun - plural - fem - nom",
+      "searchTerm": [
+        "ις"
+      ]
+    },
+    {
+      "declension": "-εις",
+      "ruleName": "noun - plural - fem - voc",
+      "searchTerm": [
+        "ις"
+      ]
+    },
+    {
+      "declension": "-εων",
+      "ruleName": "noun - plural - fem - gen",
+      "searchTerm": [
+        "ις"
+      ]
+    },
+    {
+      "declension": "-εσι",
+      "ruleName": "noun - plural - fem - dat",
+      "searchTerm": [
+        "ις"
+      ]
+    },
+    {
+      "declension": "-εσιν",
+      "ruleName": "noun - plural - fem - dat",
+      "searchTerm": [
+        "ις"
+      ]
+    },
+    {
+      "declension": "-εις",
+      "ruleName": "noun - plural - fem - acc",
+      "searchTerm": [
+        "ις"
+      ]
+    },
+
+    {
+      "declension": "α",
+      "ruleName": "noun - sing - neut - nom",
+      "searchTerm": [
+        "α"
+      ]
+    },
+    {
+      "declension": "α",
+      "ruleName": "noun - sing - neut - voc",
+      "searchTerm": [
+        "α"
+      ]
+    },
+    {
+      "declension": "-ᾰτος",
+      "ruleName": "noun - sing - neut - gen",
+      "searchTerm": [
+        "α"
+      ]
+    },
+    {
+      "declension": "-ᾰτῐ",
+      "ruleName": "noun - sing - neut - dat",
+      "searchTerm": [
+        "α"
+      ]
+    },
+    {
+      "declension": "ᾰ",
+      "ruleName": "noun - sing - neut - acc",
+      "searchTerm": [
+        "α"
+      ]
+    },
+    {
+      "declension": "-ᾰτᾰ",
+      "ruleName": "noun - plural - neut - nom",
+      "searchTerm": [
+        "α"
+      ]
+    },
+    {
+      "declension": "-ᾰτᾰ",
+      "ruleName": "noun - plural - neut - voc",
+      "searchTerm": [
+        "α"
+      ]
+    },
+    {
+      "declension": "-ᾰτων",
+      "ruleName": "noun - plural - neut - gen",
+      "searchTerm": [
+        "α"
+      ]
+    },
+    {
+      "declension": "-ασιν",
+      "ruleName": "noun - plural - neut - dat",
+      "searchTerm": [
+        "α"
+      ]
+    },
+    {
+      "declension": "-ᾰσῐ",
+      "ruleName": "noun - plural - neut - dat",
+      "searchTerm": [
+        "α"
+      ]
+    },
+    {
+      "declension": "-ᾰτᾰ",
+      "ruleName": "noun - plural - neut - acc",
+      "searchTerm": [
+        "α"
+      ]
+    },
+    {
+      "declension": "-εύς",
+      "ruleName": "noun - sing - masc - nom",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-έως",
+      "ruleName": "noun - sing - masc - gen",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-εῖ",
+      "ruleName": "noun - sing - masc - dat",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-έα",
+      "ruleName": "noun - sing - masc - acc",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-εῦ",
+      "ruleName": "noun - sing - masc - voc",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-εῖς",
+      "ruleName": "noun - plural - masc - nom",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-έων",
+      "ruleName": "noun - plural - masc - gen",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-εῦσι",
+      "ruleName": "noun - plural - masc - dat",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-εῦσιν",
+      "ruleName": "noun - plural - masc - dat",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-έας",
+      "ruleName": "noun - plural - masc - acc",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-αρ",
+      "ruleName": "noun - sing - masc - nom",
+      "searchTerm": [
+        "αρ"
+      ]
+    },
+    {
+      "declension": "-αρος",
+      "ruleName": "noun - sing - masc - gen",
+      "searchTerm": [
+        "αρ"
+      ]
+    },
+    {
+      "declension": "-αρι",
+      "ruleName": "noun - sing - masc - dat",
+      "searchTerm": [
+        "αρ"
+      ]
+    },
+    {
+      "declension": "-αρα",
+      "ruleName": "noun - sing - masc - acc",
+      "searchTerm": [
+        "αρ"
+      ]
+    },
+    {
+      "declension": "-αρ",
+      "ruleName": "noun - sing - masc - voc",
+      "searchTerm": [
+        "αρ"
+      ]
+    },
+    {
+      "declension": "-αρες",
+      "ruleName": "noun - plural - masc - nom",
+      "searchTerm": [
+        "αρ"
+      ]
+    },
+    {
+      "declension": "-άρων",
+      "ruleName": "noun - plural - masc - gen",
+      "searchTerm": [
+        "αρ"
+      ]
+    },
+    {
+      "declension": "-αράσι",
+      "ruleName": "noun - plural - masc - dat",
+      "searchTerm": [
+        "αρ"
+      ]
+    },
+    {
+      "declension": "-αράσιν",
+      "ruleName": "noun - plural - masc - dat",
+      "searchTerm": [
+        "αρ"
+      ]
+    },
+    {
+      "declension": "-αρας",
+      "ruleName": "noun - plural - masc - acc",
+      "searchTerm": [
+        "αρ"
+      ]
+    },
+    {
+      "declension": "-άς",
+      "ruleName": "noun - sing - fem - nom",
+      "searchTerm": [
+        "άς"
+      ]
+    },
+    {
+      "declension": "-άδος",
+      "ruleName": "noun - sing - fem - gen",
+      "searchTerm": [
+        "άς"
+      ]
+    },
+    {
+      "declension": "-άδι",
+      "ruleName": "noun - sing - fem - dat",
+      "searchTerm": [
+        "άς"
+      ]
+    },
+    {
+      "declension": "-άδα",
+      "ruleName": "noun - sing - fem - acc",
+      "searchTerm": [
+        "άς"
+      ]
+    },
+    {
+      "declension": "-άς",
+      "ruleName": "noun - sing - fem - voc",
+      "searchTerm": [
+        "άς"
+      ]
+    },
+    {
+      "declension": "-άδες",
+      "ruleName": "noun - plural - fem - nom",
+      "searchTerm": [
+        "άς"
+      ]
+    },
+    {
+      "declension": "-άδων",
+      "ruleName": "noun - plural - fem - gen",
+      "searchTerm": [
+        "άς"
+      ]
+    },
+    {
+      "declension": "-άσι",
+      "ruleName": "noun - plural - fem - dat",
+      "searchTerm": [
+        "άς"
+      ]
+    },
+    {
+      "declension": "-άσιν",
+      "ruleName": "noun - plural - fem - dat",
+      "searchTerm": [
+        "άς"
+      ]
+    },
+    {
+      "declension": "-άδας",
+      "ruleName": "noun - plural - fem - acc",
+      "searchTerm": [
+        "άς"
+      ]
+    },
+    {
+      "declension": "-ήρ",
+      "ruleName": "noun - sing - masc - nom",
+      "searchTerm": [
+        "ήρ"
+      ]
+    },
+    {
+      "declension": "-δρός",
+      "ruleName": "noun - sing - masc - gen",
+      "searchTerm": [
+        "ήρ"
+      ]
+    },
+    {
+      "declension": "-δρί",
+      "ruleName": "noun - sing - masc - dat",
+      "searchTerm": [
+        "ήρ"
+      ]
+    },
+    {
+      "declension": "-δρα",
+      "ruleName": "noun - sing - masc - acc",
+      "searchTerm": [
+        "ήρ"
+      ]
+    },
+    {
+      "declension": "-ερ",
+      "ruleName": "noun - sing - masc - voc",
+      "searchTerm": [
+        "ήρ"
+      ]
+    },
+    {
+      "declension": "-δρες",
+      "ruleName": "noun - plural - masc - nom",
+      "searchTerm": [
+        "ήρ"
+      ]
+    },
+    {
+      "declension": "-δρες",
+      "ruleName": "noun - plural - masc - voc",
+      "searchTerm": [
+        "ήρ"
+      ]
+    },
+    {
+      "declension": "-δρῶν",
+      "ruleName": "noun - plural - masc - gen",
+      "searchTerm": [
+        "ήρ"
+      ]
+    },
+    {
+      "declension": "-δράσι",
+      "ruleName": "noun - plural - masc - dat",
+      "searchTerm": [
+        "ήρ"
+      ]
+    },
+    {
+      "declension": "-δράσιν",
+      "ruleName": "noun - plural - masc - dat",
+      "searchTerm": [
+        "ήρ"
+      ]
+    },
+    {
+      "declension": "-δρας",
+      "ruleName": "noun - plural - masc - acc",
+      "searchTerm": [
+        "ήρ"
+      ]
+    },
+      {
+        "declension": "-ρος",
+        "ruleName": "noun - sing - gen - masc/fem",
+        "searchTerm": [
+          "ς"
+        ]
+      },
+      {
+        "declension": "-ρι",
+        "ruleName": "noun - sing - dat - masc/fem",
+        "searchTerm": [
+          "ς"
+        ]
+      },
+      {
+        "declension": "-ρα",
+        "ruleName": "noun - sing - acc - masc/fem",
+        "searchTerm": [
+          "ς"
+        ]
+      },
+      {
+        "declension": "-ρες",
+        "ruleName": "noun - sing - nom - masc/fem",
+        "searchTerm": [
+          "ς"
+        ]
+      },
+      {
+        "declension": "-ρων",
+        "ruleName": "noun - plural - gen - masc/fem",
+        "searchTerm": [
+          "ς"
+        ]
+      },
+      {
+        "declension": "-σιν",
+        "ruleName": "noun - plural - dat - masc/fem",
+        "searchTerm": [
+          "ς"
+        ]
+      },
+      {
+        "declension": "-ρας",
+        "ruleName": "noun - plural - acc - masc/fem",
+        "searchTerm": [
+          "ς"
+        ]
+      },
+    {
+      "declension": "-τος",
+      "ruleName": "noun - singular - gen - masc/fem",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-τι",
+      "ruleName": "noun - singular - dat - masc/fem",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-ν",
+      "ruleName": "noun - singular - acc - masc/fem",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-τες",
+      "ruleName": "noun - plural - nom - masc/fem",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-των",
+      "ruleName": "noun - plural - gen - masc/fem",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-σι",
+      "ruleName": "noun - plural - dat - masc/fem",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-σιν",
+      "ruleName": "noun - plural - dat - masc/fem",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-τας",
+      "ruleName": "noun - plural - acc - masc/fem",
+      "searchTerm": [
+        "ς"
+      ]
+    },
+    {
+      "declension": "-έος",
+      "ruleName": "noun - sing - masc/fem - gen (epic/ionic)",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-έϊ",
+      "ruleName": "noun - sing - masc/fem - dat (epic/ionic)",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-έα",
+      "ruleName": "noun - sing - masc/fem - acc (epic/ionic)",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-έες",
+      "ruleName": "noun - plural - masc/fem - nom (epic/ionic)",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-έων",
+      "ruleName": "noun - plural - masc/fem - gen (epic/ionic)",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-ήεσσι",
+      "ruleName": "noun - plural - masc/fem - dat (epic/ionic)",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-ήεσσιν",
+      "ruleName": "noun - plural - masc/fem - dat (epic/ionic)",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-έεσσι",
+      "ruleName": "noun - plural - masc/fem - dat (epic/ionic)",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-έεσσιν",
+      "ruleName": "noun - plural - masc/fem - dat (epic/ionic)",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-έας",
+      "ruleName": "noun - plural - masc/fem - acc (epic/ionic)",
+      "searchTerm": [
+        "εύς"
+      ]
+    },
+    {
+      "declension": "-ην",
+      "ruleName": "noun - sing - masc/fem - acc",
+      "searchTerm": [
+        "ην"
+      ]
+    },
+    {
+      "declension": "-ῆνος",
+      "ruleName": "noun - sing - masc/fem - gen",
+      "searchTerm": [
+        "ην"
+      ]
+    },
+    {
+      "declension": "-ῆνι",
+      "ruleName": "noun - sing - masc/fem - dat",
+      "searchTerm": [
+        "ην"
+      ]
+    },
+    {
+      "declension": "-ηνες",
+      "ruleName": "noun - plural - masc/fem - nom",
+      "searchTerm": [
+        "ην"
+      ]
+    },
+    {
+      "declension": "-ήνων",
+      "ruleName": "noun - plural - masc/fem - gen",
+      "searchTerm": [
+        "ην"
+      ]
+    },
+    {
+      "declension": "-ῆσι",
+      "ruleName": "noun - plural - masc/fem - dat",
+      "searchTerm": [
+        "ην"
+      ]
+    },
+    {
+      "declension": "-ῆσιν",
+      "ruleName": "noun - plural - masc/fem - dat",
+      "searchTerm": [
+        "ην"
+      ]
+    },
+    {
+      "declension": "-ῆνας",
+      "ruleName": "noun - plural - masc/fem - acc",
+      "searchTerm": [
+        "ην"
+      ]
+    }
+
+  ]
+}
