@@ -1,0 +1,267 @@
+{
+  "name": "futurContract",
+  "type": "participle",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-σεῖν",
+      "ruleName": "fut act part - sing - masc - nom",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σοντος",
+      "ruleName": "fut act part - sing - masc - gen",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σοντι",
+      "ruleName": "fut act part - sing - masc - dat",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σοντα",
+      "ruleName": "fut act part - sing - masc - acc",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σουσα",
+      "ruleName": "fut act part - sing - fem - nom",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σουσης",
+      "ruleName": "fut act part - sing - fem - gen",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σουσῃ",
+      "ruleName": "fut act part - sing - fem - dat",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σουσαν",
+      "ruleName": "fut act part - sing - fem - acc",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σον",
+      "ruleName": "fut act part - sing - neut - nom",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σοντος",
+      "ruleName": "fut act part - sing - neut - gen",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σοντι",
+      "ruleName": "fut act part - sing - neut - dat",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σον",
+      "ruleName": "fut act part - sing - neut - acc",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σοντες",
+      "ruleName": "fut act part - plural - masc - nom",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σοντων",
+      "ruleName": "fut act part - plural - masc - gen",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σουσι",
+      "ruleName": "fut act part - plural - masc - dat",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σουσιν",
+      "ruleName": "fut act part - plural - masc - dat",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σοντας",
+      "ruleName": "fut act part - plural - masc - acc",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σουσαι",
+      "ruleName": "fut act part - plural - fem - nom",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σουσῶν",
+      "ruleName": "fut act part - plural - fem - gen",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σουσαις",
+      "ruleName": "fut act part - plural - fem - dat",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σουσᾱς",
+      "ruleName": "fut act part - plural - fem - acc",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σοντα",
+      "ruleName": "fut act part - plural - neut - nom",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σοντων",
+      "ruleName": "fut act part - plural - neut - gen",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σουσι",
+      "ruleName": "fut act part - plural - neut - dat",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σουσιν",
+      "ruleName": "fut act part - plural - neut - dat",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-σοντα",
+      "ruleName": "fut act part - plural - neut - acc",
+      "searchTerm": ["εω", "αω", "οω"]
+    },
+    {
+      "declension": "-ωσων",
+      "ruleName": "fut act part - sing - masc - nom",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσοντος",
+      "ruleName": "fut act part - sing - masc - gen",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσοντι",
+      "ruleName": "fut act part - sing - masc - dat",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσοντα",
+      "ruleName": "fut act part - sing - masc - acc",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσουσα",
+      "ruleName": "fut act part - sing - fem - nom",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσούσης",
+      "ruleName": "fut act part - sing - fem - gen",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσούσῃ",
+      "ruleName": "fut act part - sing - fem - dat",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσούσαν",
+      "ruleName": "fut act part - sing - fem - acc",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσον",
+      "ruleName": "fut act part - sing - neut - nom",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσοντος",
+      "ruleName": "fut act part - sing - neut - gen",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσοντι",
+      "ruleName": "fut act part - sing - neut - dat",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσον",
+      "ruleName": "fut act part - sing - neut - acc",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσοντες",
+      "ruleName": "fut act part - plural - masc - nom",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσόντων",
+      "ruleName": "fut act part - plural - masc - gen",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσουσι",
+      "ruleName": "fut act part - plural - masc - dat",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσουσιν",
+      "ruleName": "fut act part - plural - masc - dat",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσοντας",
+      "ruleName": "fut act part - plural - masc - acc",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσουσαι",
+      "ruleName": "fut act part - plural - fem - nom",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσουσῶν",
+      "ruleName": "fut act part - plural - fem - gen",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσουσαις",
+      "ruleName": "fut act part - plural - fem - dat",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσουσᾱς",
+      "ruleName": "fut act part - plural - fem - acc",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσοντα",
+      "ruleName": "fut act part - plural - neut - nom",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσόντων",
+      "ruleName": "fut act part - plural - neut - gen",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσουσι",
+      "ruleName": "fut act part - plural - neut - dat",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσουσιν",
+      "ruleName": "fut act part - plural - neut - dat",
+      "searchTerm": ["άω", "όω", "έω"]
+    },
+    {
+      "declension": "-ωσοντα",
+      "ruleName": "fut act part - plural - neut - acc",
+      "searchTerm": ["άω", "όω", "έω"]
+    }
+  ]
+}

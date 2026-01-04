@@ -1,0 +1,52 @@
+{
+  "name": "misc",
+  "type": "particle",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "δὲ",
+      "ruleName": "particle"
+    },
+    {
+      "declension": "γε",
+      "ruleName": "particle"
+    },
+    {
+      "declension": "δʼ",
+      "ruleName": "particle",
+      "searchTerm": [
+        "δὲ"
+      ]
+    },
+    {
+      "declension": "δ’",
+      "ruleName": "particle",
+      "searchTerm": [
+        "δὲ"
+      ]
+    },
+    {
+      "declension": "ἆρα",
+      "ruleName": "particle"
+    },
+    {
+      "declension": "οὔ",
+      "ruleName": "particle"
+    },
+    {
+      "declension": "οὐκ",
+      "ruleName": "particle",
+      "searchTerm": [
+        "οὔ"
+      ]
+    },
+    {
+      "declension": "μὲν",
+      "ruleName": "particle"
+    },
+    {
+      "declension": "οὖν",
+      "ruleName": "particle"
+    }
+  ]
+}

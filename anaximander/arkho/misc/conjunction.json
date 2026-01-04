@@ -1,0 +1,77 @@
+{
+  "name": "misc",
+  "type": "conjunction",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "ἵνα",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "μέχρι",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "γὰρ",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "ὅτι",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "ὅπου",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "ὅπως",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "ὥστε",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "καί",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "οὐδὲ",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "ὅτε",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "μηδὲ",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "εἴτε",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "ὅταν",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "ἀλλά",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "ἀλλʼ",
+      "ruleName": "conjunction",
+      "searchTerm": [
+        "ἀλλά"
+      ]
+    },
+    {
+      "declension": "ἀλλ’",
+      "ruleName": "conjunction",
+      "searchTerm": [
+        "ἀλλά"
+      ]
+    }
+  ]
+}

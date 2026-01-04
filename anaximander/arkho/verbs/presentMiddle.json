@@ -1,0 +1,133 @@
+{
+  "name": "presentMiddle",
+  "type": "present",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-ομαι",
+      "ruleName": "1st sing - pres - mid - ind",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-μαι",
+      "ruleName": "1st sing - pres - mid - ind",
+      "searchTerm": [
+        "μαι"
+      ]
+    },
+    {
+      "declension": "-ει",
+      "ruleName": "2nd sing - pres - mid - ind",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ῃ",
+      "ruleName": "2nd sing - pres - mid - ind",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-σαι",
+      "ruleName": "2nd sing - pres - mid - ind",
+      "searchTerm": [
+        "μαι"
+      ]
+    },
+    {
+      "declension": "-εται",
+      "ruleName": "3th sing - pres - mid - ind",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ται",
+      "ruleName": "3th sing - pres - mid - ind",
+      "searchTerm": [
+        "μαι"
+      ]
+    },
+    {
+      "declension": "-όμεθα",
+      "ruleName": "1st plural - pres - mid - ind",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-μεθα",
+      "ruleName": "1st plural - pres - mid - ind",
+      "searchTerm": [
+        "μαι"
+      ]
+    },
+    {
+      "declension": "-εσθε",
+      "ruleName": "2nd plural - pres - mid - ind",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-σθε",
+      "ruleName": "2nd plural - pres - mid - ind",
+      "searchTerm": [
+        "μαι"
+      ]
+    },
+    {
+      "declension": "-ονται",
+      "ruleName": "3th plural - pres - mid - ind",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-νται",
+      "ruleName": "3th plural - pres - mid - ind",
+      "searchTerm": [
+        "μαι"
+      ]
+    },
+    {
+      "declension": "-ου",
+      "ruleName": "2nd sing - pres - imper - mid/pas",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-έσθω",
+      "ruleName": "3rd sing - pres - imper - mid/pas",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-εσθε",
+      "ruleName": "2nd plural - pres - imper - mid/pas",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-έσθων",
+      "ruleName": "3rd plural - pres - imper - mid/pas",
+      "searchTerm": [
+        "ω"
+      ]
+    }
+  ]
+}

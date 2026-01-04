@@ -1,0 +1,49 @@
+{
+  "name": "imperfectActiveContract",
+  "type": "past",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-ουν",
+      "ruleName": "1st sing - impf - ind - act",
+      "searchTerm": [
+        "έω"
+      ]
+    },
+    {
+      "declension": "-εις",
+      "ruleName": "2nd sing - impf - ind - act",
+      "searchTerm": [
+        "έω"
+      ]
+    },
+    {
+      "declension": "-ει",
+      "ruleName": "3rd sing - impf - ind - act",
+      "searchTerm": [
+        "έω"
+      ]
+    },
+    {
+      "declension": "-οῦμεν",
+      "ruleName": "1st plural - impf - ind - act",
+      "searchTerm": [
+        "έω"
+      ]
+    },
+    {
+      "declension": "-εῖτε",
+      "ruleName": "2nd plural - impf - ind - act",
+      "searchTerm": [
+        "έω"
+      ]
+    },
+    {
+      "declension": "-ουν",
+      "ruleName": "3rd plural - impf - ind - act",
+      "searchTerm": [
+        "έω"
+      ]
+    }
+  ]
+}

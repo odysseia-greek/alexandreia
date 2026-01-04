@@ -1,0 +1,267 @@
+{
+  "name": "present",
+  "type": "present",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-ω",
+      "ruleName": "1st sing - pres - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ωμι",
+      "ruleName": "1st sing - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-εις",
+      "ruleName": "2nd sing - pres - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ως",
+      "ruleName": "2nd sing - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-ει",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ωσι",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-ωσιν",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-ωσῐ",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-ωσῐν",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-ομεν",
+      "ruleName": "1st plural - pres - ind - act",
+      "searchTerm": [
+        "ω",
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-ετε",
+      "ruleName": "2nd plural - pres - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οτε",
+      "ruleName": "2nd plural - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-ουσι",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ουσιν",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οασι",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-οασιν",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-όασι",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-όασιν",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-όᾱσῐ",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-όᾱσῐν",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "ωμι"
+      ]
+    },
+    {
+      "declension": "-ω",
+      "ruleName": "1st sing - pres - subj - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ῃς",
+      "ruleName": "2nd sing - pres - subj - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ῃ",
+      "ruleName": "3rd sing - pres - subj - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ωμεν",
+      "ruleName": "1st plural - pres - subj - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ητε",
+      "ruleName": "2nd plural - pres - subj - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ωσι",
+      "ruleName": "3rd plural - pres - subj - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ωσιν",
+      "ruleName": "3rd plural - pres - subj - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οιμι",
+      "ruleName": "1st sing - pres - opt - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οις",
+      "ruleName": "2nd sing - pres - opt - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οι",
+      "ruleName": "3rd sing - pres - opt - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οιμεν",
+      "ruleName": "1st plural - pres - opt - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οιτε",
+      "ruleName": "2nd plural - pres - opt - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οιεν",
+      "ruleName": "3rd plural - pres - opt - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ε",
+      "ruleName": "2nd sing - pres - imper - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-έτω",
+      "ruleName": "3rd sing - pres - imper - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ετε",
+      "ruleName": "2nd plural - pres - imper - act",
+      "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-όντων",
+      "ruleName": "3rd plural - pres - imper - act",
+      "searchTerm": [
+        "ω"
+      ]
+    }
+  ]
+}

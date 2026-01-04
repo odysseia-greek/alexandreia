@@ -1,0 +1,267 @@
+{
+  "name": "aoristConsonantal",
+  "type": "participle",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-ψας",
+      "ruleName": "aor act part - sing - masc - nom",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαντος",
+      "ruleName": "aor act part - sing - masc - gen",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαντι",
+      "ruleName": "aor act part - sing - masc - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαντα",
+      "ruleName": "aor act part - sing - masc - acc",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψασα",
+      "ruleName": "aor act part - sing - fem - nom",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψασης",
+      "ruleName": "aor act part - sing - fem - gen",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαση",
+      "ruleName": "aor act part - sing - fem - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψασαν",
+      "ruleName": "aor act part - sing - fem - acc",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαν",
+      "ruleName": "aor act part - sing - neut - nom",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαντος",
+      "ruleName": "aor act part - sing - neut - gen",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαντι",
+      "ruleName": "aor act part - sing - neut - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαν",
+      "ruleName": "aor act part - sing - neut - acc",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαντες",
+      "ruleName": "aor act part - plural - masc - nom",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαντων",
+      "ruleName": "aor act part - plural - masc - gen",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψασι",
+      "ruleName": "aor act part - plural - masc - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψασιν",
+      "ruleName": "aor act part - plural - masc - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαντας",
+      "ruleName": "aor act part - plural - masc - acc",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψασαι",
+      "ruleName": "aor act part - plural - fem - nom",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψασων",
+      "ruleName": "aor act part - plural - fem - gen",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψασαις",
+      "ruleName": "aor act part - plural - fem - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψασας",
+      "ruleName": "aor act part - plural - fem - acc",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαντα",
+      "ruleName": "aor act part - plural - neut - nom",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαντων",
+      "ruleName": "aor act part - plural - neut - gen",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψασι",
+      "ruleName": "aor act part - plural - neut - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψασιν",
+      "ruleName": "aor act part - plural - neut - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψαντα",
+      "ruleName": "aor act part - plural - neut - acc",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ξας",
+      "ruleName": "aor act part - sing - masc - nom",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαντος",
+      "ruleName": "aor act part - sing - masc - gen",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαντι",
+      "ruleName": "aor act part - sing - masc - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαντα",
+      "ruleName": "aor act part - sing - masc - acc",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξασα",
+      "ruleName": "aor act part - sing - fem - nom",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξασης",
+      "ruleName": "aor act part - sing - fem - gen",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαση",
+      "ruleName": "aor act part - sing - fem - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξασαν",
+      "ruleName": "aor act part - sing - fem - acc",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαν",
+      "ruleName": "aor act part - sing - neut - nom",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαντος",
+      "ruleName": "aor act part - sing - neut - gen",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαντι",
+      "ruleName": "aor act part - sing - neut - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαν",
+      "ruleName": "aor act part - sing - neut - acc",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαντες",
+      "ruleName": "aor act part - plural - masc - nom",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαντων",
+      "ruleName": "aor act part - plural - masc - gen",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξασι",
+      "ruleName": "aor act part - plural - masc - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξασιν",
+      "ruleName": "aor act part - plural - masc - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαντας",
+      "ruleName": "aor act part - plural - masc - acc",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξασαι",
+      "ruleName": "aor act part - plural - fem - nom",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξασων",
+      "ruleName": "aor act part - plural - fem - gen",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξασαις",
+      "ruleName": "aor act part - plural - fem - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξασας",
+      "ruleName": "aor act part - plural - fem - acc",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαντα",
+      "ruleName": "aor act part - plural - neut - nom",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαντων",
+      "ruleName": "aor act part - plural - neut - gen",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξασι",
+      "ruleName": "aor act part - plural - neut - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξασιν",
+      "ruleName": "aor act part - plural - neut - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαντα",
+      "ruleName": "aor act part - plural - neut - acc",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    }
+  ]
+}

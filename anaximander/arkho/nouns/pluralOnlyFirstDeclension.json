@@ -1,0 +1,42 @@
+{
+  "name": "firstDeclension",
+  "type": "noun",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-αι",
+      "ruleName": "noun - plural - fem - nom",
+      "searchTerm": [
+        "αι"
+      ]
+    },
+    {
+      "declension": "-αι",
+      "ruleName": "noun - plural - fem - voc",
+      "searchTerm": [
+        "αι"
+      ]
+    },
+    {
+      "declension": "-ων",
+      "ruleName": "noun - plural - fem - gen",
+      "searchTerm": [
+        "αι"
+      ]
+    },
+    {
+      "declension": "-αις",
+      "ruleName": "noun - plural - fem - dat",
+      "searchTerm": [
+        "αι"
+      ]
+    },
+    {
+      "declension": "-ας",
+      "ruleName": "noun - plural - fem - acc",
+      "searchTerm": [
+        "αι"
+      ]
+    }
+  ]
+}

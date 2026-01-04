@@ -1,0 +1,202 @@
+{
+  "name": "misc",
+  "type": "preposition",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "ἅμα",
+      "ruleName": "preposition +dat."
+    },
+    {
+      "declension": "ἄνευ",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ἄχρι",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ἄχρις",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ἕνεκα",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ἔξω",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "μεταξύ",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "μέχρι",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ὁπίσω",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "πλήν",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "χωρίς",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ἀμφί",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ἀντί",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ἀπό",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "διά",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ἐκ",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ἐπί",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "κατά",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "μετά",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "παρά",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "περί",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "πρό",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "πρός",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ὑπέρ",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ὑπό",
+      "ruleName": "preposition +gen."
+    },
+    {
+      "declension": "ἐξ",
+      "ruleName": "preposition +gen.",
+      "searchTerm": [
+        "ἐκ"
+      ]
+    },
+    {
+      "declension": "ἀμφί",
+      "ruleName": "preposition +dat."
+    },
+    {
+      "declension": "ἀνά",
+      "ruleName": "preposition +dat."
+    },
+    {
+      "declension": "ἐν",
+      "ruleName": "preposition +dat."
+    },
+    {
+      "declension": "ἐπί",
+      "ruleName": "preposition +dat."
+    },
+    {
+      "declension": "παρά",
+      "ruleName": "preposition +dat."
+    },
+    {
+      "declension": "περί",
+      "ruleName": "preposition +dat."
+    },
+    {
+      "declension": "πρός",
+      "ruleName": "preposition +dat."
+    },
+    {
+      "declension": "σύν",
+      "ruleName": "preposition +dat."
+    },
+    {
+      "declension": "ὑπό",
+      "ruleName": "preposition +dat."
+    },
+    {
+      "declension": "ἀμφί",
+      "ruleName": "preposition +acc."
+    },
+    {
+      "declension": "ἀνά",
+      "ruleName": "preposition +acc."
+    },
+    {
+      "declension": "διά",
+      "ruleName": "preposition +acc."
+    },
+    {
+      "declension": "εἰς",
+      "ruleName": "preposition +acc."
+    },
+    {
+      "declension": "ἐς",
+      "ruleName": "preposition +acc."
+    },
+    {
+      "declension": "ἐπί",
+      "ruleName": "preposition +acc."
+    },
+    {
+      "declension": "κατά",
+      "ruleName": "preposition +acc."
+    },
+    {
+      "declension": "μετά",
+      "ruleName": "preposition +acc."
+    },
+    {
+      "declension": "παρά",
+      "ruleName": "preposition +acc."
+    },
+    {
+      "declension": "περί",
+      "ruleName": "preposition +acc."
+    },
+    {
+      "declension": "πρός",
+      "ruleName": "preposition +acc."
+    },
+    {
+      "declension": "ὑπέρ",
+      "ruleName": "preposition +acc."
+    },
+    {
+      "declension": "ὑπό",
+      "ruleName": "preposition +acc."
+    }
+  ]
+}

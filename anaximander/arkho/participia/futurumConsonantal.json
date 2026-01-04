@@ -1,0 +1,267 @@
+{
+  "name": "futurumConsonantal",
+  "type": "participle",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-ψων",
+      "ruleName": "fut act part - sing - masc - nom",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψοντος",
+      "ruleName": "fut act part - sing - masc - gen",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψοντι",
+      "ruleName": "fut act part - sing - masc - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψοντα",
+      "ruleName": "fut act part - sing - masc - acc",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψουσα",
+      "ruleName": "fut act part - sing - fem - nom",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψούσης",
+      "ruleName": "fut act part - sing - fem - gen",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψούσῃ",
+      "ruleName": "fut act part - sing - fem - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψούσαν",
+      "ruleName": "fut act part - sing - fem - acc",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψον",
+      "ruleName": "fut act part - sing - neut - nom",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψοντος",
+      "ruleName": "fut act part - sing - neut - gen",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψοντι",
+      "ruleName": "fut act part - sing - neut - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψον",
+      "ruleName": "fut act part - sing - neut - acc",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψοντες",
+      "ruleName": "fut act part - plural - masc - nom",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψόντων",
+      "ruleName": "fut act part - plural - masc - gen",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψουσι",
+      "ruleName": "fut act part - plural - masc - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψουσιν",
+      "ruleName": "fut act part - plural - masc - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψοντας",
+      "ruleName": "fut act part - plural - masc - acc",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψουσαι",
+      "ruleName": "fut act part - plural - fem - nom",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψουσῶν",
+      "ruleName": "fut act part - plural - fem - gen",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψουσαις",
+      "ruleName": "fut act part - plural - fem - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψουσᾱς",
+      "ruleName": "fut act part - plural - fem - acc",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψοντα",
+      "ruleName": "fut act part - plural - neut - nom",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψόντων",
+      "ruleName": "fut act part - plural - neut - gen",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψουσι",
+      "ruleName": "fut act part - plural - neut - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψουσιν",
+      "ruleName": "fut act part - plural - neut - dat",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ψοντα",
+      "ruleName": "fut act part - plural - neut - acc",
+      "searchTerm": ["φω", "πτω", "πω"]
+    },
+    {
+      "declension": "-ξων",
+      "ruleName": "fut act part - sing - masc - nom",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξοντος",
+      "ruleName": "fut act part - sing - masc - gen",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξοντι",
+      "ruleName": "fut act part - sing - masc - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξοντα",
+      "ruleName": "fut act part - sing - masc - acc",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξουσα",
+      "ruleName": "fut act part - sing - fem - nom",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξούσης",
+      "ruleName": "fut act part - sing - fem - gen",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξούσῃ",
+      "ruleName": "fut act part - sing - fem - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξούσαν",
+      "ruleName": "fut act part - sing - fem - acc",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξον",
+      "ruleName": "fut act part - sing - neut - nom",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξοντος",
+      "ruleName": "fut act part - sing - neut - gen",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξοντι",
+      "ruleName": "fut act part - sing - neut - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξον",
+      "ruleName": "fut act part - sing - neut - acc",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξοντες",
+      "ruleName": "fut act part - plural - masc - nom",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξόντων",
+      "ruleName": "fut act part - plural - masc - gen",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξουσι",
+      "ruleName": "fut act part - plural - masc - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξουσιν",
+      "ruleName": "fut act part - plural - masc - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξοντας",
+      "ruleName": "fut act part - plural - masc - acc",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξουσαι",
+      "ruleName": "fut act part - plural - fem - nom",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξουσῶν",
+      "ruleName": "fut act part - plural - fem - gen",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξουσαις",
+      "ruleName": "fut act part - plural - fem - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξουσᾱς",
+      "ruleName": "fut act part - plural - fem - acc",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξοντα",
+      "ruleName": "fut act part - plural - neut - nom",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξόντων",
+      "ruleName": "fut act part - plural - neut - gen",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξουσι",
+      "ruleName": "fut act part - plural - neut - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξουσιν",
+      "ruleName": "fut act part - plural - neut - dat",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξοντα",
+      "ruleName": "fut act part - plural - neut - acc",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    }
+  ]
+}

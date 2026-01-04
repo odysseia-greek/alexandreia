@@ -1,0 +1,168 @@
+{
+  "name": "misc",
+  "type": "adverb",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "ἀεί",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "ἄνω",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "ἄρτι",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "αὖθις",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "αὐτίκα",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "εἶτα",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "ἐκεῖ",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "ἔνθα",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "ἐνταῦθα",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "ἔπειτα",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "ἔτι",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "εὖ",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "εὐθύς",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "ἤδη",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "μάλα",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "μάλιστα",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "μᾶλλον",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "οὐκέτι",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "πάλιν",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "πάντοτε",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "πλέον",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "πολλάκις",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "πότερον",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "πότε",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "πού",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "πρίν",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "πῶς",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "τότε",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "ναί",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "μάλιστα",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "οὔτε",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "πάνυ",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "νῦν",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "ὥσπερ",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "πάντα",
+      "ruleName": "adverb"
+    },
+    {
+      "declension": "τί",
+      "ruleName": "adverb (adverbial accusative)",
+      "searchTerm": [
+        "τί"
+      ]
+    },
+    {
+      "declension": "τʼ",
+      "ruleName": "adverb (adverbial accusative)",
+      "searchTerm": [
+        "τί"
+      ]
+    },
+    {
+      "declension": "τ’",
+      "ruleName": "adverb (adverbial accusative)",
+      "searchTerm": [
+        "τί"
+      ]
+    }
+  ]
+}
