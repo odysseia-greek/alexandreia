@@ -15,10 +15,10 @@ import (
 	"github.com/odysseia-greek/agora/plato/middleware"
 	"github.com/odysseia-greek/agora/plato/models"
 	"github.com/odysseia-greek/agora/plato/service"
+	pba "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
+	aristarchos "github.com/odysseia-greek/alexandreia/aristarchos/scholar"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
 	pb "github.com/odysseia-greek/attike/aristophanes/proto"
-	pba "github.com/odysseia-greek/olympia/aristarchos/proto"
-	aristarchos "github.com/odysseia-greek/olympia/aristarchos/scholar"
 	"google.golang.org/grpc/metadata"
 )
 

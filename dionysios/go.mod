@@ -8,9 +8,9 @@ require (
 	github.com/odysseia-greek/agora/archytas v0.1.2
 	github.com/odysseia-greek/agora/aristoteles v0.1.15
 	github.com/odysseia-greek/agora/plato v0.2.10
+	github.com/odysseia-greek/alexandreia/aristarchos v0.0.3
 	github.com/odysseia-greek/attike/aristophanes v0.6.3
 	github.com/odysseia-greek/delphi/aristides v0.0.1
-	github.com/odysseia-greek/olympia/aristarchos v0.0.15
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/text v0.32.0
 	google.golang.org/grpc v1.78.0
@@ -98,7 +98,7 @@ require (
 	golang.org/x/term v0.37.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251029180050-ab9386a59fda // indirect
-	google.golang.org/protobuf v1.36.10 // indirect
+	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

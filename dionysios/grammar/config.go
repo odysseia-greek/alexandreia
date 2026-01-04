@@ -16,11 +16,11 @@ import (
 	"github.com/odysseia-greek/agora/plato/logging"
 	plato "github.com/odysseia-greek/agora/plato/models"
 	"github.com/odysseia-greek/agora/plato/service"
+	aristarchos "github.com/odysseia-greek/alexandreia/aristarchos/scholar"
 	aristophanes "github.com/odysseia-greek/attike/aristophanes/comedy"
 	pbar "github.com/odysseia-greek/attike/aristophanes/proto"
 	"github.com/odysseia-greek/delphi/aristides/diplomat"
 	pb "github.com/odysseia-greek/delphi/aristides/proto"
-	aristarchos "github.com/odysseia-greek/olympia/aristarchos/scholar"
 	"google.golang.org/grpc/metadata"
 )
 
