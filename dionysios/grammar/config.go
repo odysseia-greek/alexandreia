@@ -18,7 +18,7 @@ import (
 	"github.com/odysseia-greek/agora/plato/service"
 	aristarchos "github.com/odysseia-greek/alexandreia/aristarchos/scholar"
 	aristophanes "github.com/odysseia-greek/attike/aristophanes/comedy"
-	pbar "github.com/odysseia-greek/attike/aristophanes/proto"
+	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"github.com/odysseia-greek/delphi/aristides/diplomat"
 	pb "github.com/odysseia-greek/delphi/aristides/proto"
 	"google.golang.org/grpc/metadata"
@@ -61,7 +61,7 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 	ambassadorCtx, ctxCancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer ctxCancel()
 
-	payload := &pbar.StartTraceRequest{
+	payload := &arv1.ObserveTraceStart{
 		Method:        "GetSecret",
 		Url:           diplomat.DEFAULTADDRESS,
 		Host:          "",
@@ -70,12 +70,12 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 	}
 
 	go func() {
-		parabasis := &pbar.ParabasisRequest{
+		parabasis := &arv1.ObserveRequest{
 			TraceId:      traceID,
 			ParentSpanId: spanID,
 			SpanId:       spanID,
-			RequestType: &pbar.ParabasisRequest_StartTrace{
-				StartTrace: payload,
+			Kind: &arv1.ObserveRequest_TraceStart{
+				TraceStart: payload,
 			},
 		}
 		if err := streamer.Send(parabasis); err != nil {
@@ -94,12 +94,12 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 	}
 
 	go func() {
-		parabasis := &pbar.ParabasisRequest{
+		parabasis := &arv1.ObserveRequest{
 			TraceId:      traceID,
 			ParentSpanId: spanID,
 			SpanId:       spanID,
-			RequestType: &pbar.ParabasisRequest_CloseTrace{
-				CloseTrace: &pbar.CloseTraceRequest{
+			Kind: &arv1.ObserveRequest_TraceStop{
+				TraceStop: &arv1.ObserveTraceStop{
 					ResponseBody: fmt.Sprintf("user retrieved from vault: %s", vaultConfig.ElasticUsername),
 				},
 			},

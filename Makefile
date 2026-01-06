@@ -23,5 +23,3 @@ docs:
 			-v $$PWD/$$dir/proto:/protos \
 			localproto:latest --doc_opt=markdown,docs.md; \
 	done
-	cd ./sokrates/docs && spectaql -c  spectaql.yaml
-

@@ -10,7 +10,7 @@ import (
 	"github.com/odysseia-greek/agora/plato/transform"
 	v1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
-	v1ar "github.com/odysseia-greek/attike/aristophanes/proto"
+	v1ar "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 
 	"io"
 	"strings"
@@ -111,15 +111,15 @@ func (a *AggregatorServiceImpl) createOrUpdate(request *v1.AggregatorCreationReq
 				hits = response.Hits.Total.Value
 				took = response.Took
 			}
-			dataBaseSpan := &v1ar.ParabasisRequest{
+			dataBaseSpan := &v1ar.ObserveRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       spanID,
-				RequestType: &v1ar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &v1ar.DatabaseSpanRequest{
-					Action:   "search",
-					Query:    string(parsedQuery),
-					Hits:     hits,
-					TimeTook: took,
+				Kind: &v1ar.ObserveRequest_DbSpan{DbSpan: &v1ar.ObserveDbSpan{
+					Action: "search",
+					Query:  string(parsedQuery),
+					Hits:   hits,
+					TookMs: took,
 				}},
 			}
 
@@ -229,14 +229,14 @@ func (a *AggregatorServiceImpl) createOrUpdate(request *v1.AggregatorCreationReq
 
 	if traceCall {
 		go func() {
-			parabasis := &v1ar.ParabasisRequest{
+			parabasis := &v1ar.ObserveRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       comedy.GenerateSpanID(),
-				RequestType: &v1ar.ParabasisRequest_Span{
-					Span: &v1ar.SpanRequest{
+				Kind: &v1ar.ObserveRequest_Action{
+					Action: &v1ar.ObserveAction{
 						Action: "CloseSpan",
-						Took:   fmt.Sprintf("%v", time.Since(startTime)),
+						TookMs: time.Since(startTime).Milliseconds(),
 						Status: "updated document",
 					},
 				},
@@ -312,15 +312,15 @@ func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *v1.A
 				took = response.Took
 			}
 			parsedQuery, _ := json.Marshal(query)
-			dataBaseSpan := &v1ar.ParabasisRequest{
+			dataBaseSpan := &v1ar.ObserveRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       spanID,
-				RequestType: &v1ar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &v1ar.DatabaseSpanRequest{
-					Action:   "search",
-					Query:    string(parsedQuery),
-					Hits:     hits,
-					TimeTook: took,
+				Kind: &v1ar.ObserveRequest_DbSpan{DbSpan: &v1ar.ObserveDbSpan{
+					Action: "search",
+					Query:  string(parsedQuery),
+					Hits:   hits,
+					TookMs: took,
 				}},
 			}
 
@@ -360,14 +360,15 @@ func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *v1.A
 
 	if traceCall {
 		go func() {
-			parabasis := &v1ar.ParabasisRequest{
+			parabasis := &v1ar.ObserveRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       comedy.GenerateSpanID(),
-				RequestType: &v1ar.ParabasisRequest_Span{
-					Span: &v1ar.SpanRequest{
+				Kind: &v1ar.ObserveRequest_Action{
+					Action: &v1ar.ObserveAction{
 						Action: "CloseSpan",
-						Took:   fmt.Sprintf("%v", time.Since(startTime)),
+						TookMs: time.Since(startTime).Milliseconds(),
+						Status: "updated document",
 					},
 				},
 			}
@@ -425,15 +426,15 @@ func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request
 				took = response.Took
 			}
 
-			dataBaseSpan := &v1ar.ParabasisRequest{
+			dataBaseSpan := &v1ar.ObserveRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       spanID,
-				RequestType: &v1ar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &v1ar.DatabaseSpanRequest{
-					Action:   "search",
-					Query:    string(parsedQuery),
-					Hits:     hits,
-					TimeTook: took,
+				Kind: &v1ar.ObserveRequest_DbSpan{DbSpan: &v1ar.ObserveDbSpan{
+					Action: "search",
+					Query:  string(parsedQuery),
+					Hits:   hits,
+					TookMs: took,
 				}},
 			}
 
@@ -456,14 +457,15 @@ func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request
 
 	if traceCall {
 		go func() {
-			parabasis := &v1ar.ParabasisRequest{
+			parabasis := &v1ar.ObserveRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       comedy.GenerateSpanID(),
-				RequestType: &v1ar.ParabasisRequest_Span{
-					Span: &v1ar.SpanRequest{
+				Kind: &v1ar.ObserveRequest_Action{
+					Action: &v1ar.ObserveAction{
 						Action: "CloseSpan",
-						Took:   fmt.Sprintf("%v", time.Since(startTime)),
+						TookMs: time.Since(startTime).Milliseconds(),
+						Status: "updated document",
 					},
 				},
 			}
@@ -541,15 +543,15 @@ func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context,
 				took = response.Took
 			}
 
-			dataBaseSpan := &v1ar.ParabasisRequest{
+			dataBaseSpan := &v1ar.ObserveRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       spanID,
-				RequestType: &v1ar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &v1ar.DatabaseSpanRequest{
-					Action:   "search",
-					Query:    string(parsedQuery),
-					Hits:     hits,
-					TimeTook: took,
+				Kind: &v1ar.ObserveRequest_DbSpan{DbSpan: &v1ar.ObserveDbSpan{
+					Action: "search",
+					Query:  string(parsedQuery),
+					Hits:   hits,
+					TookMs: took,
 				}},
 			}
 
@@ -584,14 +586,15 @@ func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context,
 
 	if traceCall {
 		go func() {
-			parabasis := &v1ar.ParabasisRequest{
+			parabasis := &v1ar.ObserveRequest{
 				TraceId:      traceID,
 				ParentSpanId: spanID,
 				SpanId:       comedy.GenerateSpanID(),
-				RequestType: &v1ar.ParabasisRequest_Span{
-					Span: &v1ar.SpanRequest{
+				Kind: &v1ar.ObserveRequest_Action{
+					Action: &v1ar.ObserveAction{
 						Action: "CloseSpan",
-						Took:   fmt.Sprintf("%v", time.Since(startTime)),
+						TookMs: time.Since(startTime).Milliseconds(),
+						Status: "updated document",
 					},
 				},
 			}

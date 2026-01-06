@@ -12,7 +12,7 @@ import (
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/models"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
-	pb "github.com/odysseia-greek/attike/aristophanes/proto"
+	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"golang.org/x/text/runes"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
@@ -354,14 +354,14 @@ func (d *DionysosHandler) StartFindingRules(word, requestID string) (*models.Dec
 		if err != nil {
 			logging.Error(fmt.Sprintf("failed to marshal body: %v", err))
 		}
-		parabasis := &pb.ParabasisRequest{
+		parabasis := &arv1.ObserveRequest{
 			TraceId:      traceID,
 			ParentSpanId: spanID,
 			SpanId:       comedy.GenerateSpanID(),
-			RequestType: &pb.ParabasisRequest_Span{
-				Span: &pb.SpanRequest{
+			Kind: &arv1.ObserveRequest_Action{
+				Action: &arv1.ObserveAction{
 					Action: "StartFindingRules",
-					Took:   fmt.Sprintf("%v", duration),
+					TookMs: duration.Milliseconds(),
 					Status: fmt.Sprintf("%s", string(status)),
 				},
 			},
