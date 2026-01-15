@@ -23,8 +23,6 @@ const (
 	defaultIndex string = "aggregator"
 )
 
-var streamer arv1.TraceService_ChorusClient
-
 func CreateNewConfig(ctx context.Context) (*AggregatorServiceImpl, error) {
 	tls := config.BoolFromEnv(config.EnvTlSKey)
 
@@ -35,7 +33,7 @@ func CreateNewConfig(ctx context.Context) (*AggregatorServiceImpl, error) {
 		os.Exit(1)
 	}
 
-	streamer, err = tracer.Chorus(ctx)
+	streamer, err := tracer.Chorus(ctx)
 	if err != nil {
 		logging.Error(err.Error())
 	}
@@ -135,5 +133,6 @@ func CreateNewConfig(ctx context.Context) (*AggregatorServiceImpl, error) {
 		Index:      index,
 		Elastic:    elastic,
 		PolicyName: policyName,
+		Streamer:   streamer,
 	}, nil
 }

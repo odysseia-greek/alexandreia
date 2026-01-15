@@ -8,7 +8,7 @@ require (
 	github.com/odysseia-greek/agora/archytas v0.1.2
 	github.com/odysseia-greek/agora/aristoteles v0.1.15
 	github.com/odysseia-greek/agora/plato v0.2.12
-	github.com/odysseia-greek/alexandreia/aristarchos v0.0.4
+	github.com/odysseia-greek/alexandreia/aristarchos v0.0.5
 	github.com/odysseia-greek/attike/aristophanes v0.7.0-rho1
 	github.com/odysseia-greek/delphi/aristides v0.0.1
 	github.com/stretchr/testify v1.11.1
@@ -50,7 +50,6 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/odysseia-greek/agora/diogenes v0.1.15 // indirect
 	github.com/odysseia-greek/agora/eupalinos v0.2.3 // indirect
-	github.com/odysseia-greek/attike v0.2.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect

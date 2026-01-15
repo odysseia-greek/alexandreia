@@ -5,16 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/odysseia-greek/agora/plato/config"
+	"io"
+	"strings"
+
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/transform"
 	v1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
-	v1ar "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
-
-	"io"
-	"strings"
-	"time"
 )
 
 const (
@@ -28,39 +25,24 @@ func (a *AggregatorServiceImpl) Health(context.Context, *v1.HealthRequest) (*v1.
 }
 
 func (a *AggregatorServiceImpl) CreateNewEntry(stream v1.Aristarchos_CreateNewEntryServer) error {
+	ctx := stream.Context()
+
 	for {
 		in, err := stream.Recv()
 		if err == io.EOF {
-			return stream.SendAndClose(&v1.AggregatorStreamResponse{
-				Ack: "acknowledged",
-			})
+			return stream.SendAndClose(&v1.AggregatorStreamResponse{Ack: "acknowledged"})
 		}
 		if err != nil {
 			return err
 		}
 
-		go a.createOrUpdate(in)
+		req := in
+
+		go a.createOrUpdate(ctx, req)
 	}
 }
 
-func (a *AggregatorServiceImpl) createOrUpdate(request *v1.AggregatorCreationRequest) {
-	startTime := time.Now()
-	splitID := strings.Split(request.TraceId, "+")
-
-	traceCall := false
-	var traceID, spanID string
-
-	if len(splitID) >= 3 {
-		traceCall = splitID[2] == "1"
-	}
-
-	if len(splitID) >= 1 {
-		traceID = splitID[0]
-	}
-	if len(splitID) >= 2 {
-		spanID = splitID[1]
-	}
-
+func (a *AggregatorServiceImpl) createOrUpdate(ctx context.Context, request *v1.AggregatorCreationRequest) {
 	parsedWord := transform.RemoveAccents(request.RootWord)
 
 	createNewWord := false
@@ -102,32 +84,8 @@ func (a *AggregatorServiceImpl) createOrUpdate(request *v1.AggregatorCreationReq
 		createNewWord = true
 	}
 
-	if traceCall {
-		go func() {
-			parsedQuery, _ := json.Marshal(query)
-			hits := int64(0)
-			took := int64(0)
-			if response != nil {
-				hits = response.Hits.Total.Value
-				took = response.Took
-			}
-			dataBaseSpan := &v1ar.ObserveRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       spanID,
-				Kind: &v1ar.ObserveRequest_DbSpan{DbSpan: &v1ar.ObserveDbSpan{
-					Action: "search",
-					Query:  string(parsedQuery),
-					Hits:   hits,
-					TookMs: took,
-				}},
-			}
-
-			err := streamer.Send(dataBaseSpan)
-			if err != nil {
-				logging.Error(fmt.Sprintf("error returned from tracer: %s", err.Error()))
-			}
-		}()
+	if response != nil {
+		go comedy.DatabaseSpan(query, response.Hits.Total.Value, response.Took, ctx, a.Streamer)
 	}
 
 	entry, err := a.mapAndHandleGrammaticalCategories(request)
@@ -227,53 +185,11 @@ func (a *AggregatorServiceImpl) createOrUpdate(request *v1.AggregatorCreationReq
 		return
 	}
 
-	if traceCall {
-		go func() {
-			parabasis := &v1ar.ObserveRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       comedy.GenerateSpanID(),
-				Kind: &v1ar.ObserveRequest_Action{
-					Action: &v1ar.ObserveAction{
-						Action: "CloseSpan",
-						TookMs: time.Since(startTime).Milliseconds(),
-						Status: "updated document",
-					},
-				},
-			}
-			if err := streamer.Send(parabasis); err != nil {
-				logging.Error(fmt.Sprintf("failed to send trace data: %v", err))
-			}
-		}()
-	}
-
 	logging.Debug(fmt.Sprintf("updated document with id: %s and rootWordEntry: %s", createDocument.ID, request.RootWord))
 	return
 }
 
 func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *v1.AggregatorRequest) (*v1.RootWordResponse, error) {
-	startTime := time.Now()
-	requestID, ok := ctx.Value(config.DefaultTracingName).(string)
-	if !ok {
-		requestID = "donot+trace+0"
-	}
-
-	splitID := strings.Split(requestID, "+")
-
-	traceCall := false
-	var traceID, spanID string
-
-	if len(splitID) >= 3 {
-		traceCall = splitID[2] == "1"
-	}
-
-	if len(splitID) >= 1 {
-		traceID = splitID[0]
-	}
-	if len(splitID) >= 2 {
-		spanID = splitID[1]
-	}
-
 	parsedWord := transform.RemoveAccents(request.RootWord)
 	shouldQueries := []map[string]interface{}{
 		{"match_phrase": map[string]string{"rootWordEntry": request.RootWord}}, // Match root word
@@ -303,39 +219,13 @@ func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *v1.A
 
 	response, err := a.Elastic.Query().Match(a.Index, query)
 
-	if traceCall {
-		go func() {
-			hits := int64(0)
-			took := int64(0)
-			if response != nil {
-				hits = response.Hits.Total.Value
-				took = response.Took
-			}
-			parsedQuery, _ := json.Marshal(query)
-			dataBaseSpan := &v1ar.ObserveRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       spanID,
-				Kind: &v1ar.ObserveRequest_DbSpan{DbSpan: &v1ar.ObserveDbSpan{
-					Action: "search",
-					Query:  string(parsedQuery),
-					Hits:   hits,
-					TookMs: took,
-				}},
-			}
-
-			err := streamer.Send(dataBaseSpan)
-			if err != nil {
-				logging.Error(fmt.Sprintf("error returned from tracer: %s", err.Error()))
-			}
-		}()
-	}
-
 	if err != nil {
 		return nil, err
 	} else if len(response.Hits.Hits) == 0 {
 		return nil, fmt.Errorf("no entry can be found")
 	}
+
+	go comedy.DatabaseSpan(query, response.Hits.Total.Value, response.Took, ctx, a.Streamer)
 
 	var responsev1 v1.RootWordResponse
 	jsonHit, _ := json.Marshal(response.Hits.Hits[0].Source)
@@ -358,51 +248,10 @@ func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *v1.A
 		responsev1.Categories = append(responsev1.Categories, conjv1)
 	}
 
-	if traceCall {
-		go func() {
-			parabasis := &v1ar.ObserveRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       comedy.GenerateSpanID(),
-				Kind: &v1ar.ObserveRequest_Action{
-					Action: &v1ar.ObserveAction{
-						Action: "CloseSpan",
-						TookMs: time.Since(startTime).Milliseconds(),
-						Status: "updated document",
-					},
-				},
-			}
-			if err := streamer.Send(parabasis); err != nil {
-				logging.Error(fmt.Sprintf("failed to send trace data: %v", err))
-			}
-		}()
-	}
-
 	return &responsev1, nil
 }
 
 func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request *v1.AggregatorRequest) (*v1.SearchWordResponse, error) {
-	startTime := time.Now()
-	requestID, ok := ctx.Value(config.DefaultTracingName).(string)
-	if !ok {
-		requestID = "donot+trace+0"
-	}
-
-	splitID := strings.Split(requestID, "+")
-
-	traceCall := false
-	var traceID, spanID string
-
-	if len(splitID) >= 3 {
-		traceCall = splitID[2] == "1"
-	}
-
-	if len(splitID) >= 1 {
-		traceID = splitID[0]
-	}
-	if len(splitID) >= 2 {
-		spanID = splitID[1]
-	}
 
 	parsedWord := transform.RemoveAccents(request.RootWord)
 	request.RootWord = parsedWord
@@ -416,34 +265,7 @@ func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request
 		return nil, fmt.Errorf("no entry can be found")
 	}
 
-	if traceCall {
-		go func() {
-			parsedQuery, _ := json.Marshal(query)
-			hits := int64(0)
-			took := int64(0)
-			if response != nil {
-				hits = response.Hits.Total.Value
-				took = response.Took
-			}
-
-			dataBaseSpan := &v1ar.ObserveRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       spanID,
-				Kind: &v1ar.ObserveRequest_DbSpan{DbSpan: &v1ar.ObserveDbSpan{
-					Action: "search",
-					Query:  string(parsedQuery),
-					Hits:   hits,
-					TookMs: took,
-				}},
-			}
-
-			err := streamer.Send(dataBaseSpan)
-			if err != nil {
-				logging.Error(fmt.Sprintf("error returned from tracer: %s", err.Error()))
-			}
-		}()
-	}
+	go comedy.DatabaseSpan(query, response.Hits.Total.Value, response.Took, ctx, a.Streamer)
 
 	var responsev1 v1.SearchWordResponse
 	jsonHit, _ := json.Marshal(response.Hits.Hits[0].Source)
@@ -455,53 +277,10 @@ func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request
 		}
 	}
 
-	if traceCall {
-		go func() {
-			parabasis := &v1ar.ObserveRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       comedy.GenerateSpanID(),
-				Kind: &v1ar.ObserveRequest_Action{
-					Action: &v1ar.ObserveAction{
-						Action: "CloseSpan",
-						TookMs: time.Since(startTime).Milliseconds(),
-						Status: "updated document",
-					},
-				},
-			}
-			if err := streamer.Send(parabasis); err != nil {
-				logging.Error(fmt.Sprintf("failed to send trace data: %v", err))
-			}
-		}()
-	}
-
 	return &responsev1, nil
 }
 
 func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context, request *v1.AggregatorRequest) (*v1.FormsResponse, error) {
-	startTime := time.Now()
-	requestID, ok := ctx.Value(config.DefaultTracingName).(string)
-	if !ok {
-		logging.Error("could not extract combinedId")
-		requestID = "donot+trace+0"
-	}
-
-	splitID := strings.Split(requestID, "+")
-
-	traceCall := false
-	var traceID, spanID string
-
-	if len(splitID) >= 3 {
-		traceCall = splitID[2] == "1"
-	}
-
-	if len(splitID) >= 1 {
-		traceID = splitID[0]
-	}
-	if len(splitID) >= 2 {
-		spanID = splitID[1]
-	}
-
 	var responsev1 v1.FormsResponse
 	responsev1.Word = request.RootWord
 	parsedWord := transform.RemoveAccents(request.RootWord)
@@ -533,34 +312,7 @@ func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context,
 		return nil, fmt.Errorf("no entry can be found")
 	}
 
-	if traceCall {
-		go func() {
-			parsedQuery, _ := json.Marshal(query)
-			hits := int64(0)
-			took := int64(0)
-			if response != nil {
-				hits = response.Hits.Total.Value
-				took = response.Took
-			}
-
-			dataBaseSpan := &v1ar.ObserveRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       spanID,
-				Kind: &v1ar.ObserveRequest_DbSpan{DbSpan: &v1ar.ObserveDbSpan{
-					Action: "search",
-					Query:  string(parsedQuery),
-					Hits:   hits,
-					TookMs: took,
-				}},
-			}
-
-			err := streamer.Send(dataBaseSpan)
-			if err != nil {
-				logging.Error(fmt.Sprintf("error returned from tracer: %s", err.Error()))
-			}
-		}()
-	}
+	go comedy.DatabaseSpan(query, response.Hits.Total.Value, response.Took, ctx, a.Streamer)
 
 	jsonHit, _ := json.Marshal(response.Hits.Hits[0].Source)
 
@@ -582,26 +334,6 @@ func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context,
 				responsev1.Word = form.Word
 			}
 		}
-	}
-
-	if traceCall {
-		go func() {
-			parabasis := &v1ar.ObserveRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       comedy.GenerateSpanID(),
-				Kind: &v1ar.ObserveRequest_Action{
-					Action: &v1ar.ObserveAction{
-						Action: "CloseSpan",
-						TookMs: time.Since(startTime).Milliseconds(),
-						Status: "updated document",
-					},
-				},
-			}
-			if err := streamer.Send(parabasis); err != nil {
-				logging.Error(fmt.Sprintf("failed to send trace data: %v", err))
-			}
-		}()
 	}
 
 	return &responsev1, nil

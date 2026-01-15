@@ -7,6 +7,7 @@ import (
 
 	"github.com/odysseia-greek/agora/aristoteles"
 	v1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
+	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -27,6 +28,7 @@ type AggregatorServiceImpl struct {
 	Elastic    aristoteles.Client
 	Index      string
 	PolicyName string
+	Streamer   arv1.TraceService_ChorusClient
 	v1.UnimplementedAristarchosServer
 }
 
