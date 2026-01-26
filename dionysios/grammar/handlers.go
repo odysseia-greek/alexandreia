@@ -17,6 +17,7 @@ import (
 	"github.com/odysseia-greek/agora/plato/service"
 	pba "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	aristarchos "github.com/odysseia-greek/alexandreia/aristarchos/scholar"
+	erv1 "github.com/odysseia-greek/alexandreia/eratosthenes/gen/go/v1"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
 	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"google.golang.org/grpc/metadata"
@@ -27,6 +28,7 @@ type DionysosHandler struct {
 	Cache            archytas.Client
 	Index            string
 	Client           service.OdysseiaClient
+	LibraryService   erv1.EratosthenesServiceClient
 	DeclensionConfig models.DeclensionConfig
 	Streamer         arv1.TraceService_ChorusClient
 	Aggregator       pba.Aristarchos_CreateNewEntryClient

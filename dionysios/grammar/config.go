@@ -12,11 +12,13 @@ import (
 	"github.com/odysseia-greek/agora/aristoteles"
 	elastic "github.com/odysseia-greek/agora/aristoteles"
 	"github.com/odysseia-greek/agora/aristoteles/models"
+	"github.com/odysseia-greek/agora/hesiodos"
 	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
 	plato "github.com/odysseia-greek/agora/plato/models"
 	"github.com/odysseia-greek/agora/plato/service"
 	aristarchos "github.com/odysseia-greek/alexandreia/aristarchos/scholar"
+	"github.com/odysseia-greek/alexandreia/eratosthenes/library"
 	aristophanes "github.com/odysseia-greek/attike/aristophanes/comedy"
 	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"github.com/odysseia-greek/delphi/aristides/diplomat"
@@ -167,6 +169,16 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 		return nil, err
 	}
 
+	libraryClientAddress := config.StringFromEnv("ERATOSTHENES_SERVICE", "eratosthenes:50060")
+	libraryClient, err := hesiodos.NewGenericGrpcClient[*scholar.LibraryClient](
+		libraryClientAddress,
+		library.NewEratosthenesClient,
+	)
+
+	if err != nil {
+		logging.Error(err.Error())
+	}
+
 	ctx, cancel := context.WithCancel(ctx)
 
 	return &DionysosHandler{
@@ -175,6 +187,7 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 		Index:            index,
 		Client:           client,
 		DeclensionConfig: plato.DeclensionConfig{},
+		LibraryService:   libraryClient,
 		Streamer:         streamer,
 		Aggregator:       aristarchosStreamer,
 		AggregatorClient: aggregator,

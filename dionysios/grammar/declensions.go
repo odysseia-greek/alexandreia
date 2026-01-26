@@ -1,6 +1,7 @@
 package grammar
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -11,6 +12,8 @@ import (
 
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/models"
+	erv1 "github.com/odysseia-greek/alexandreia/eratosthenes/gen/go/v1"
+	"github.com/odysseia-greek/alexandreia/eratosthenes/library"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
 	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"golang.org/x/text/runes"
@@ -62,6 +65,22 @@ func (d *DionysosHandler) queryWordInAlexandros(word, traceID string) ([]models.
 
 	// Return the search results
 	return extendedResponse.Hits, nil
+}
+
+// queryWordInAlexandros tries to find results for given words in the dictionary.
+// It queries the Alexandros dictionary for the stripped word and returns the search results.
+func (d *DionysosHandler) queryLibrary(ctx context.Context, word string) ([]models.Hit, error) {
+
+	var grpcResponse *erv1.ResolveResponse
+
+	err := d.LibraryService.CallWithReconnect(func(client *library.LibraryClient) error {
+		var innerErr error
+		grpcResponse, innerErr = client.Search(outCtx, request)
+		return innerErr
+	})
+	if err != nil {
+		return nil, err
+	}
 }
 
 // removeAccents removes accents from a given string and returns the transformed string.

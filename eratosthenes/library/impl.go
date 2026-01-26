@@ -16,6 +16,7 @@ import (
 
 type LibraryService interface {
 	WaitForHealthyState() bool
+	Resolve(ctx context.Context, entry *v1.ResolveRequest) (*v1.ResolveResponse, error)
 }
 
 const (
@@ -69,4 +70,8 @@ func (d *LibraryClient) WaitForHealthyState() bool {
 
 func (d *LibraryClient) Health(ctx context.Context, request *emptypb.Empty) (*v1.HealthResponse, error) {
 	return d.library.Health(ctx, request)
+}
+
+func (d *LibraryClient) Resolve(ctx context.Context, request *v1.ResolveRequest) (*v1.ResolveResponse, error) {
+	return d.library.Resolve(ctx, request)
 }
