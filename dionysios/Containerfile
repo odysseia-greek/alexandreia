@@ -13,16 +13,6 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-
-# Debug build
-FROM base as debug
-# Install Air for live reloading
-RUN go install github.com/air-verse/air@latest
-# Install Delve for debugging
-RUN go install github.com/go-delve/delve/cmd/dlv@latest
-EXPOSE 2345
-CMD ["air", "-c", ".air.toml"]
-
 # Build binary with Go
 FROM base as builder
 ENV CGO_ENABLED=0
@@ -31,6 +21,24 @@ ARG project_name
 ENV project_name=${project_name}
 
 RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o /app/${project_name}
+
+
+RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o /app/${project_name}
+# Dev image
+FROM debian:trixie-slim AS dev
+WORKDIR /app
+
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl dnsutils iproute2 netcat-traditional procps \
+  && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /app/dionysios /app/dionysios
+
+ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+
+USER 65532:65532
+ENTRYPOINT ["/app/dionysios"]
 
 # Production build
 FROM alpine:3.23.2 as prod

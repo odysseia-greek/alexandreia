@@ -170,7 +170,7 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 	}
 
 	libraryClientAddress := config.StringFromEnv("ERATOSTHENES_SERVICE", "eratosthenes:50060")
-	libraryClient, err := hesiodos.NewGenericGrpcClient[*scholar.LibraryClient](
+	libraryClient, err := hesiodos.NewGenericGrpcClient[*library.LibraryClient](
 		libraryClientAddress,
 		library.NewEratosthenesClient,
 	)

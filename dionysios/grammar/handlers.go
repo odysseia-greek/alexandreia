@@ -10,6 +10,7 @@ import (
 
 	"github.com/odysseia-greek/agora/archytas"
 	"github.com/odysseia-greek/agora/aristoteles"
+	"github.com/odysseia-greek/agora/hesiodos"
 	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/middleware"
@@ -17,7 +18,7 @@ import (
 	"github.com/odysseia-greek/agora/plato/service"
 	pba "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	aristarchos "github.com/odysseia-greek/alexandreia/aristarchos/scholar"
-	erv1 "github.com/odysseia-greek/alexandreia/eratosthenes/gen/go/v1"
+	"github.com/odysseia-greek/alexandreia/eratosthenes/library"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
 	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"google.golang.org/grpc/metadata"
@@ -28,13 +29,31 @@ type DionysosHandler struct {
 	Cache            archytas.Client
 	Index            string
 	Client           service.OdysseiaClient
-	LibraryService   erv1.EratosthenesServiceClient
+	LibraryService   *hesiodos.GenericGrpcClient[*library.LibraryClient]
 	DeclensionConfig models.DeclensionConfig
 	Streamer         arv1.TraceService_ChorusClient
 	Aggregator       pba.Aristarchos_CreateNewEntryClient
 	StreamerCancel   context.CancelFunc
 	AggregatorCancel context.CancelFunc
 	AggregatorClient *aristarchos.ClientAggregator
+}
+
+func (d *DionysosHandler) outgoingCtx(parent context.Context) (context.Context, context.CancelFunc) {
+	ctx, cancel := context.WithTimeout(parent, 30*time.Second)
+
+	reqID, _ := parent.Value(config.HeaderKey).(string)
+
+	kvs := make([]string, 0, 4)
+
+	if reqID != "" {
+		kvs = append(kvs, config.HeaderKey, reqID)
+	}
+
+	if len(kvs) > 0 {
+		ctx = metadata.AppendToOutgoingContext(ctx, kvs...)
+	}
+
+	return ctx, cancel
 }
 
 // PingPong pongs the ping
@@ -65,6 +84,8 @@ func (d *DionysosHandler) health(w http.ResponseWriter, req *http.Request) {
 }
 
 func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request) {
+	startTime := time.Now()
+	ctx := req.Context()
 	var requestId string
 	fromContext := req.Context().Value(config.DefaultTracingName)
 	if fromContext == nil {
@@ -87,6 +108,8 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 	if len(splitID) >= 2 {
 		spanID = splitID[1]
 	}
+
+	ctx = context.WithValue(ctx, config.HeaderKey, requestId)
 
 	queryWord := req.URL.Query().Get("word")
 
@@ -179,7 +202,7 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 
 	}
 
-	declensions, _ := d.StartFindingRules(queryWord, requestId)
+	declensions, _ := d.StartFindingRules(ctx, queryWord)
 	if len(declensions.Results) == 0 || declensions.Results == nil {
 		e := models.NotFoundError{
 			ErrorModel: models.ErrorModel{UniqueCode: traceID},
@@ -203,6 +226,30 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 
 	if err != nil {
 		logging.Error(fmt.Sprintf("error setting cache: %s", err.Error()))
+	}
+
+	if traceCall {
+		// this span is meant to give insight into the working of StartFindingRules and should be expanded
+		duration := time.Since(startTime)
+		status, err := json.Marshal(declensions)
+		if err != nil {
+			logging.Error(fmt.Sprintf("failed to marshal body: %v", err))
+		}
+		parabasis := &arv1.ObserveRequest{
+			TraceId:      traceID,
+			ParentSpanId: spanID,
+			SpanId:       comedy.GenerateSpanID(),
+			Kind: &arv1.ObserveRequest_Action{
+				Action: &arv1.ObserveAction{
+					Action: "StartFindingRules",
+					TookMs: duration.Milliseconds(),
+					Status: fmt.Sprintf("%s", string(status)),
+				},
+			},
+		}
+		if err := d.Streamer.Send(parabasis); err != nil {
+			logging.Error(fmt.Sprintf("failed to send trace data: %v", err))
+		}
 	}
 
 	middleware.ResponseWithJson(w, *declensions)

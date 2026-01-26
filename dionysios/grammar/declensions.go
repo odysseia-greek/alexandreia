@@ -2,11 +2,8 @@ package grammar
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"net/http"
 	"strings"
-	"time"
 	"unicode"
 	"unicode/utf8"
 
@@ -14,8 +11,6 @@ import (
 	"github.com/odysseia-greek/agora/plato/models"
 	erv1 "github.com/odysseia-greek/alexandreia/eratosthenes/gen/go/v1"
 	"github.com/odysseia-greek/alexandreia/eratosthenes/library"
-	"github.com/odysseia-greek/attike/aristophanes/comedy"
-	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"golang.org/x/text/runes"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
@@ -26,61 +21,28 @@ var exceptionList = map[string]bool{
 	"λογάς": true,
 }
 
-// queryWordInAlexandros tries to find results for given words in the dictionary.
+// queryLibrary tries to find results for given words in the dictionary.
 // It queries the Alexandros dictionary for the stripped word and returns the search results.
-func (d *DionysosHandler) queryWordInAlexandros(word, traceID string) ([]models.Hit, error) {
-	// Remove accents from the word
-	strippedWord := d.removeAccents(word)
-
-	// Set the search term and mode
-	term := "greek"
-	mode := "exact"
-
-	// Send a search request to the Alexandros dictionary
-	response, err := d.Client.Alexandros().Search(strippedWord, "greek", mode, "false", traceID)
-	if err != nil {
-		return nil, err
-	}
-	defer response.Body.Close()
-
-	// Check the response status code
-	if response.StatusCode != http.StatusOK {
-		// Create a not found error with a unique code and reason
-		e := models.NotFoundError{
-			ErrorModel: models.ErrorModel{UniqueCode: traceID},
-			Message: models.NotFoundMessage{
-				Type:   term,
-				Reason: "not found",
-			},
-		}
-		return nil, &e
-	}
-
-	// Decode the response body into search results
-	var extendedResponse models.ExtendedResponse
-	err = json.NewDecoder(response.Body).Decode(&extendedResponse)
-	if err != nil {
-		return nil, err
-	}
-
-	// Return the search results
-	return extendedResponse.Hits, nil
-}
-
-// queryWordInAlexandros tries to find results for given words in the dictionary.
-// It queries the Alexandros dictionary for the stripped word and returns the search results.
-func (d *DionysosHandler) queryLibrary(ctx context.Context, word string) ([]models.Hit, error) {
+func (d *DionysosHandler) queryLibrary(ctx context.Context, term string) (*erv1.ResolveResponse, error) {
+	outCtx, cancel := d.outgoingCtx(ctx)
+	defer cancel()
 
 	var grpcResponse *erv1.ResolveResponse
 
+	request := &erv1.ResolveRequest{
+		Term:  term,
+		Limit: 5,
+	}
 	err := d.LibraryService.CallWithReconnect(func(client *library.LibraryClient) error {
 		var innerErr error
-		grpcResponse, innerErr = client.Search(outCtx, request)
+		grpcResponse, innerErr = client.Resolve(outCtx, request)
 		return innerErr
 	})
 	if err != nil {
 		return nil, err
 	}
+
+	return grpcResponse, nil
 }
 
 // removeAccents removes accents from a given string and returns the transformed string.
@@ -101,12 +63,9 @@ func (d *DionysosHandler) removeAccents(s string) string {
 
 // parseDictResults parses the dictionary hit and extracts the translation and article (if available).
 // It splits the Greek term to extract the article and returns the translation and article strings.
-func (d *DionysosHandler) parseDictResults(dictionaryHits models.Meros) (translation, article string) {
-	// Set the translation to the English field in the dictionary hit
-	translation = dictionaryHits.English
-
+func (d *DionysosHandler) parseDictResults(result *erv1.Candidate) (article string) {
 	// Split the Greek term by comma
-	greek := strings.Split(dictionaryHits.Greek, ",")
+	greek := strings.Split(result.Lemma, ",")
 
 	// Check if there is an article present in the Greek term
 	if len(greek) > 1 {
@@ -136,22 +95,7 @@ func (d *DionysosHandler) isAWordWithoutDeclensions(word string) (bool, *models.
 
 // StartFindingRules initiates the process of finding declension rules and translations for a given word.
 // It returns the declension translation results.
-func (d *DionysosHandler) StartFindingRules(word, requestID string) (*models.DeclensionTranslationResults, error) {
-	// Initialize the results variable
-	startTime := time.Now()
-	splitID := strings.Split(requestID, "+")
-
-	traceCall := false
-	var traceID, spanID string
-
-	if len(splitID) >= 3 {
-		traceCall = splitID[2] == "1"
-	}
-
-	if len(splitID) >= 1 {
-		traceID = splitID[0]
-	}
-
+func (d *DionysosHandler) StartFindingRules(ctx context.Context, word string) (*models.DeclensionTranslationResults, error) {
 	var results models.DeclensionTranslationResults
 
 	noDeclensionWord, form := d.isAWordWithoutDeclensions(d.removeAccents(word))
@@ -162,12 +106,12 @@ func (d *DionysosHandler) StartFindingRules(word, requestID string) (*models.Dec
 		if len(form.SearchTerm) > 0 {
 			rootWord = form.SearchTerm[0]
 		}
-		singleSearchResult, err := d.queryWordInAlexandros(rootWord, requestID)
+		singleSearchResult, err := d.queryLibrary(ctx, rootWord)
 		if err != nil {
 			logging.Debug(fmt.Sprintf("single search result gave an error: %s", err.Error()))
 		}
 
-		if len(singleSearchResult) > 0 {
+		if singleSearchResult != nil && len(singleSearchResult.Candidates) > 0 {
 			// Parse the dictionary results and create result objects
 
 			result := models.Result{
@@ -176,9 +120,10 @@ func (d *DionysosHandler) StartFindingRules(word, requestID string) (*models.Dec
 				RootWord:    rootWord,
 				Translation: []string{},
 			}
-			for _, searchResult := range singleSearchResult {
-				translation, _ := d.parseDictResults(searchResult.Hit)
-				result.Translation = append(result.Translation, translation)
+			for _, searchResult := range singleSearchResult.Candidates {
+				for _, gloss := range searchResult.Glosses {
+					result.Translation = append(result.Translation, gloss)
+				}
 			}
 			results.Results = append(results.Results, result)
 		}
@@ -218,10 +163,13 @@ func (d *DionysosHandler) StartFindingRules(word, requestID string) (*models.Dec
 
 						//replace παρε with παρα for imperfect verbs
 
-						// Query the word in the Alexandros dictionary
-						dictionaryHits, err := d.queryWordInAlexandros(term, requestID)
+						dictionaryHits, err := d.queryLibrary(ctx, term)
 						if err != nil {
 							// Handle the error
+							continue
+						}
+
+						if dictionaryHits == nil {
 							continue
 						}
 
@@ -233,18 +181,19 @@ func (d *DionysosHandler) StartFindingRules(word, requestID string) (*models.Dec
 						}
 
 						// Parse the dictionary results and create result objects
-						for _, hit := range dictionaryHits {
-							if hit.Hit.Original != "" && hit.Hit.Original != result.RootWord {
-								result.RootWord = hit.Hit.Original
+						for _, hit := range dictionaryHits.Candidates {
+
+							if hit.Lemma != "" {
+								result.RootWord = hit.Lemma
 							}
 
-							if hit.Hit.Greek != "" && hit.Hit.Greek != result.RootWord {
-								result.RootWord = hit.Hit.Greek
+							article := d.parseDictResults(hit)
+
+							for _, gloss := range hit.Glosses {
+								result.Translation = append(result.Translation, gloss)
 							}
 
-							translation, article := d.parseDictResults(hit.Hit)
-
-							result.Translation = append(result.Translation, translation)
+							translation := result.Translation[0]
 
 							// Skip adding the result if it already exists with the same translation
 							if len(processedResults) > 0 {
@@ -344,13 +293,12 @@ func (d *DionysosHandler) StartFindingRules(word, requestID string) (*models.Dec
 		// Replace the original results with the filtered results
 		results.Results = filteredResults
 	} else if len(results.Results) == 0 {
-		// a final attempt is made if the rules are empty to just find the word in the dictionary
-		dictionaryHits, err := d.queryWordInAlexandros(d.removeAccents(word), requestID)
+		dictionaryHits, err := d.queryLibrary(ctx, word)
 		if err != nil {
 			logging.Debug(fmt.Sprintf("single search result gave an error: %s", err.Error()))
 		}
 
-		if len(dictionaryHits) > 0 {
+		if dictionaryHits != nil && len(dictionaryHits.Candidates) > 0 {
 			result := models.Result{
 				Word:        word,
 				Rule:        "no rule found",
@@ -358,35 +306,13 @@ func (d *DionysosHandler) StartFindingRules(word, requestID string) (*models.Dec
 				Translation: []string{},
 			}
 
-			for _, hit := range dictionaryHits {
-				translation, _ := d.parseDictResults(hit.Hit)
-				result.Translation = append(result.Translation, translation)
+			for _, hit := range dictionaryHits.Candidates {
+				for _, gloss := range hit.Glosses {
+					result.Translation = append(result.Translation, gloss)
+				}
+
 			}
 			results.Results = append(results.Results, result)
-		}
-	}
-
-	if traceCall {
-		// this span is meant to give insight into the working of StartFindingRules and should be expanded
-		duration := time.Since(startTime)
-		status, err := json.Marshal(results)
-		if err != nil {
-			logging.Error(fmt.Sprintf("failed to marshal body: %v", err))
-		}
-		parabasis := &arv1.ObserveRequest{
-			TraceId:      traceID,
-			ParentSpanId: spanID,
-			SpanId:       comedy.GenerateSpanID(),
-			Kind: &arv1.ObserveRequest_Action{
-				Action: &arv1.ObserveAction{
-					Action: "StartFindingRules",
-					TookMs: duration.Milliseconds(),
-					Status: fmt.Sprintf("%s", string(status)),
-				},
-			},
-		}
-		if err := d.Streamer.Send(parabasis); err != nil {
-			logging.Error(fmt.Sprintf("failed to send trace data: %v", err))
 		}
 	}
 

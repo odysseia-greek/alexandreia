@@ -154,8 +154,8 @@ github.com/odysseia-greek/agora/plato v0.2.16 h1:FUb51WxE1NThsj9DUroaCIx53VVLaOd
 github.com/odysseia-greek/agora/plato v0.2.16/go.mod h1:8Y89JmcuT7XH9OHi9aIxTu8BXZNV/C4QbWdlfWuzm0E=
 github.com/odysseia-greek/alexandreia/aristarchos v0.0.6 h1:psQsP9lUG458IX5hoI0PawJvy95G+DoiBdm1ExY3R6Q=
 github.com/odysseia-greek/alexandreia/aristarchos v0.0.6/go.mod h1:iaMG5czM4NpHWrU6MUwLMZTFZyPRHLWQU2V5TGtjcAc=
-github.com/odysseia-greek/alexandreia/eratosthenes v0.0.1 h1:n+yYYTeOMgaRpf4ifpukt5YpxhFArLgU3yYJ5oprWjc=
-github.com/odysseia-greek/alexandreia/eratosthenes v0.0.1/go.mod h1:7saEPoXSy7H42OYboOQ99ApAh6U1+bNsmtf7SoLU8oc=
+github.com/odysseia-greek/alexandreia/eratosthenes v0.0.2 h1:T3xFeJmYe3eKM7Zw4t7iGiVQN1k3dulYgTdOYoC+1mQ=
+github.com/odysseia-greek/alexandreia/eratosthenes v0.0.2/go.mod h1:7saEPoXSy7H42OYboOQ99ApAh6U1+bNsmtf7SoLU8oc=
 github.com/odysseia-greek/attike/aristophanes v0.7.0-rho8 h1:E3FuG2zTySaWknYQE6cLyf36l1DulgFT5KwnHAE7XMc=
 github.com/odysseia-greek/attike/aristophanes v0.7.0-rho8/go.mod h1:PnfzmFnr4wgiYqw2v5uBEE/Gi2+3FQE9RnTcnIzycsY=
 github.com/odysseia-greek/delphi/aristides v0.0.1 h1:cr1bWw3po+WLNIfrg/CK2ey2uVk2RZLD767zwSdktWk=
