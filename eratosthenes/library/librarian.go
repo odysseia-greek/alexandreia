@@ -34,11 +34,36 @@ func (l *LibraryServiceImpl) Health(ctx context.Context, request *emptypb.Empty)
 }
 
 func (l *LibraryServiceImpl) Resolve(ctx context.Context, entry *v1.ResolveRequest) (*v1.ResolveResponse, error) {
+	start := time.Now()
 	normalizedWord := transform.RemoveAccents(entry.Term)
 	response := &v1.ResolveResponse{
 		Term:           entry.Term,
 		NormalizedTerm: normalizedWord,
 		Candidates:     nil,
+	}
+
+	logging.Debug(fmt.Sprintf(
+		"resolve start term=%s normalized=%s limit=%d",
+		entry.Term, normalizedWord, entry.Limit,
+	))
+
+	cacheItem, _ := l.Archytas.Read(entry.Term)
+	if cacheItem != nil {
+		var candidates []*v1.Candidate
+		err := json.Unmarshal(cacheItem, &candidates)
+		if err != nil {
+			return nil, err
+		}
+
+		response.Candidates = candidates
+
+		logging.Debug(fmt.Sprintf(
+			"resolve done from cache term=%s candidates=%d duration=%s",
+			entry.Term, len(response.Candidates), time.Since(start),
+		))
+
+		go comedy.CacheSpan(string(cacheItem), entry.Term, ctx, l.Streamer)
+		return response, nil
 	}
 
 	normalized := false
@@ -47,6 +72,11 @@ func (l *LibraryServiceImpl) Resolve(ctx context.Context, entry *v1.ResolveReque
 		return nil, err
 	}
 
+	logging.Debug(fmt.Sprintf(
+		"resolve elastic query term=%q normalized=false hits=%d",
+		entry.Term, len(elasticResponse.Hits.Hits),
+	))
+
 	if len(elasticResponse.Hits.Hits) == 0 {
 		logging.Debug("no hits found trying with a word without diacretics")
 		normalized = true
@@ -54,6 +84,11 @@ func (l *LibraryServiceImpl) Resolve(ctx context.Context, entry *v1.ResolveReque
 		if err != nil {
 			return nil, err
 		}
+
+		logging.Debug(fmt.Sprintf(
+			"resolve elastic normalized hits=%d",
+			len(elasticResponse.Hits.Hits),
+		))
 	}
 
 	var lemmas []Lemma
@@ -72,11 +107,23 @@ func (l *LibraryServiceImpl) Resolve(ctx context.Context, entry *v1.ResolveReque
 
 	candidates, err := l.reviewCandidates(lemmas, entry.Term, normalized)
 	if err != nil {
-		logging.Error(err.Error())
+		return nil, fmt.Errorf("no found candidates: %w", err)
 	}
 
 	response.Candidates = candidates
 
+	itemToCache, _ := json.Marshal(candidates)
+
+	standardDuration := time.Minute * 30
+	err = l.Archytas.SetWithTTL(entry.Term, string(itemToCache), standardDuration)
+	if err != nil {
+		logging.Error(err.Error())
+	}
+
+	logging.Debug(fmt.Sprintf(
+		"resolve done term=%s candidates=%d duration=%s",
+		entry.Term, len(response.Candidates), time.Since(start),
+	))
 	return response, nil
 }
 
