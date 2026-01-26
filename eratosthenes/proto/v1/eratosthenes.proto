@@ -1,142 +1,31 @@
 syntax = "proto3";
 
 package eratosthenes.v1;
+
 option go_package = "github.com/odysseia-greek/alexandreia/eratosthenes/gen/go/v1;eratosthenesv1";
 
 service Eratosthenes {
-  // Resolve a single surface term into ranked dictionary candidates.
   rpc Resolve(ResolveRequest) returns (ResolveResponse);
-
-  // Resolve many terms in one call (recommended for sentence/segment processing).
-  rpc BatchResolve(BatchResolveRequest) returns (BatchResolveResponse);
-
-  // Optional: fetch a full entry later (UI/debug). Keep it lightweight for now.
-  rpc GetEntry(GetEntryRequest) returns (GetEntryResponse);
-
-  rpc Health (HealthRequest) returns (HealthResponse) {}
+  rpc Health(HealthRequest) returns (HealthResponse);
 }
 
-message HealthResponse {
-  bool health = 1;
-}
-
-message HealthRequest {
-}
+message HealthRequest {}
+message HealthResponse { bool ok = 1; }
 
 message ResolveRequest {
-  string term = 1;
-  ResolveOptions options = 2;
-}
-
-message ResolveOptions {
-  // Maximum results to return. Server may clamp.
-  uint32 max_results = 1;
-
-  // How aggressive matching should be.
-  Strategy strategy = 2;
-
-  // If true, try normalized/variant forms (accent-strip, sigma normalization, etc.).
-  bool allow_variants = 3;
-
-  // If true, allow fuzzy candidate generation (if you add it later).
-  bool allow_fuzzy = 4;
-
-  // If true, include attempts/debug info in response.
-  bool include_attempts = 5;
-
-  // Reserved for future (don’t reuse numbers).
-  reserved 6 to 20;
-}
-
-enum Strategy {
-  STRATEGY_UNSPECIFIED = 0; // treat as AUTO
-  STRATEGY_AUTO        = 1; // exact -> variants -> (optional) fuzzy
-  STRATEGY_EXACT_ONLY  = 2;
-  STRATEGY_VARIANTS    = 3; // exact + variants, no fuzzy
-  STRATEGY_FUZZY       = 4; // include fuzzy (if enabled)
+  string term = 1;     // e.g. "εἰρήνη"
+  uint32 limit = 2;    // default server-side if 0
 }
 
 message ResolveResponse {
-  // Echo input
-  string term = 1;
-
-  // Server’s normalized form used for matching/caching/logging.
-  string normalized_term = 2;
-
-  repeated Candidate results = 3;
-
-  // Optional debug/trace of what was tried (only if include_attempts=true).
-  repeated Attempt attempts = 4;
-
-  // Reserved for future expansions.
-  reserved 5 to 20;
+  string term = 1;              // echo input
+  string normalized_term = 2;   // what the server actually matched against
+  repeated Candidate candidates = 3;
 }
 
 message Candidate {
-  // Dictionary headword / lemma (Greek).
-  string lemma = 1;
-
-  // Short meanings (glosses) for Dionysios scoring/logging.
-  repeated string glosses = 2;
-
-  // 0..100, where 100 is best (e.g. Levenshtein similarity * 100).
-  uint32 score = 3;
-
-  // Optional stable identifier if your dictionary has one.
-  string entry_id = 4;
-
-  MatchType match_type = 5;
-  Source source = 6;
-
-  // Optional: raw distance / similarity metadata for debugging.
-  uint32 levenshtein_distance = 7;
-  uint32 max_len = 8; // used in normalization of distance if you want
-
-  reserved 9 to 20;
-}
-
-enum MatchType {
-  MATCH_TYPE_UNSPECIFIED = 0;
-  MATCH_EXACT            = 1;
-  MATCH_NORMALIZED       = 2; // e.g. accent-stripped equality
-  MATCH_VARIANT          = 3; // sigma normalization, etc.
-  MATCH_FUZZY            = 4; // edit-distance based
-}
-
-enum Source {
-  SOURCE_UNSPECIFIED = 0;
-  SOURCE_DICT_INDEX  = 1; // Elasticsearch dictionary index
-  SOURCE_ALEXANDROS  = 2; // legacy service (if you keep it as fallback)
-}
-
-message Attempt {
-  // What query string was actually executed.
-  string query = 1;
-
-  MatchType type = 2;
-  Source source = 3;
-
-  reserved 4 to 10;
-}
-
-message BatchResolveRequest {
-  repeated ResolveRequest requests = 1;
-}
-
-message BatchResolveResponse {
-  repeated ResolveResponse responses = 1;
-}
-
-message GetEntryRequest {
-  string entry_id = 1;
-}
-
-message GetEntryResponse {
-  // Keep this vague for now; you can expand safely.
-  string entry_id = 1;
-  string lemma = 2;
-  repeated string glosses = 3;
-
-  // If later you want richer data, add fields (never rename/reuse numbers).
-  reserved 4 to 50;
+  string lemma = 1;             // dictionary headword / lemma
+  uint32 score = 2;             // 0..100 (100 best)
+  repeated string glosses = 3;  // optional: short defs for logging/UI
+  string entry_id = 4;          // optional, leave empty if not available
 }

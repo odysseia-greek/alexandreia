@@ -1,4 +1,4 @@
-PROTO_DIRS := aristarchos
+PROTO_DIRS := aristarchos eratosthenes
 
 .PHONY: all
 all: generate docs

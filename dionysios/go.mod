@@ -6,13 +6,13 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/mux v1.8.1
 	github.com/odysseia-greek/agora/archytas v0.1.2
-	github.com/odysseia-greek/agora/aristoteles v0.1.15
+	github.com/odysseia-greek/agora/aristoteles v0.2.2
 	github.com/odysseia-greek/agora/plato v0.2.12
-	github.com/odysseia-greek/alexandreia/aristarchos v0.0.5
-	github.com/odysseia-greek/attike/aristophanes v0.7.0-rho1
+	github.com/odysseia-greek/alexandreia/aristarchos v0.0.6
+	github.com/odysseia-greek/attike/aristophanes v0.7.0-rho8
 	github.com/odysseia-greek/delphi/aristides v0.0.1
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/text v0.32.0
+	golang.org/x/text v0.33.0
 	google.golang.org/grpc v1.78.0
 )
 
@@ -24,8 +24,8 @@ require (
 	github.com/dgraph-io/badger/v3 v3.2103.5 // indirect
 	github.com/dgraph-io/ristretto v0.2.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
-	github.com/elastic/elastic-transport-go/v8 v8.7.0 // indirect
-	github.com/elastic/go-elasticsearch/v8 v8.18.1 // indirect
+	github.com/elastic/elastic-transport-go/v8 v8.8.0 // indirect
+	github.com/elastic/go-elasticsearch/v9 v9.2.1 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.3 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
@@ -49,7 +49,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/odysseia-greek/agora/diogenes v0.1.15 // indirect
-	github.com/odysseia-greek/agora/eupalinos v0.2.3 // indirect
+	github.com/odysseia-greek/agora/eupalinos v0.2.7 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
