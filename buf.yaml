@@ -2,6 +2,7 @@
 version: v2
 modules:
   - path: aristarchos/proto
+  - path: eratosthenes/proto
 lint:
   use: [DEFAULT]
 breaking:

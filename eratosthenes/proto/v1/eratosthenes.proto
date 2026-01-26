@@ -4,13 +4,27 @@ package eratosthenes.v1;
 
 option go_package = "github.com/odysseia-greek/alexandreia/eratosthenes/gen/go/v1;eratosthenesv1";
 
-service Eratosthenes {
+import "google/protobuf/empty.proto";
+
+service EratosthenesService {
   rpc Resolve(ResolveRequest) returns (ResolveResponse);
-  rpc Health(HealthRequest) returns (HealthResponse);
+  rpc Health(google.protobuf.Empty) returns (HealthResponse);
 }
 
-message HealthRequest {}
-message HealthResponse { bool ok = 1; }
+message HealthResponse {
+  bool healthy = 1;
+  string time = 2;
+  string version = 3;
+  DatabaseHealth database_health = 4;
+}
+
+// Nested message for database health details
+message DatabaseHealth {
+  bool healthy = 1;
+  string cluster_name = 2;
+  string server_name = 3;
+  string server_version = 4;
+}
 
 message ResolveRequest {
   string term = 1;     // e.g. "εἰρήνη"
@@ -25,7 +39,8 @@ message ResolveResponse {
 
 message Candidate {
   string lemma = 1;             // dictionary headword / lemma
-  uint32 score = 2;             // 0..100 (100 best)
-  repeated string glosses = 3;  // optional: short defs for logging/UI
-  string entry_id = 4;          // optional, leave empty if not available
+  int32 score = 2;             // 0..100 (100 best)
+  int32 levenshtein = 3;
+  repeated string glosses = 4;  // optional: short defs for logging/UI
+  string entry_id = 5;          // optional, leave empty if not available
 }

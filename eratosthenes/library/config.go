@@ -1,4 +1,4 @@
-package scholar
+package library
 
 import (
 	"context"
@@ -20,7 +20,7 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-func CreateNewConfig(ctx context.Context) (*ExactServiceImpl, error) {
+func CreateNewConfig(ctx context.Context) (*LibraryServiceImpl, error) {
 	tls := config.BoolFromEnv(config.EnvTlSKey)
 
 	tracer, err := aristophanes.NewClientTracer(aristophanes.DefaultAddress)
@@ -134,7 +134,7 @@ func CreateNewConfig(ctx context.Context) (*ExactServiceImpl, error) {
 
 	version := os.Getenv(config.EnvVersion)
 
-	return &ExactServiceImpl{
+	return &LibraryServiceImpl{
 		Index:    index,
 		Elastic:  elastic,
 		Archytas: cache,
