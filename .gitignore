@@ -28,5 +28,9 @@ go.work.sum
 .env
 
 # Editor/IDE
-# .idea/
-# .vscode/
+ .idea/
+ .vscode/
+
+# docs
+eratosthenes/docs
+aristarchos/docs
