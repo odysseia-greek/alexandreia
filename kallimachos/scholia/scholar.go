@@ -17,7 +17,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func (l *LibraryServiceImpl) Health(ctx context.Context, request *emptypb.Empty) (*v1.HealthResponse, error) {
+func (l *ScholarServiceImpl) Health(ctx context.Context, request *emptypb.Empty) (*v1.HealthResponse, error) {
 	elasticHealth := l.Elastic.Health().Info()
 	dbHealth := &v1.DatabaseHealth{
 		Healthy:       elasticHealth.Healthy,
@@ -34,7 +34,7 @@ func (l *LibraryServiceImpl) Health(ctx context.Context, request *emptypb.Empty)
 	}, nil
 }
 
-func (l *LibraryServiceImpl) Analyze(ctx context.Context, request *v1.AnalyzeRequest) (*v1.AnalyzeResponse, error) {
+func (l *ScholarServiceImpl) Analyze(ctx context.Context, request *v1.AnalyzeRequest) (*v1.AnalyzeResponse, error) {
 	start := time.Now()
 	rootword := strings.TrimSpace(request.GetRootword())
 	if rootword == "" {
@@ -144,7 +144,7 @@ func sanitizeLimit(limit uint32) uint32 {
 	return limit
 }
 
-func (l *LibraryServiceImpl) resolveForms(ctx context.Context, rootword string) (*ariv1.RootWordResponse, []string, []*v1.Conjugation) {
+func (l *ScholarServiceImpl) resolveForms(ctx context.Context, rootword string) (*ariv1.RootWordResponse, []string, []*v1.Conjugation) {
 	entry, err := l.Aggregator.RetrieveEntry(ctx, &ariv1.AggregatorRequest{RootWord: rootword})
 	if err != nil {
 		logging.Error(fmt.Sprintf("failed to retrieve entry for %s: %s", rootword, err.Error()))
@@ -187,7 +187,7 @@ func (l *LibraryServiceImpl) resolveForms(ctx context.Context, rootword string) 
 	return entry, words, conjugations
 }
 
-func (l *LibraryServiceImpl) queryTexts(ctx context.Context, query map[string]interface{}) (*models.Response, int64, error) {
+func (l *ScholarServiceImpl) queryTexts(ctx context.Context, query map[string]interface{}) (*models.Response, int64, error) {
 	ctx, cancel := context.WithTimeout(ctx, 60*time.Second)
 	defer cancel()
 

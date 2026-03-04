@@ -14,7 +14,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-type LibraryService interface {
+type ScholarService interface {
 	WaitForHealthyState() bool
 	Analyze(ctx context.Context, entry *v1.AnalyzeRequest) (*v1.AnalyzeResponse, error)
 }
@@ -23,7 +23,7 @@ const (
 	DEFAULTADDRESS = "localhost:50060"
 )
 
-type LibraryServiceImpl struct {
+type ScholarServiceImpl struct {
 	Elastic    aristoteles.Client
 	Index      string
 	Version    string
@@ -32,11 +32,11 @@ type LibraryServiceImpl struct {
 	v1.UnimplementedKallimachosServiceServer
 }
 
-type LibraryClient struct {
+type ScholarClient struct {
 	library v1.KallimachosServiceClient
 }
 
-func NewKallimachosClient(address string) (*LibraryClient, error) {
+func NewKallimachosClient(address string) (*ScholarClient, error) {
 	if address == "" {
 		address = DEFAULTADDRESS
 	}
@@ -47,16 +47,16 @@ func NewKallimachosClient(address string) (*LibraryClient, error) {
 	}
 
 	client := v1.NewKallimachosServiceClient(conn)
-	return &LibraryClient{library: client}, nil
+	return &ScholarClient{library: client}, nil
 }
 
-func (l *LibraryClient) WaitForHealthyState() bool {
+func (s *ScholarClient) WaitForHealthyState() bool {
 	timeout := 30 * time.Second
 	checkInterval := 1 * time.Second
 	endTime := time.Now().Add(timeout)
 
 	for time.Now().Before(endTime) {
-		response, err := l.Health(context.Background(), &emptypb.Empty{})
+		response, err := s.Health(context.Background(), &emptypb.Empty{})
 		if err == nil && response.Healthy {
 			return true
 		}
@@ -67,10 +67,10 @@ func (l *LibraryClient) WaitForHealthyState() bool {
 	return false
 }
 
-func (l *LibraryClient) Health(ctx context.Context, request *emptypb.Empty) (*v1.HealthResponse, error) {
-	return l.library.Health(ctx, request)
+func (s *ScholarClient) Health(ctx context.Context, request *emptypb.Empty) (*v1.HealthResponse, error) {
+	return s.library.Health(ctx, request)
 }
 
-func (l *LibraryClient) Analyze(ctx context.Context, request *v1.AnalyzeRequest) (*v1.AnalyzeResponse, error) {
-	return l.library.Analyze(ctx, request)
+func (s *ScholarClient) Analyze(ctx context.Context, request *v1.AnalyzeRequest) (*v1.AnalyzeResponse, error) {
+	return s.library.Analyze(ctx, request)
 }

@@ -22,7 +22,7 @@ import (
 
 const defaultIndex = "text"
 
-func CreateNewConfig(ctx context.Context) (*LibraryServiceImpl, error) {
+func CreateNewConfig(ctx context.Context) (*ScholarServiceImpl, error) {
 	tls := config.BoolFromEnv(config.EnvTlSKey)
 
 	tracer, err := aristophanes.NewClientTracer(aristophanes.DefaultAddress)
@@ -146,7 +146,7 @@ func CreateNewConfig(ctx context.Context) (*LibraryServiceImpl, error) {
 
 	version := os.Getenv(config.EnvVersion)
 
-	return &LibraryServiceImpl{
+	return &ScholarServiceImpl{
 		Index:      index,
 		Elastic:    elastic,
 		Aggregator: aggregator,
