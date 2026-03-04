@@ -10,7 +10,7 @@ import (
 	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
 	v1 "github.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1"
-	"github.com/odysseia-greek/alexandreia/kallimachos/library"
+	"github.com/odysseia-greek/alexandreia/kallimachos/scholia"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -39,7 +39,7 @@ func main() {
 	logging.System("Kallimachos, fragment 465")
 
 	ctx := context.Background()
-	cfg, err := library.CreateNewConfig(ctx)
+	cfg, err := scholia.CreateNewConfig(ctx)
 	if err != nil {
 		logging.Error(err.Error())
 		log.Fatal("death has found me")

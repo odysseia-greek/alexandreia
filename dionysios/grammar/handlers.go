@@ -19,6 +19,7 @@ import (
 	pba "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	aristarchos "github.com/odysseia-greek/alexandreia/aristarchos/scholar"
 	"github.com/odysseia-greek/alexandreia/eratosthenes/library"
+	analyzer "github.com/odysseia-greek/alexandreia/kallimachos/library"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
 	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"google.golang.org/grpc/metadata"
@@ -30,6 +31,7 @@ type DionysosHandler struct {
 	Index            string
 	Client           service.OdysseiaClient
 	LibraryService   *hesiodos.GenericGrpcClient[*library.LibraryClient]
+	AnalyzeService 	 *hesiodos.GenericGrpcClient[*]
 	DeclensionConfig models.DeclensionConfig
 	Streamer         arv1.TraceService_ChorusClient
 	Aggregator       pba.Aristarchos_CreateNewEntryClient

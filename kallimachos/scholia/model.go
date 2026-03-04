@@ -1,4 +1,4 @@
-package library
+package scholia
 
 import platomodels "github.com/odysseia-greek/agora/plato/models"
 
