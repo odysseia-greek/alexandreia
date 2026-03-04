@@ -1,0 +1,8 @@
+version: v2
+plugins:
+  - local: protoc-gen-doc
+    out: kallimachos/docs
+    opt: html,docs.html
+  - local: protoc-gen-doc
+    out: kallimachos/docs
+    opt: markdown,docs.md

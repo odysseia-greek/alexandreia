@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package kallimachos.v1;
+
+option go_package = "github.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1;kallimachosv1";
+
+import "google/protobuf/empty.proto";
+
+service KallimachosService {
+  rpc Analyze(AnalyzeRequest) returns (AnalyzeResponse);
+  rpc Health(google.protobuf.Empty) returns (HealthResponse);
+}
+
+message HealthResponse {
+  bool healthy = 1;
+  string time = 2;
+  string version = 3;
+  DatabaseHealth database_health = 4;
+}
+
+message DatabaseHealth {
+  bool healthy = 1;
+  string cluster_name = 2;
+  string server_name = 3;
+  string server_version = 4;
+}
+
+message AnalyzeRequest {
+  string rootword = 1;
+  uint32 limit = 2;
+}
+
+message AnalyzeResponse {
+  string rootword = 1;
+  string part_of_speech = 2;
+  repeated Conjugation conjugations = 3;
+  DirectResult direct_result = 4;
+  repeated AnalyzeResult results = 5;
+}
+
+message Conjugation {
+  string word = 1;
+  string rule = 2;
+}
+
+message AnalyzeResult {
+  string reference_link = 1;
+  string author = 2;
+  string book = 3;
+  string reference = 4;
+  Rhema text = 5;
+}
+
+message DirectResult {
+  string requested_word = 1;
+  repeated AnalyzeResult texts = 2;
+}
+
+message Rhema {
+  string greek = 1;
+  repeated string translations = 2;
+  string section = 3;
+}

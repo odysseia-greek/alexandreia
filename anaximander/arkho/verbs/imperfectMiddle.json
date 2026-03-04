@@ -5,42 +5,42 @@
   "declensions": [
     {
       "declension": "-ομην",
-      "ruleName": "1st sing - impf - ind - mid",
+      "ruleName": "1st sing - impf - ind - mid/pas",
       "searchTerm": [
         "ω"
       ]
     },
     {
       "declension": "-ου",
-      "ruleName": "2nd sing - impf - ind - mid",
+      "ruleName": "2nd sing - impf - ind - mid/pas",
       "searchTerm": [
         "ω"
       ]
     },
     {
       "declension": "-ετο",
-      "ruleName": "3th sing - impf - ind - mid",
+      "ruleName": "3th sing - impf - ind - mid/pas",
       "searchTerm": [
         "ω"
       ]
     },
     {
       "declension": "-ομεθα",
-      "ruleName": "1st plural - impf - ind - mid",
+      "ruleName": "1st plural - impf - ind - mid/pas",
       "searchTerm": [
         "ω"
       ]
     },
     {
       "declension": "-εσθε",
-      "ruleName": "2nd plural - impf - ind - mid",
+      "ruleName": "2nd plural - impf - ind - mid/pas",
       "searchTerm": [
         "ω"
       ]
     },
     {
       "declension": "-οντο",
-      "ruleName": "3th plural - impf - ind - mid",
+      "ruleName": "3th plural - impf - ind - mid/pas",
       "searchTerm": [
         "ω"
       ]

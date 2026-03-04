@@ -156,7 +156,10 @@ func (l *LibraryServiceImpl) queryElastic(ctx context.Context, word string, norm
 		"size": results,
 	}
 
-	elasticResponse, err := l.Elastic.Query().Match(l.Index, query)
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
+	elasticResponse, err := l.Elastic.Query().MatchWithContext(ctx, l.Index, query)
 	if err != nil {
 		return nil, 0, fmt.Errorf("error querying elastic: %w", err)
 	}

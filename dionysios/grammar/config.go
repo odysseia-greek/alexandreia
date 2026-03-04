@@ -198,7 +198,10 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 
 func QueryRuleSet(es elastic.Client, index string) (*plato.DeclensionConfig, error) {
 	query := es.Builder().MatchAll()
-	response, err := es.Query().MatchWithScroll(index, query)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	response, err := es.Query().MatchWithScrollWithContext(ctx, index, query)
 
 	if err != nil {
 		return nil, err

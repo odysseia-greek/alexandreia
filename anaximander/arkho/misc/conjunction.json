@@ -8,6 +8,10 @@
       "ruleName": "conjunction"
     },
     {
+      "declension": "δέ",
+      "ruleName": "conjunction"
+    },
+    {
       "declension": "μέχρι",
       "ruleName": "conjunction"
     },
@@ -53,6 +57,10 @@
     },
     {
       "declension": "ὅταν",
+      "ruleName": "conjunction"
+    },
+    {
+      "declension": "ἤ",
       "ruleName": "conjunction"
     },
     {
