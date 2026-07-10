@@ -1,21 +1,21 @@
 module github.com/odysseia-greek/alexandreia/dionysios
 
-go 1.25.5
+go 1.26.4
 
 require (
 	github.com/google/uuid v1.6.0
-	github.com/gorilla/mux v1.8.1
 	github.com/odysseia-greek/agora/archytas v0.1.2
 	github.com/odysseia-greek/agora/aristoteles v0.3.0
+	github.com/odysseia-greek/agora/eupalinos v0.2.7
 	github.com/odysseia-greek/agora/hesiodos v0.1.1
 	github.com/odysseia-greek/agora/plato v0.2.16
 	github.com/odysseia-greek/alexandreia/aristarchos v0.0.6
 	github.com/odysseia-greek/alexandreia/eratosthenes v0.0.2
-	github.com/odysseia-greek/alexandreia/kallimachos v0.0.1
+	github.com/odysseia-greek/alexandreia/kallimachos v0.0.2-rho1
 	github.com/odysseia-greek/attike/aristophanes v0.7.2
 	github.com/odysseia-greek/delphi/aristides v0.0.1
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/text v0.34.0
+	golang.org/x/text v0.38.0
 	google.golang.org/grpc v1.79.1
 )
 
@@ -52,7 +52,6 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/odysseia-greek/agora/diogenes v0.1.15 // indirect
-	github.com/odysseia-greek/agora/eupalinos v0.2.7 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect

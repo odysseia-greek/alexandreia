@@ -1,4 +1,4 @@
-PROTO_DIRS := aristarchos eratosthenes
+PROTO_DIRS := aristarchos dionysios eratosthenes
 
 .PHONY: docs-grpc tidy tidy-go mods
 

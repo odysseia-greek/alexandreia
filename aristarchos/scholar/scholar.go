@@ -71,7 +71,7 @@ func (a *AggregatorServiceImpl) createOrUpdate(ctx context.Context, request *v1.
 			},
 		},
 	}
-	response, err := a.Elastic.Query().Match(a.Index, query)
+	response, err := a.Elastic.Query().MatchWithContext(ctx, a.Index, query)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "404") {
@@ -106,7 +106,7 @@ func (a *AggregatorServiceImpl) createOrUpdate(ctx context.Context, request *v1.
 		}
 		entry.Variants = append(entry.Variants, variant)
 		entryAsJson, _ := json.Marshal(entry)
-		createDocument, err := a.Elastic.Index().CreateDocument(a.Index, entryAsJson)
+		createDocument, err := a.Elastic.Index().CreateDocumentWithContext(ctx, a.Index, entryAsJson)
 		if err != nil {
 			logging.Error(err.Error())
 			return
@@ -179,7 +179,7 @@ func (a *AggregatorServiceImpl) createOrUpdate(ctx context.Context, request *v1.
 	}
 
 	entryAsJson, _ := json.Marshal(rootWordEntry)
-	createDocument, err := a.Elastic.Document().Update(a.Index, response.Hits.Hits[0].ID, entryAsJson)
+	createDocument, err := a.Elastic.Document().UpdateWithContext(ctx, a.Index, response.Hits.Hits[0].ID, entryAsJson)
 	if err != nil {
 		logging.Error(err.Error())
 		return
@@ -217,7 +217,7 @@ func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *v1.A
 		},
 	}
 
-	response, err := a.Elastic.Query().Match(a.Index, query)
+	response, err := a.Elastic.Query().MatchWithContext(ctx, a.Index, query)
 
 	if err != nil {
 		return nil, err
@@ -257,7 +257,7 @@ func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request
 	request.RootWord = parsedWord
 
 	query := a.Elastic.Builder().MatchQuery(ROOTWORD, request.RootWord)
-	response, err := a.Elastic.Query().Match(a.Index, query)
+	response, err := a.Elastic.Query().MatchWithContext(ctx, a.Index, query)
 
 	if err != nil {
 		return nil, err
@@ -304,7 +304,7 @@ func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context,
 			},
 		},
 	}
-	response, err := a.Elastic.Query().Match(a.Index, query)
+	response, err := a.Elastic.Query().MatchWithContext(ctx, a.Index, query)
 
 	if err != nil {
 		return nil, err

@@ -1,0 +1,161 @@
+syntax = "proto3";
+
+package dionysios.v1;
+
+option go_package = "github.com/odysseia-greek/alexandreia/dionysios/gen/go/v1;dionysiosv1";
+
+service DionysiosService {
+  rpc Ping(PingRequest) returns (PingResponse);
+  rpc Health(HealthRequest) returns (HealthResponse);
+  rpc CheckGrammar(CheckGrammarRequest) returns (CheckGrammarResponse);
+  rpc Research(ResearchRequest) returns (ResearchResponse);
+
+  // TextMode is intended for heavier scholar workflows. Implementations should
+  // require session_id and rate-limit by both session_id and the upstream IP
+  // observed from gRPC peer/metadata. Resource-exhausted should be returned
+  // when either identity has sent a request inside the configured window.
+  rpc TextMode(TextModeRequest) returns (TextModeResponse);
+
+  // Scholar-mode placeholders.
+  rpc ExplainWord(ExplainWordRequest) returns (ExplainWordResponse);
+  rpc DiveText(DiveTextRequest) returns (DiveTextResponse);
+}
+
+message PingRequest {}
+
+message PingResponse {
+  string result = 1;
+}
+
+message HealthRequest {}
+
+message HealthResponse {
+  bool healthy = 1;
+  string time = 2;
+  string version = 3;
+  DatabaseHealth database_health = 4;
+}
+
+message DatabaseHealth {
+  bool healthy = 1;
+  string cluster_name = 2;
+  string server_name = 3;
+  string server_version = 4;
+}
+
+message CheckGrammarRequest {
+  string word = 1;
+  bool include_audit = 2;
+}
+
+message CheckGrammarResponse {
+  repeated DeclensionResult results = 1;
+  GrammarAudit audit = 2;
+}
+
+message DeclensionResult {
+  string word = 1;
+  string rule = 2;
+  string root_word = 3;
+  repeated string translation = 4;
+}
+
+message GrammarAudit {
+  string request_id = 1;
+  string word = 2;
+  string outcome = 3;
+  string source = 4;
+  string reason = 5;
+  repeated GrammarAuditEvent events = 6;
+}
+
+message GrammarAuditEvent {
+  string step = 1;
+  string status = 2;
+  string reason = 3;
+  string source = 4;
+  string rule = 5;
+  string root_word = 6;
+  string search_term = 7;
+  uint32 result_count = 8;
+  uint32 candidate_count = 9;
+  repeated string details = 10;
+}
+
+message ResearchRequest {
+  string rootword = 1;
+  uint32 limit = 2;
+}
+
+message ResearchResponse {
+  string rootword = 1;
+  string part_of_speech = 2;
+  repeated Conjugation conjugations = 3;
+  repeated AnalyzeResult results = 4;
+}
+
+message Conjugation {
+  string word = 1;
+  string rule = 2;
+}
+
+message AnalyzeResult {
+  string reference_link = 1;
+  string author = 2;
+  string book = 3;
+  string reference = 4;
+  Rhema text = 5;
+}
+
+message Rhema {
+  string greek = 1;
+  repeated string translations = 2;
+  string section = 3;
+}
+
+message TextModeRequest {
+  string text = 1;
+  string session_id = 2;
+  bool include_audit = 3;
+}
+
+message TextModeResponse {
+  string session_id = 1;
+  RateLimitInfo rate_limit = 2;
+  repeated TextToken tokens = 3;
+  GrammarAudit audit = 4;
+}
+
+message RateLimitInfo {
+  string upstream_ip = 1;
+  uint32 window_seconds = 2;
+  string next_allowed_time = 3;
+}
+
+message TextToken {
+  string token = 1;
+  uint32 position = 2;
+  repeated DeclensionResult results = 3;
+}
+
+message ExplainWordRequest {
+  string word = 1;
+  string session_id = 2;
+  string context = 3;
+}
+
+message ExplainWordResponse {
+  string word = 1;
+  string placeholder = 2;
+}
+
+message DiveTextRequest {
+  string text_id = 1;
+  string session_id = 2;
+  string selection = 3;
+}
+
+message DiveTextResponse {
+  string text_id = 1;
+  string placeholder = 2;
+}

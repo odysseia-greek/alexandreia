@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/odysseia-greek/agora/aristoteles"
+	queuepb "github.com/odysseia-greek/agora/eupalinos/proto"
 	v1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"google.golang.org/grpc"
@@ -20,12 +21,20 @@ type AggregatorService interface {
 	RetrieveSearchWords(ctx context.Context, in *v1.AggregatorRequest) (*v1.SearchWordResponse, error)
 }
 
+type QueueService interface {
+	WaitForHealthyState() bool
+	EnqueueMessageBytes(ctx context.Context, in *queuepb.EpistelloBytes) (*queuepb.EnqueueResponse, error)
+	DequeueMessageBytes(ctx context.Context, in *queuepb.ChannelInfo) (*queuepb.EpistelloBytes, error)
+}
+
 const (
 	DEFAULTADDRESS string = "localhost:50060"
 )
 
 type AggregatorServiceImpl struct {
 	Elastic    aristoteles.Client
+	Queue      QueueService
+	QueueName  string
 	Index      string
 	PolicyName string
 	Streamer   arv1.TraceService_ChorusClient

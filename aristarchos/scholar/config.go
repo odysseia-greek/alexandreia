@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/odysseia-greek/agora/aristoteles"
 	"github.com/odysseia-greek/agora/aristoteles/models"
+	"github.com/odysseia-greek/agora/eupalinos/stomion"
 	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/service"
@@ -125,13 +126,27 @@ func CreateNewConfig(ctx context.Context) (*AggregatorServiceImpl, error) {
 		return nil, err
 	}
 
+	eupalinosAddress := config.StringFromEnv(config.EnvEupalinosService, config.DefaultEupalinosService)
+	queue, err := stomion.NewEupalinosClient(eupalinosAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	queueHealthy := queue.WaitForHealthyState()
+	if !queueHealthy {
+		return nil, fmt.Errorf("eupalinos service not ready at %s", eupalinosAddress)
+	}
+
 	index := config.StringFromEnv(config.EnvIndex, defaultIndex)
 
 	policyName := config.StringFromEnv("HOT_POLICY_NAME", "hot_plain")
+	queueName := config.StringFromEnv(config.EnvChannel, DefaultQueueName)
 
 	return &AggregatorServiceImpl{
 		Index:      index,
 		Elastic:    elastic,
+		Queue:      queue,
+		QueueName:  queueName,
 		PolicyName: policyName,
 		Streamer:   streamer,
 	}, nil

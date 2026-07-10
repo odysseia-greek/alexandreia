@@ -95,8 +95,15 @@ func (d *DionysosHandler) isAWordWithoutDeclensions(word string) (bool, *models.
 
 // StartFindingRules initiates the process of finding declension rules and translations for a given word.
 // It returns the declension translation results.
-func (d *DionysosHandler) StartFindingRules(ctx context.Context, word string) (*models.DeclensionTranslationResults, error) {
+func (d *DionysosHandler) StartFindingRules(ctx context.Context, word string, auditLog *GrammarAuditLog) (*models.DeclensionTranslationResults, error) {
 	var results models.DeclensionTranslationResults
+
+	auditLog.Add(GrammarAuditEvent{
+		Step:   "rule_engine.start",
+		Status: "ok",
+		Reason: "started rule evaluation for requested word",
+		Source: "rule-engine",
+	})
 
 	noDeclensionWord, form := d.isAWordWithoutDeclensions(d.removeAccents(word))
 
@@ -106,9 +113,34 @@ func (d *DionysosHandler) StartFindingRules(ctx context.Context, word string) (*
 		if len(form.SearchTerm) > 0 {
 			rootWord = form.SearchTerm[0]
 		}
+		auditLog.Add(GrammarAuditEvent{
+			Step:     "rule_engine.shortcut",
+			Status:   "ok",
+			Reason:   "word matches a non-declining lexical entry",
+			Source:   "rule-engine",
+			Rule:     form.RuleName,
+			RootWord: rootWord,
+		})
 		singleSearchResult, err := d.queryLibrary(ctx, rootWord)
 		if err != nil {
+			auditLog.Add(GrammarAuditEvent{
+				Step:       "dictionary.lookup",
+				Status:     "failed",
+				Reason:     err.Error(),
+				Source:     "dictionary",
+				SearchTerm: rootWord,
+			})
 			logging.Debug(fmt.Sprintf("single search result gave an error: %s", err.Error()))
+		}
+		if singleSearchResult != nil {
+			auditLog.Add(GrammarAuditEvent{
+				Step:           "dictionary.lookup",
+				Status:         "ok",
+				Reason:         "queried dictionary for non-declining word",
+				Source:         "dictionary",
+				SearchTerm:     rootWord,
+				CandidateCount: len(singleSearchResult.Candidates),
+			})
 		}
 
 		if singleSearchResult != nil && len(singleSearchResult.Candidates) > 0 {
@@ -126,13 +158,29 @@ func (d *DionysosHandler) StartFindingRules(ctx context.Context, word string) (*
 				}
 			}
 			results.Results = append(results.Results, result)
+			auditLog.Add(GrammarAuditEvent{
+				Step:        "dictionary.accept",
+				Status:      "ok",
+				Reason:      "dictionary returned translations for the direct lexical entry",
+				Source:      "dictionary",
+				Rule:        form.RuleName,
+				RootWord:    rootWord,
+				ResultCount: 1,
+			})
 		}
 	} else {
 		// even if the word is found as being in the misc group it might still be both
-		declensions, err := d.searchForDeclensions(word)
+		declensions, err := d.searchForDeclensions(word, auditLog)
 		if err != nil {
 			return nil, err
 		}
+		auditLog.Add(GrammarAuditEvent{
+			Step:        "rule_engine.rules_found",
+			Status:      "ok",
+			Reason:      "collected candidate rules before dictionary validation",
+			Source:      "rule-engine",
+			ResultCount: len(declensions.Rules),
+		})
 
 		// Separate first/second declensions from third declensions
 		firstSecondDeclensions := []models.Rule{}
@@ -165,13 +213,38 @@ func (d *DionysosHandler) StartFindingRules(ctx context.Context, word string) (*
 
 						dictionaryHits, err := d.queryLibrary(ctx, term)
 						if err != nil {
+							auditLog.Add(GrammarAuditEvent{
+								Step:       "dictionary.lookup",
+								Status:     "failed",
+								Reason:     err.Error(),
+								Source:     "dictionary",
+								Rule:       declension.Rule,
+								SearchTerm: term,
+							})
 							// Handle the error
 							continue
 						}
 
 						if dictionaryHits == nil {
+							auditLog.Add(GrammarAuditEvent{
+								Step:       "dictionary.lookup",
+								Status:     "empty",
+								Reason:     "dictionary returned no payload",
+								Source:     "dictionary",
+								Rule:       declension.Rule,
+								SearchTerm: term,
+							})
 							continue
 						}
+						auditLog.Add(GrammarAuditEvent{
+							Step:           "dictionary.lookup",
+							Status:         "ok",
+							Reason:         "queried dictionary for candidate search term",
+							Source:         "dictionary",
+							Rule:           declension.Rule,
+							SearchTerm:     term,
+							CandidateCount: len(dictionaryHits.Candidates),
+						})
 
 						result := models.Result{
 							Word:        word,
@@ -207,14 +280,38 @@ func (d *DionysosHandler) StartFindingRules(ctx context.Context, word string) (*
 								switch article {
 								case "ὁ":
 									if !strings.Contains(declension.Rule, "masc") {
+										auditLog.Add(GrammarAuditEvent{
+											Step:       "dictionary.reject",
+											Status:     "filtered",
+											Reason:     "dictionary article indicates masculine but rule is not masculine",
+											Source:     "dictionary",
+											Rule:       declension.Rule,
+											SearchTerm: term,
+										})
 										continue
 									}
 								case "ἡ":
 									if !strings.Contains(declension.Rule, "fem") {
+										auditLog.Add(GrammarAuditEvent{
+											Step:       "dictionary.reject",
+											Status:     "filtered",
+											Reason:     "dictionary article indicates feminine but rule is not feminine",
+											Source:     "dictionary",
+											Rule:       declension.Rule,
+											SearchTerm: term,
+										})
 										continue
 									}
 								case "τό":
 									if !strings.Contains(declension.Rule, "neut") {
+										auditLog.Add(GrammarAuditEvent{
+											Step:       "dictionary.reject",
+											Status:     "filtered",
+											Reason:     "dictionary article indicates neuter but rule is not neuter",
+											Source:     "dictionary",
+											Rule:       declension.Rule,
+											SearchTerm: term,
+										})
 										continue
 									}
 								}
@@ -224,6 +321,16 @@ func (d *DionysosHandler) StartFindingRules(ctx context.Context, word string) (*
 						// Append the result to the results slice
 						if len(result.Translation) > 0 {
 							processedResults = append(processedResults, result)
+							auditLog.Add(GrammarAuditEvent{
+								Step:        "dictionary.accept",
+								Status:      "ok",
+								Reason:      "dictionary evidence supports this rule",
+								Source:      "dictionary",
+								Rule:        declension.Rule,
+								SearchTerm:  term,
+								RootWord:    result.RootWord,
+								ResultCount: 1,
+							})
 						}
 					}
 				}
@@ -292,10 +399,34 @@ func (d *DionysosHandler) StartFindingRules(ctx context.Context, word string) (*
 
 		// Replace the original results with the filtered results
 		results.Results = filteredResults
+		auditLog.Add(GrammarAuditEvent{
+			Step:        "result.filter",
+			Status:      "ok",
+			Reason:      "removed duplicate or low-quality results",
+			Source:      "rule-engine",
+			ResultCount: len(results.Results),
+		})
 	} else if len(results.Results) == 0 {
 		dictionaryHits, err := d.queryLibrary(ctx, word)
 		if err != nil {
+			auditLog.Add(GrammarAuditEvent{
+				Step:       "dictionary.lookup",
+				Status:     "failed",
+				Reason:     err.Error(),
+				Source:     "dictionary",
+				SearchTerm: word,
+			})
 			logging.Debug(fmt.Sprintf("single search result gave an error: %s", err.Error()))
+		}
+		if dictionaryHits != nil {
+			auditLog.Add(GrammarAuditEvent{
+				Step:           "dictionary.lookup",
+				Status:         "ok",
+				Reason:         "performed fallback dictionary lookup for the original word",
+				Source:         "dictionary",
+				SearchTerm:     word,
+				CandidateCount: len(dictionaryHits.Candidates),
+			})
 		}
 
 		if dictionaryHits != nil && len(dictionaryHits.Candidates) > 0 {
@@ -313,17 +444,38 @@ func (d *DionysosHandler) StartFindingRules(ctx context.Context, word string) (*
 
 			}
 			results.Results = append(results.Results, result)
+			auditLog.Add(GrammarAuditEvent{
+				Step:        "dictionary.accept",
+				Status:      "ok",
+				Reason:      "fallback dictionary lookup returned translations without a matching rule",
+				Source:      "dictionary",
+				Rule:        "no rule found",
+				RootWord:    word,
+				ResultCount: 1,
+			})
 		}
 	}
+
+	auditLog.Add(GrammarAuditEvent{
+		Step:        "rule_engine.complete",
+		Status:      "ok",
+		Reason:      "finished building the result set",
+		Source:      "rule-engine",
+		ResultCount: len(results.Results),
+	})
 
 	return &results, nil
 }
 
 // searchForDeclensions searches for declensions of a given word.
 // It iterates over each declension and declension form, processes them, and returns the found declension rules.
-func (d *DionysosHandler) searchForDeclensions(word string) (*models.FoundRules, error) {
+func (d *DionysosHandler) searchForDeclensions(word string, auditLogs ...*GrammarAuditLog) (*models.FoundRules, error) {
 	// Initialize the foundRules variable
 	var foundRules models.FoundRules
+	var auditLog *GrammarAuditLog
+	if len(auditLogs) > 0 {
+		auditLog = auditLogs[0]
+	}
 
 	// Iterate over each declension
 	for _, declension := range d.DeclensionConfig.Declensions {
@@ -337,6 +489,14 @@ func (d *DionysosHandler) searchForDeclensions(word string) (*models.FoundRules,
 			var directRules models.FoundRules
 			rules, directHit := d.loopOverIrregularVerbs(word, declension.Declensions)
 			for _, rule := range rules.Rules {
+				auditLog.Add(GrammarAuditEvent{
+					Step:       "rule_engine.match",
+					Status:     "ok",
+					Reason:     "matched article form directly",
+					Source:     "rule-engine",
+					Rule:       rule.Rule,
+					SearchTerm: strings.Join(rule.SearchTerms, ", "),
+				})
 				if directHit {
 					directRules.Rules = append(directRules.Rules, rule)
 				} else {
@@ -353,6 +513,14 @@ func (d *DionysosHandler) searchForDeclensions(word string) (*models.FoundRules,
 			var directRules models.FoundRules
 			rules, directHit := d.loopOverIrregularVerbs(word, declension.Declensions)
 			for _, rule := range rules.Rules {
+				auditLog.Add(GrammarAuditEvent{
+					Step:       "rule_engine.match",
+					Status:     "ok",
+					Reason:     "matched pronoun form directly",
+					Source:     "rule-engine",
+					Rule:       rule.Rule,
+					SearchTerm: strings.Join(rule.SearchTerms, ", "),
+				})
 				if directHit {
 					directRules.Rules = append(directRules.Rules, rule)
 				} else {
@@ -370,6 +538,14 @@ func (d *DionysosHandler) searchForDeclensions(word string) (*models.FoundRules,
 			var directRules models.FoundRules
 			rules, directHit := d.loopOverIrregularVerbs(word, declension.Declensions)
 			for _, rule := range rules.Rules {
+				auditLog.Add(GrammarAuditEvent{
+					Step:       "rule_engine.match",
+					Status:     "ok",
+					Reason:     "matched irregular form directly",
+					Source:     "rule-engine",
+					Rule:       rule.Rule,
+					SearchTerm: strings.Join(rule.SearchTerms, ", "),
+				})
 				if directHit {
 					directRules.Rules = append(directRules.Rules, rule)
 				} else {
@@ -398,6 +574,14 @@ func (d *DionysosHandler) searchForDeclensions(word string) (*models.FoundRules,
 			// Check if any rules were found
 			if len(result.Rules) >= 1 {
 				for _, rule := range result.Rules {
+					auditLog.Add(GrammarAuditEvent{
+						Step:       "rule_engine.match",
+						Status:     "ok",
+						Reason:     "declension ending matched candidate rule",
+						Source:     "rule-engine",
+						Rule:       rule.Rule,
+						SearchTerm: strings.Join(rule.SearchTerms, ", "),
+					})
 					if wordIsOfTypePare {
 						for index, searchTerm := range rule.SearchTerms {
 							// Replace "παρε" with "παρα"

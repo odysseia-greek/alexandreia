@@ -50,6 +50,11 @@ func main() {
 	if err != nil {
 		logging.Error(err.Error())
 	}
+
+	queueCtx, cancelQueueListener := context.WithCancel(ctx)
+	defer cancelQueueListener()
+	go cfg.StartQueueListener(queueCtx, scholar.QueuePollIntervalFromEnv(os.Getenv(scholar.EnvQueuePollInterval)))
+
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

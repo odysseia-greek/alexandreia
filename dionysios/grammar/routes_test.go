@@ -3,14 +3,16 @@ package grammar
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+	"time"
+
 	"github.com/odysseia-greek/agora/archytas"
 	elastic "github.com/odysseia-greek/agora/aristoteles"
 	"github.com/odysseia-greek/agora/plato/models"
 	"github.com/odysseia-greek/agora/plato/service"
 	"github.com/stretchr/testify/assert"
-	"net/http"
-	"net/http/httptest"
-	"testing"
 )
 
 const (
@@ -212,6 +214,44 @@ func TestCheckGrammarEndPointNouns(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, http.StatusBadRequest, response.Code)
 		assert.Equal(t, expected, validation.Messages[0].Message)
+	})
+
+	t.Run("AuditFromCache", func(t *testing.T) {
+		inMemoryCache, err := archytas.NewInMemoryBadgerClient()
+		assert.Nil(t, err)
+
+		cached := models.DeclensionTranslationResults{
+			Results: []models.Result{
+				{
+					Word:        "λόγοι",
+					Rule:        "noun - plural - masc - nom",
+					RootWord:    "λόγος",
+					Translation: []string{},
+				},
+			},
+		}
+
+		payload, err := json.Marshal(cached)
+		assert.Nil(t, err)
+
+		err = inMemoryCache.SetWithTTL("λόγοι", string(payload), time.Hour)
+		assert.Nil(t, err)
+
+		testConfig := DionysosHandler{
+			Cache: inMemoryCache,
+		}
+
+		router := InitRoutes(&testConfig)
+		response := performGetRequest(router, "/dionysios/v1/checkGrammar?word=λόγοι&audit=true")
+
+		var audited GrammarAuditResponse
+		err = json.NewDecoder(response.Body).Decode(&audited)
+		assert.Nil(t, err)
+		assert.Equal(t, http.StatusOK, response.Code)
+		assert.Equal(t, "cache", audited.Audit.DecisionSource)
+		assert.Equal(t, "success", audited.Audit.Outcome)
+		assert.Len(t, audited.Results, 1)
+		assert.NotEmpty(t, audited.Audit.Events)
 	})
 }
 

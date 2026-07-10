@@ -253,18 +253,63 @@ func highlightSection(section Rhema, words []string) (Rhema, bool) {
 		return len([]rune(deduped[i])) > len([]rune(deduped[j]))
 	})
 
-	found := false
+	original := section.Greek
+	occupied := make([]bool, len(original))
+	starts := make(map[int]int)
+
 	for _, word := range deduped {
 		if word == "" {
 			continue
 		}
-		if strings.Contains(section.Greek, word) {
-			found = true
-			section.Greek = strings.ReplaceAll(section.Greek, word, fmt.Sprintf("&&&%s&&&", word))
+
+		offset := 0
+		for offset < len(original) {
+			idx := strings.Index(original[offset:], word)
+			if idx == -1 {
+				break
+			}
+
+			start := offset + idx
+			end := start + len(word)
+			overlaps := false
+			for i := start; i < end; i++ {
+				if occupied[i] {
+					overlaps = true
+					break
+				}
+			}
+
+			if !overlaps {
+				for i := start; i < end; i++ {
+					occupied[i] = true
+				}
+				starts[start] = end
+			}
+
+			offset = start + len(word)
 		}
 	}
 
-	return section, found
+	if len(starts) == 0 {
+		return section, false
+	}
+
+	var highlighted strings.Builder
+	for i := 0; i < len(original); {
+		if end, ok := starts[i]; ok {
+			highlighted.WriteString("&&&")
+			highlighted.WriteString(original[i:end])
+			highlighted.WriteString("&&&")
+			i = end
+			continue
+		}
+
+		highlighted.WriteByte(original[i])
+		i++
+	}
+
+	section.Greek = highlighted.String()
+	return section, true
 }
 
 func uniqueWords(words []string) []string {

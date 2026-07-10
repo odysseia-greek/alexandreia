@@ -5,16 +5,23 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/models"
+	v1 "github.com/odysseia-greek/alexandreia/dionysios/gen/go/v1"
 	"github.com/odysseia-greek/alexandreia/dionysios/grammar"
+	"github.com/odysseia-greek/attike/aristophanes/comedy"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 const standardPort = ":5000"
+const standardGrpcPort = ":50060"
 
 func main() {
 	port := os.Getenv("PORT")
@@ -55,6 +62,7 @@ func main() {
 	// Start a goroutine to periodically update the grammar config
 	logging.Debug("starting goroutine to periodically update the grammar config")
 	go updateGrammarConfig(dionysiosConfig)
+	go startGrpcServer(dionysiosConfig)
 
 	srv := grammar.InitRoutes(dionysiosConfig)
 
@@ -62,6 +70,37 @@ func main() {
 	err = http.ListenAndServe(port, srv)
 	if err != nil {
 		panic(err)
+	}
+}
+
+func startGrpcServer(dionysiosConfig *grammar.DionysosHandler) {
+	port := os.Getenv("GRPC_PORT")
+	if port == "" {
+		port = standardGrpcPort
+	}
+
+	listener, err := net.Listen("tcp", port)
+	if err != nil {
+		log.Fatalf("failed to listen for grpc: %v", err)
+	}
+
+	server := grpc.NewServer(
+		grpc.UnaryInterceptor(
+			comedy.UnaryServerInterceptor(
+				dionysiosConfig.Streamer,
+				comedy.WithHeaderKey(config.HeaderKey),
+				comedy.WithContextKeyName(config.DefaultTracingName),
+				comedy.WithCloseHop(),
+			),
+		),
+	)
+
+	reflection.Register(server)
+	v1.RegisterDionysiosServiceServer(server, dionysiosConfig)
+
+	logging.Info(fmt.Sprintf("gRPC server listening on %s", port))
+	if err := server.Serve(listener); err != nil {
+		log.Fatalf("failed to serve grpc: %v", err)
 	}
 }
 
