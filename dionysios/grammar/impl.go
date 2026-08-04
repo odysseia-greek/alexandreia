@@ -55,10 +55,6 @@ func (s *ScholarClient) WaitForHealthyState() bool {
 	return false
 }
 
-func (s *ScholarClient) Ping(ctx context.Context, request *v1.PingRequest) (*v1.PingResponse, error) {
-	return s.grammar.Ping(ctx, request)
-}
-
 func (s *ScholarClient) Health(ctx context.Context, request *v1.HealthRequest) (*v1.HealthResponse, error) {
 	return s.grammar.Health(ctx, request)
 }

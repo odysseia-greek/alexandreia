@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	queuepb "github.com/odysseia-greek/agora/eupalinos/proto"
+	queuepb "github.com/odysseia-greek/agora/eupalinos/v1"
 	v1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/proto"
@@ -16,6 +16,9 @@ type fakeQueueService struct {
 	message *queuepb.EpistelloBytes
 	err     error
 	channel string
+	ackMode bool
+	acked   string
+	nacked  string
 }
 
 func (f *fakeQueueService) WaitForHealthyState() bool {
@@ -28,11 +31,22 @@ func (f *fakeQueueService) EnqueueMessageBytes(ctx context.Context, in *queuepb.
 
 func (f *fakeQueueService) DequeueMessageBytes(ctx context.Context, in *queuepb.ChannelInfo) (*queuepb.EpistelloBytes, error) {
 	f.channel = in.Name
+	f.ackMode = in.AckMode
 	if f.err != nil {
 		return nil, f.err
 	}
 
 	return f.message, nil
+}
+
+func (f *fakeQueueService) AcknowledgeMessage(ctx context.Context, in *queuepb.AcknowledgeRequest) (*queuepb.AcknowledgeResponse, error) {
+	f.acked = in.Id
+	return &queuepb.AcknowledgeResponse{Acknowledged: true}, nil
+}
+
+func (f *fakeQueueService) NackMessage(ctx context.Context, in *queuepb.NackRequest) (*queuepb.NackResponse, error) {
+	f.nacked = in.Id
+	return &queuepb.NackResponse{Requeued: true, NackCount: 1}, nil
 }
 
 func TestProcessNextQueueMessageCreatesNewWord(t *testing.T) {
@@ -48,6 +62,7 @@ func TestProcessNextQueueMessageCreatesNewWord(t *testing.T) {
 
 	queue := &fakeQueueService{
 		message: &queuepb.EpistelloBytes{
+			Id:      "message-1",
 			Channel: DefaultQueueName,
 			Data:    data,
 		},
@@ -60,11 +75,15 @@ func TestProcessNextQueueMessageCreatesNewWord(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Equal(t, DefaultQueueName, queue.channel)
+	assert.True(t, queue.ackMode)
+	assert.Equal(t, "message-1", queue.acked)
+	assert.Empty(t, queue.nacked)
 }
 
 func TestProcessNextQueueMessageRejectsMalformedPayload(t *testing.T) {
 	queue := &fakeQueueService{
 		message: &queuepb.EpistelloBytes{
+			Id:      "message-2",
 			Channel: DefaultQueueName,
 			Data:    []byte("not a protobuf"),
 		},
@@ -77,6 +96,8 @@ func TestProcessNextQueueMessageRejectsMalformedPayload(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "unmarshal queued aggregator creation request")
+	assert.Equal(t, "message-2", queue.nacked)
+	assert.Empty(t, queue.acked)
 }
 
 func TestProcessNextQueueMessageReturnsQueueError(t *testing.T) {

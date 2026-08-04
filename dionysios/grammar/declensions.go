@@ -78,6 +78,8 @@ func (d *DionysosHandler) parseDictResults(result *erv1.Candidate) (article stri
 }
 
 func (d *DionysosHandler) isAWordWithoutDeclensions(word string) (bool, *models.DeclensionElement) {
+	d.DeclensionMu.RLock()
+	defer d.DeclensionMu.RUnlock()
 	for _, rules := range d.DeclensionConfig.Declensions {
 		for _, m := range miscNames {
 			if rules.Type == m {
@@ -470,6 +472,8 @@ func (d *DionysosHandler) StartFindingRules(ctx context.Context, word string, au
 // searchForDeclensions searches for declensions of a given word.
 // It iterates over each declension and declension form, processes them, and returns the found declension rules.
 func (d *DionysosHandler) searchForDeclensions(word string, auditLogs ...*GrammarAuditLog) (*models.FoundRules, error) {
+	d.DeclensionMu.RLock()
+	defer d.DeclensionMu.RUnlock()
 	// Initialize the foundRules variable
 	var foundRules models.FoundRules
 	var auditLog *GrammarAuditLog

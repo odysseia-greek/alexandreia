@@ -1,0 +1,17 @@
+{
+  "name": "imperfect",
+  "type": "past",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-ον",
+      "ruleName": "1st sing - impf - ind - act",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-ον",
+      "ruleName": "3th plural - impf - ind - act",
+      "searchTerm": ["ω"]
+    }
+  ]
+}

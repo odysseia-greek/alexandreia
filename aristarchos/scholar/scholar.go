@@ -42,7 +42,7 @@ func (a *AggregatorServiceImpl) CreateNewEntry(stream v1.Aristarchos_CreateNewEn
 	}
 }
 
-func (a *AggregatorServiceImpl) createOrUpdate(ctx context.Context, request *v1.AggregatorCreationRequest) {
+func (a *AggregatorServiceImpl) createOrUpdate(ctx context.Context, request *v1.AggregatorCreationRequest) error {
 	parsedWord := transform.RemoveAccents(request.RootWord)
 
 	createNewWord := false
@@ -78,7 +78,7 @@ func (a *AggregatorServiceImpl) createOrUpdate(ctx context.Context, request *v1.
 			createNewWord = true
 		} else {
 			logging.Error(err.Error())
-			return
+			return fmt.Errorf("query root word: %w", err)
 		}
 	} else if len(response.Hits.Hits) == 0 {
 		createNewWord = true
@@ -91,12 +91,13 @@ func (a *AggregatorServiceImpl) createOrUpdate(ctx context.Context, request *v1.
 	entry, err := a.mapAndHandleGrammaticalCategories(request)
 	if err != nil {
 		logging.Error(fmt.Sprintf("error returned from mapping: %s", err.Error()))
-		return
+		return fmt.Errorf("map grammatical categories: %w", err)
 	}
 
 	if entry.Categories == nil {
-		logging.Error(fmt.Sprintf("could not map the word %s to a workable form", parsedWord))
-		return
+		err := fmt.Errorf("could not map the word %s to a workable form", parsedWord)
+		logging.Error(err.Error())
+		return err
 	}
 
 	if createNewWord {
@@ -105,19 +106,28 @@ func (a *AggregatorServiceImpl) createOrUpdate(ctx context.Context, request *v1.
 			Score:      1,
 		}
 		entry.Variants = append(entry.Variants, variant)
-		entryAsJson, _ := json.Marshal(entry)
+		entryAsJson, err := json.Marshal(entry)
+		if err != nil {
+			return fmt.Errorf("marshal new root word entry: %w", err)
+		}
 		createDocument, err := a.Elastic.Index().CreateDocumentWithContext(ctx, a.Index, entryAsJson)
 		if err != nil {
 			logging.Error(err.Error())
-			return
+			return fmt.Errorf("create root word entry: %w", err)
 		}
 
 		logging.Debug(fmt.Sprintf("created document with id: %s and rootWordEntry: %s", createDocument.ID, request.RootWord))
-		return
+		return nil
 	}
 
-	jsonHit, _ := json.Marshal(response.Hits.Hits[0].Source)
-	rootWordEntry, _ := UnmarshalRootWordEntry(jsonHit)
+	jsonHit, err := json.Marshal(response.Hits.Hits[0].Source)
+	if err != nil {
+		return fmt.Errorf("marshal existing root word entry: %w", err)
+	}
+	rootWordEntry, err := UnmarshalRootWordEntry(jsonHit)
+	if err != nil {
+		return fmt.Errorf("unmarshal existing root word entry: %w", err)
+	}
 
 	for i, conjugation := range rootWordEntry.Categories {
 		formFound := false
@@ -178,15 +188,18 @@ func (a *AggregatorServiceImpl) createOrUpdate(ctx context.Context, request *v1.
 		}
 	}
 
-	entryAsJson, _ := json.Marshal(rootWordEntry)
+	entryAsJson, err := json.Marshal(rootWordEntry)
+	if err != nil {
+		return fmt.Errorf("marshal updated root word entry: %w", err)
+	}
 	createDocument, err := a.Elastic.Document().UpdateWithContext(ctx, a.Index, response.Hits.Hits[0].ID, entryAsJson)
 	if err != nil {
 		logging.Error(err.Error())
-		return
+		return fmt.Errorf("update root word entry: %w", err)
 	}
 
 	logging.Debug(fmt.Sprintf("updated document with id: %s and rootWordEntry: %s", createDocument.ID, request.RootWord))
-	return
+	return nil
 }
 
 func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *v1.AggregatorRequest) (*v1.RootWordResponse, error) {

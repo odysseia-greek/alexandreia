@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	queuepb "github.com/odysseia-greek/agora/eupalinos/proto"
+	queuepb "github.com/odysseia-greek/agora/eupalinos/v1"
 	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
 	v1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
@@ -68,19 +68,40 @@ func (a *AggregatorServiceImpl) ProcessNextQueueMessage(ctx context.Context) err
 		queueName = DefaultQueueName
 	}
 
-	message, err := a.Queue.DequeueMessageBytes(ctx, &queuepb.ChannelInfo{Name: queueName})
+	message, err := a.Queue.DequeueMessageBytes(ctx, &queuepb.ChannelInfo{Name: queueName, AckMode: true})
 	if err != nil {
 		return err
 	}
 
 	request := &v1.AggregatorCreationRequest{}
 	if err := proto.Unmarshal(message.Data, request); err != nil {
-		return fmt.Errorf("unmarshal queued aggregator creation request: %w", err)
+		return a.nackQueueMessage(ctx, queueName, message.Id, fmt.Errorf("unmarshal queued aggregator creation request: %w", err))
 	}
 
 	processCtx := traceContext(ctx, request.TraceId)
-	a.createOrUpdate(processCtx, request)
+	if err := a.createOrUpdate(processCtx, request); err != nil {
+		return a.nackQueueMessage(ctx, queueName, message.Id, err)
+	}
+
+	acknowledged, err := a.Queue.AcknowledgeMessage(ctx, &queuepb.AcknowledgeRequest{Channel: queueName, Id: message.Id})
+	if err != nil {
+		return fmt.Errorf("acknowledge queue message %s: %w", message.Id, err)
+	}
+	if !acknowledged.GetAcknowledged() {
+		return fmt.Errorf("queue message %s was not acknowledged", message.Id)
+	}
 	return nil
+}
+
+func (a *AggregatorServiceImpl) nackQueueMessage(ctx context.Context, channel, id string, processingErr error) error {
+	nacked, err := a.Queue.NackMessage(ctx, &queuepb.NackRequest{Channel: channel, Id: id})
+	if err != nil {
+		return fmt.Errorf("%w; nack queue message %s: %v", processingErr, id, err)
+	}
+	if !nacked.GetRequeued() {
+		return fmt.Errorf("%w; queue message %s was not requeued", processingErr, id)
+	}
+	return processingErr
 }
 
 func QueuePollIntervalFromEnv(value string) time.Duration {

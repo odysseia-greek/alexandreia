@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/odysseia-greek/agora/archytas"
 	"github.com/odysseia-greek/agora/aristoteles"
-	queuepb "github.com/odysseia-greek/agora/eupalinos/proto"
+	queuepb "github.com/odysseia-greek/agora/eupalinos/v1"
 	"github.com/odysseia-greek/agora/hesiodos"
 	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
@@ -38,15 +39,24 @@ type DionysosHandler struct {
 	LibraryService    *hesiodos.GenericGrpcClient[*library.LibraryClient]
 	ScholarService    *hesiodos.GenericGrpcClient[*scholia.ScholarClient]
 	DeclensionConfig  models.DeclensionConfig
+	DeclensionMu      sync.RWMutex
 	Streamer          arv1.TraceService_ChorusClient
 	Aggregator        pba.Aristarchos_CreateNewEntryClient
-	AggregatorQueue   aristarchos.QueueService
+	AggregatorQueue   AggregatorQueue
 	AggregatorChannel string
 	StreamerCancel    context.CancelFunc
 	AggregatorCancel  context.CancelFunc
 	AggregatorClient  *aristarchos.ClientAggregator
 	v1.UnimplementedDionysiosServiceServer
 }
+
+type AggregatorQueue interface {
+	WaitForHealthyState() bool
+	EnqueueMessageBytes(ctx context.Context, in *queuepb.EpistelloBytes) (*queuepb.EnqueueResponse, error)
+	DequeueMessageBytes(ctx context.Context, in *queuepb.ChannelInfo) (*queuepb.EpistelloBytes, error)
+}
+
+const defaultAggregatorChannel = "aristarchos"
 
 func (d *DionysosHandler) outgoingCtx(parent context.Context) (context.Context, context.CancelFunc) {
 	ctx, cancel := context.WithTimeout(parent, 30*time.Second)
@@ -64,35 +74,6 @@ func (d *DionysosHandler) outgoingCtx(parent context.Context) (context.Context, 
 	}
 
 	return ctx, cancel
-}
-
-// PingPong pongs the ping
-func (d *DionysosHandler) pingPong(w http.ResponseWriter, req *http.Request) {
-	pingPong := models.ResultModel{Result: "pong"}
-	middleware.ResponseWithJson(w, pingPong)
-}
-
-// returns the health of the api
-func (d *DionysosHandler) health(w http.ResponseWriter, req *http.Request) {
-	elasticHealth := d.Elastic.Health().Info()
-	dbHealth := models.DatabaseHealth{
-		Healthy:       elasticHealth.Healthy,
-		ClusterName:   elasticHealth.ClusterName,
-		ServerName:    elasticHealth.ServerName,
-		ServerVersion: elasticHealth.ServerVersion,
-	}
-	healthy := models.Health{
-		Healthy:  dbHealth.Healthy,
-		Time:     time.Now().String(),
-		Database: dbHealth,
-		Version:  d.Version,
-	}
-	if !healthy.Healthy {
-		middleware.ResponseWithCustomCode(w, http.StatusBadGateway, healthy)
-		return
-	}
-
-	middleware.ResponseWithJson(w, healthy)
 }
 
 func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request) {
@@ -234,7 +215,7 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 			Source:      "cache",
 			ResultCount: len(cache.Results),
 		})
-		err = d.sendWordsToAggregator(&cache, requestId)
+		err = d.sendWordsToAggregator(ctx, &cache, requestId)
 		if err != nil {
 			auditLog.Add(GrammarAuditEvent{
 				Step:   "aggregator.send",
@@ -258,10 +239,10 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 	}
 
 	//check first if the word is part of aristarchos and if it exists there return the result from it
-	aggrCtx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	aggrCtx, cancel := context.WithTimeout(ctx, 60*time.Second)
 	defer cancel()
 	md := metadata.New(map[string]string{service.HeaderKey: requestId})
-	aggrCtx = metadata.NewOutgoingContext(context.Background(), md)
+	aggrCtx = metadata.NewOutgoingContext(aggrCtx, md)
 	var entry *pba.FormsResponse
 	if d.AggregatorClient == nil {
 		auditLog.Add(GrammarAuditEvent{
@@ -368,7 +349,7 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 		return
 	}
 
-	err = d.sendWordsToAggregator(declensions, requestId)
+	err = d.sendWordsToAggregator(ctx, declensions, requestId)
 	if err != nil {
 		auditLog.Add(GrammarAuditEvent{
 			Step:   "aggregator.send",
@@ -557,14 +538,14 @@ func mapScholarResults(results []*sv1.AnalyzeResult) []models.AnalyzeResult {
 	return mapped
 }
 
-func (d *DionysosHandler) sendWordsToAggregator(declensions *models.DeclensionTranslationResults, requestID string) error {
+func (d *DionysosHandler) sendWordsToAggregator(ctx context.Context, declensions *models.DeclensionTranslationResults, requestID string) error {
 	if d.AggregatorQueue == nil {
 		return nil
 	}
 
 	aggregatorChannel := d.AggregatorChannel
 	if aggregatorChannel == "" {
-		aggregatorChannel = aristarchos.DefaultQueueName
+		aggregatorChannel = defaultAggregatorChannel
 	}
 
 	for _, declension := range declensions.Results {
@@ -625,7 +606,7 @@ func (d *DionysosHandler) sendWordsToAggregator(declensions *models.DeclensionTr
 			return fmt.Errorf("marshal aggregator request: %w", err)
 		}
 
-		_, err = d.AggregatorQueue.EnqueueMessageBytes(context.Background(), &queuepb.EpistelloBytes{
+		_, err = d.AggregatorQueue.EnqueueMessageBytes(ctx, &queuepb.EpistelloBytes{
 			Channel: aggregatorChannel,
 			Data:    data,
 		})

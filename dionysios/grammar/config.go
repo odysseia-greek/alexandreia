@@ -14,6 +14,7 @@ import (
 	elastic "github.com/odysseia-greek/agora/aristoteles"
 	"github.com/odysseia-greek/agora/aristoteles/models"
 	"github.com/odysseia-greek/agora/eupalinos/stomion"
+	eupalinospb "github.com/odysseia-greek/agora/eupalinos/v1"
 	"github.com/odysseia-greek/agora/hesiodos"
 	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
@@ -63,7 +64,7 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 	spanID := aristophanes.GenerateSpanID()
 	combinedID := fmt.Sprintf("%s+%s+%d", traceID, spanID, 1)
 
-	ambassadorCtx, ctxCancel := context.WithTimeout(context.Background(), 30*time.Second)
+	ambassadorCtx, ctxCancel := context.WithTimeout(ctx, 30*time.Second)
 	defer ctxCancel()
 
 	payload := &arv1.ObserveTraceStart{
@@ -91,7 +92,7 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 	}()
 
 	md := metadata.New(map[string]string{service.HeaderKey: combinedID})
-	ambassadorCtx = metadata.NewOutgoingContext(context.Background(), md)
+	ambassadorCtx = metadata.NewOutgoingContext(ambassadorCtx, md)
 	vaultConfig, err := ambassador.GetSecret(ambassadorCtx, &pb.VaultRequest{})
 	if err != nil {
 		logging.Error(err.Error())
@@ -132,13 +133,8 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 		return nil, err
 	}
 
-	err = aristoteles.HealthCheck(elastic)
-	if err != nil {
-		return nil, err
-	}
-
 	index := config.StringFromEnv(config.EnvIndex, defaultIndex)
-	cache, err := archytas.CreateBadgerClient()
+	cache, err := archytas.CreateBadgerClientWithOptions(archytas.WithLogging(false))
 	if err != nil {
 		return nil, err
 	}
@@ -169,12 +165,10 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 		logging.Error(err.Error())
 		return nil, err
 	}
-	queueHealthy := queue.WaitForHealthyState()
-	if !queueHealthy {
-		logging.Debug("eupalinos service not ready - restarting seems the only option")
-		os.Exit(1)
+	if err := waitForEupalinos(ctx, queue, eupalinosAddress); err != nil {
+		return nil, err
 	}
-	aggregatorChannel := config.StringFromEnv(config.EnvChannel, aristarchos.DefaultQueueName)
+	aggregatorChannel := config.StringFromEnv(config.EnvChannel, defaultAggregatorChannel)
 
 	libraryClientAddress := config.StringFromEnv("ERATOSTHENES_SERVICE", "eratosthenes:50060")
 	libraryClient, err := hesiodos.NewGenericGrpcClient[*library.LibraryClient](
@@ -213,7 +207,48 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 	}, nil
 }
 
-func QueryRuleSet(es elastic.Client, index string) (*plato.DeclensionConfig, error) {
+type eupalinosHealthClient interface {
+	Health(context.Context, *eupalinospb.HealthRequest) (*eupalinospb.HealthResponse, error)
+}
+
+func waitForEupalinos(parent context.Context, client eupalinosHealthClient, address string) error {
+	const (
+		startupTimeout = 30 * time.Second
+		attemptTimeout = 2 * time.Second
+		retryInterval  = time.Second
+	)
+
+	ctx, cancel := context.WithTimeout(parent, startupTimeout)
+	defer cancel()
+	ticker := time.NewTicker(retryInterval)
+	defer ticker.Stop()
+
+	var lastErr error
+	for {
+		attemptCtx, attemptCancel := context.WithTimeout(ctx, attemptTimeout)
+		response, err := client.Health(attemptCtx, &eupalinospb.HealthRequest{})
+		attemptCancel()
+		if err == nil && response.GetHealthy() {
+			return nil
+		}
+		if err != nil {
+			lastErr = err
+		} else {
+			lastErr = fmt.Errorf("health response reported healthy=false")
+		}
+
+		select {
+		case <-ctx.Done():
+			return fmt.Errorf("eupalinos at %q was not healthy within %s: %w", address, startupTimeout, lastErr)
+		case <-ticker.C:
+		}
+	}
+}
+
+func QueryRuleSet(ctx context.Context, es elastic.Client, index string) (*plato.DeclensionConfig, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 	if es == nil {
 		mockElastic, err := elastic.NewMockClient("declensionsDionysos", http.StatusOK)
 		if err != nil {
@@ -224,11 +259,14 @@ func QueryRuleSet(es elastic.Client, index string) (*plato.DeclensionConfig, err
 
 	query := es.Builder().MatchAll()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	response, err := es.Query().MatchWithScrollWithContext(ctx, index, query)
 
 	if err != nil {
+		return nil, err
+	}
+	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
 

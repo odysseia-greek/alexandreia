@@ -1,0 +1,32 @@
+{
+  "name": "present",
+  "type": "participle",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-ὠν",
+      "ruleName": "pres act part - sing - masc - nom",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-ὀντος",
+      "ruleName": "pres act part - sing - masc - gen",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-ὀντος",
+      "ruleName": "pres act part - sing - neut - gen",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-οὐσι",
+      "ruleName": "pres act part - plural - masc - dat",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-οὐσαις",
+      "ruleName": "pres act part - plural - fem - dat",
+      "searchTerm": ["ω"]
+    }
+  ]
+}

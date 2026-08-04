@@ -5,7 +5,6 @@ package dionysios.v1;
 option go_package = "github.com/odysseia-greek/alexandreia/dionysios/gen/go/v1;dionysiosv1";
 
 service DionysiosService {
-  rpc Ping(PingRequest) returns (PingResponse);
   rpc Health(HealthRequest) returns (HealthResponse);
   rpc CheckGrammar(CheckGrammarRequest) returns (CheckGrammarResponse);
   rpc Research(ResearchRequest) returns (ResearchResponse);
@@ -21,12 +20,6 @@ service DionysiosService {
   rpc DiveText(DiveTextRequest) returns (DiveTextResponse);
 }
 
-message PingRequest {}
-
-message PingResponse {
-  string result = 1;
-}
-
 message HealthRequest {}
 
 message HealthResponse {
@@ -34,6 +27,50 @@ message HealthResponse {
   string time = 2;
   string version = 3;
   DatabaseHealth database_health = 4;
+  ComponentHealth tracer = 5;
+  CacheHealth cache = 6;
+  MappingHealth mapping = 7;
+  repeated ComponentHealth dependencies = 8;
+  ComponentHealth elasticsearch = 9;
+}
+
+message ComponentHealth {
+  string name = 1;
+  bool configured = 2;
+  bool healthy = 3;
+  string status = 4;
+  string message = 5;
+  uint64 latency_ms = 6;
+}
+
+message CacheHealth {
+  bool configured = 1;
+  bool healthy = 2;
+  string implementation = 3;
+  string status = 4;
+  string message = 5;
+  uint64 key_count = 6;
+  int64 lsm_size_bytes = 7;
+  int64 value_log_size_bytes = 8;
+  int64 total_size_bytes = 9;
+  CacheMetrics block_cache = 10;
+  CacheMetrics index_cache = 11;
+}
+
+message CacheMetrics {
+  uint64 hits = 1;
+  uint64 misses = 2;
+  uint64 keys_added = 3;
+  uint64 keys_updated = 4;
+  uint64 keys_evicted = 5;
+  uint64 cost_added = 6;
+  uint64 cost_evicted = 7;
+}
+
+message MappingHealth {
+  bool loaded = 1;
+  uint32 declension_count = 2;
+  uint32 rule_count = 3;
 }
 
 message DatabaseHealth {

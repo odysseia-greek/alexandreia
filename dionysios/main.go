@@ -8,6 +8,8 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/odysseia-greek/agora/plato/config"
@@ -45,23 +47,26 @@ func main() {
 	logging.System("starting up.....")
 	logging.System("starting up and getting env variables")
 
-	ctx := context.Background()
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 	dionysiosConfig, err := grammar.CreateNewConfig(ctx)
 	if err != nil {
 		logging.Error(err.Error())
 		log.Fatal("death has found me")
 	}
 
-	declensionConfig, err := grammar.QueryRuleSet(dionysiosConfig.Elastic, dionysiosConfig.Index)
+	declensionConfig, err := grammar.QueryRuleSet(ctx, dionysiosConfig.Elastic, dionysiosConfig.Index)
 	if err != nil {
 		logging.Error(err.Error())
 		log.Fatal("death has found me")
 	}
+	dionysiosConfig.DeclensionMu.Lock()
 	dionysiosConfig.DeclensionConfig = *declensionConfig
+	dionysiosConfig.DeclensionMu.Unlock()
 
 	// Start a goroutine to periodically update the grammar config
 	logging.Debug("starting goroutine to periodically update the grammar config")
-	go updateGrammarConfig(dionysiosConfig)
+	go updateGrammarConfig(ctx, dionysiosConfig)
 	go startGrpcServer(dionysiosConfig)
 
 	srv := grammar.InitRoutes(dionysiosConfig)
@@ -106,20 +111,28 @@ func startGrpcServer(dionysiosConfig *grammar.DionysosHandler) {
 
 // updateGrammarConfig periodically fetches the grammar config from Elasticsearch
 // and updates the provided dionysiosConfig if there is any difference.
-func updateGrammarConfig(dionysiosConfig *grammar.DionysosHandler) {
+func updateGrammarConfig(ctx context.Context, dionysiosConfig *grammar.DionysosHandler) {
 	ticker := time.NewTicker(2 * time.Minute)
+	defer ticker.Stop()
 	for {
 		select {
+		case <-ctx.Done():
+			return
 		case <-ticker.C:
-			declensionConfig, err := grammar.QueryRuleSet(dionysiosConfig.Elastic, dionysiosConfig.Index)
+			declensionConfig, err := grammar.QueryRuleSet(ctx, dionysiosConfig.Elastic, dionysiosConfig.Index)
 			if err != nil {
 				logging.Debug(fmt.Sprintf("failed to fetch updated declension config: %s", err.Error()))
 				continue // Retry on the next tick
 			}
 
-			if !isSameDeclensionConfig(*declensionConfig, dionysiosConfig.DeclensionConfig) {
+			dionysiosConfig.DeclensionMu.RLock()
+			same := isSameDeclensionConfig(*declensionConfig, dionysiosConfig.DeclensionConfig)
+			dionysiosConfig.DeclensionMu.RUnlock()
+			if !same {
 				logging.Debug("Detected a difference in the grammar config. Updating...")
+				dionysiosConfig.DeclensionMu.Lock()
 				dionysiosConfig.DeclensionConfig = *declensionConfig
+				dionysiosConfig.DeclensionMu.Unlock()
 			}
 		}
 	}

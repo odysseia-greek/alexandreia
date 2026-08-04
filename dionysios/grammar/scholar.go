@@ -20,25 +20,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (d *DionysosHandler) Ping(ctx context.Context, request *v1.PingRequest) (*v1.PingResponse, error) {
-	return &v1.PingResponse{Result: "pong"}, nil
-}
-
 func (d *DionysosHandler) Health(ctx context.Context, request *v1.HealthRequest) (*v1.HealthResponse, error) {
-	elasticHealth := d.Elastic.Health().Info()
-	dbHealth := &v1.DatabaseHealth{
-		Healthy:       elasticHealth.Healthy,
-		ClusterName:   elasticHealth.ClusterName,
-		ServerName:    elasticHealth.ServerName,
-		ServerVersion: elasticHealth.ServerVersion,
-	}
-
-	return &v1.HealthResponse{
-		Healthy:        dbHealth.Healthy,
-		Time:           time.Now().String(),
-		DatabaseHealth: dbHealth,
-		Version:        d.Version,
-	}, nil
+	return d.detailedHealth(ctx), nil
 }
 
 func (d *DionysosHandler) CheckGrammar(ctx context.Context, request *v1.CheckGrammarRequest) (*v1.CheckGrammarResponse, error) {
@@ -143,7 +126,7 @@ func (d *DionysosHandler) checkGrammarResults(ctx context.Context, word, request
 				Source:      "cache",
 				ResultCount: len(cache.Results),
 			})
-			_ = d.sendWordsToAggregator(&cache, requestID)
+			_ = d.sendWordsToAggregator(ctx, &cache, requestID)
 			auditLog.Complete("success", "cache", "cache hit satisfied request")
 			return &cache, nil
 		}
@@ -195,7 +178,7 @@ func (d *DionysosHandler) checkGrammarResults(ctx context.Context, word, request
 		return nil, status.Error(codes.NotFound, "no options found")
 	}
 
-	if err := d.sendWordsToAggregator(declensions, requestID); err != nil {
+	if err := d.sendWordsToAggregator(ctx, declensions, requestID); err != nil {
 		auditLog.Add(GrammarAuditEvent{
 			Step:   "aggregator.send",
 			Status: "failed",
