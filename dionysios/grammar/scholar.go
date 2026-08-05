@@ -12,7 +12,6 @@ import (
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/models"
 	"github.com/odysseia-greek/agora/plato/service"
-	pba "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	v1 "github.com/odysseia-greek/alexandreia/dionysios/gen/go/v1"
 	sv1 "github.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1"
 	"google.golang.org/grpc/codes"
@@ -80,13 +79,21 @@ func (d *DionysosHandler) Research(ctx context.Context, request *v1.ResearchRequ
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "research failed: %v", err)
 	}
+	mappedResults := limitResearchResults(mapResearchResults(results), limit)
 
 	return &v1.ResearchResponse{
 		Rootword:     results.Rootword,
 		PartOfSpeech: results.PartOfSpeech,
 		Conjugations: mapResearchConjugations(results.Conjugations),
-		Results:      mapResearchResults(results),
+		Results:      mappedResults,
 	}, nil
+}
+
+func limitResearchResults(results []*v1.AnalyzeResult, limit uint32) []*v1.AnalyzeResult {
+	if uint32(len(results)) <= limit {
+		return results
+	}
+	return results[:limit]
 }
 
 func (d *DionysosHandler) checkGrammarResults(ctx context.Context, word, requestID string, auditLog *GrammarAuditLog) (*models.DeclensionTranslationResults, error) {
@@ -98,7 +105,7 @@ func (d *DionysosHandler) checkGrammarResults(ctx context.Context, word, request
 			Source: "cache",
 		})
 	} else {
-		cacheItem, _ := d.Cache.Read(word)
+		cacheItem, _ := d.Cache.Read(grammarCacheKey(word))
 		auditLog.Add(GrammarAuditEvent{
 			Step:   "cache.lookup",
 			Status: "ok",
@@ -130,30 +137,6 @@ func (d *DionysosHandler) checkGrammarResults(ctx context.Context, word, request
 			auditLog.Complete("success", "cache", "cache hit satisfied request")
 			return &cache, nil
 		}
-	}
-
-	entry := d.lookupGrammarForm(ctx, word, auditLog)
-	if entry != nil {
-		declensionFromAggregator := &models.DeclensionTranslationResults{Results: []models.Result{
-			{
-				Word:        entry.Word,
-				Rule:        entry.Rule,
-				RootWord:    entry.RootWord,
-				Translation: entry.Translation,
-			},
-		}}
-
-		d.cacheGrammarResults(word, declensionFromAggregator, auditLog)
-		auditLog.Add(GrammarAuditEvent{
-			Step:        "aggregator.return",
-			Status:      "ok",
-			Reason:      "aggregator returned a previously known mapping",
-			Source:      "aggregator",
-			RootWord:    entry.RootWord,
-			ResultCount: len(declensionFromAggregator.Results),
-		})
-		auditLog.Complete("success", "aggregator", "aggregator hit satisfied request")
-		return declensionFromAggregator, nil
 	}
 
 	declensions, err := d.StartFindingRules(ctx, word, auditLog)
@@ -202,48 +185,6 @@ func (d *DionysosHandler) checkGrammarResults(ctx context.Context, word, request
 	return declensions, nil
 }
 
-func (d *DionysosHandler) lookupGrammarForm(ctx context.Context, word string, auditLog *GrammarAuditLog) *pba.FormsResponse {
-	if d.AggregatorClient == nil {
-		auditLog.Add(GrammarAuditEvent{
-			Step:   "aggregator.lookup",
-			Status: "skipped",
-			Reason: "aggregator client is not configured",
-			Source: "aggregator",
-		})
-		return nil
-	}
-
-	aggrCtx, cancel := context.WithTimeout(ctx, 60*time.Second)
-	defer cancel()
-	requestID := requestIDFromContext(ctx)
-	md := metadata.New(map[string]string{service.HeaderKey: requestID})
-	aggrCtx = metadata.NewOutgoingContext(aggrCtx, md)
-
-	entry, err := d.AggregatorClient.RetrieveRootFromGrammarForm(aggrCtx, &pba.AggregatorRequest{RootWord: word})
-	if err != nil {
-		auditLog.Add(GrammarAuditEvent{
-			Step:   "aggregator.lookup",
-			Status: "failed",
-			Reason: err.Error(),
-			Source: "aggregator",
-		})
-		logging.Error(err.Error())
-		return nil
-	}
-
-	auditLog.Add(GrammarAuditEvent{
-		Step:   "aggregator.lookup",
-		Status: "ok",
-		Reason: "checked aggregator for existing root word",
-		Source: "aggregator",
-		Details: []string{
-			fmt.Sprintf("hit=%t", entry != nil),
-		},
-	})
-
-	return entry
-}
-
 func (d *DionysosHandler) cacheGrammarResults(word string, results *models.DeclensionTranslationResults, auditLog *GrammarAuditLog) {
 	if d.Cache == nil {
 		auditLog.Add(GrammarAuditEvent{
@@ -267,7 +208,7 @@ func (d *DionysosHandler) cacheGrammarResults(word string, results *models.Decle
 	}
 
 	ttl := time.Hour
-	if err := d.Cache.SetWithTTL(word, string(stringifiedDeclension), ttl); err != nil {
+	if err := d.Cache.SetWithTTL(grammarCacheKey(word), string(stringifiedDeclension), ttl); err != nil {
 		auditLog.Add(GrammarAuditEvent{
 			Step:   "cache.write",
 			Status: "failed",
@@ -287,6 +228,10 @@ func (d *DionysosHandler) cacheGrammarResults(word string, results *models.Decle
 			fmt.Sprintf("ttl=%s", ttl),
 		},
 	})
+}
+
+func grammarCacheKey(word string) string {
+	return "grammar:v2:" + normalizeGrammarInput(word)
 }
 
 func requestIDFromContext(ctx context.Context) string {

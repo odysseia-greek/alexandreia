@@ -40,6 +40,9 @@ type DionysosHandler struct {
 	ScholarService    *hesiodos.GenericGrpcClient[*scholia.ScholarClient]
 	DeclensionConfig  models.DeclensionConfig
 	DeclensionMu      sync.RWMutex
+	TextModeMu        sync.Mutex
+	TextModeSessions  map[string]time.Time
+	TextModeIPs       map[string]time.Time
 	Streamer          arv1.TraceService_ChorusClient
 	Aggregator        pba.Aristarchos_CreateNewEntryClient
 	AggregatorQueue   AggregatorQueue
@@ -156,7 +159,7 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 			Source: "cache",
 		})
 	} else {
-		cacheItem, _ = d.Cache.Read(queryWord)
+		cacheItem, _ = d.Cache.Read(grammarCacheKey(queryWord))
 		auditLog.Add(GrammarAuditEvent{
 			Step:   "cache.lookup",
 			Status: "ok",
@@ -238,84 +241,6 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 		return
 	}
 
-	//check first if the word is part of aristarchos and if it exists there return the result from it
-	aggrCtx, cancel := context.WithTimeout(ctx, 60*time.Second)
-	defer cancel()
-	md := metadata.New(map[string]string{service.HeaderKey: requestId})
-	aggrCtx = metadata.NewOutgoingContext(aggrCtx, md)
-	var entry *pba.FormsResponse
-	if d.AggregatorClient == nil {
-		auditLog.Add(GrammarAuditEvent{
-			Step:   "aggregator.lookup",
-			Status: "skipped",
-			Reason: "aggregator client is not configured",
-			Source: "aggregator",
-		})
-	} else {
-		aggregatorRequest := pba.AggregatorRequest{RootWord: queryWord}
-		entry, err := d.AggregatorClient.RetrieveRootFromGrammarForm(aggrCtx, &aggregatorRequest)
-		if err != nil {
-			auditLog.Add(GrammarAuditEvent{
-				Step:   "aggregator.lookup",
-				Status: "failed",
-				Reason: err.Error(),
-				Source: "aggregator",
-			})
-			logging.Error(err.Error())
-		} else {
-			auditLog.Add(GrammarAuditEvent{
-				Step:   "aggregator.lookup",
-				Status: "ok",
-				Reason: "checked aggregator for existing root word",
-				Source: "aggregator",
-				Details: []string{
-					fmt.Sprintf("hit=%t", entry != nil),
-				},
-			})
-		}
-	}
-
-	if entry != nil {
-		declensionFromAggregator := models.DeclensionTranslationResults{Results: []models.Result{
-			{
-				Word:        entry.Word,
-				Rule:        entry.Rule,
-				RootWord:    entry.RootWord,
-				Translation: entry.Translation,
-			},
-		}}
-
-		stringifiedDeclension, _ := json.Marshal(declensionFromAggregator)
-		ttl := time.Hour
-		if d.Cache == nil {
-			auditLog.Add(GrammarAuditEvent{
-				Step:   "cache.write",
-				Status: "skipped",
-				Reason: "cache client is not configured",
-				Source: "cache",
-			})
-		} else {
-			err := d.Cache.SetWithTTL(queryWord, string(stringifiedDeclension), ttl)
-
-			if err != nil {
-				logging.Error(fmt.Sprintf("error setting cache: %s", err.Error()))
-			}
-		}
-
-		auditLog.Add(GrammarAuditEvent{
-			Step:        "aggregator.return",
-			Status:      "ok",
-			Reason:      "aggregator returned a previously known mapping",
-			Source:      "aggregator",
-			RootWord:    entry.RootWord,
-			ResultCount: len(declensionFromAggregator.Results),
-		})
-		auditLog.Complete("success", "aggregator", "aggregator hit satisfied request")
-		writeResults(&declensionFromAggregator)
-		return
-
-	}
-
 	declensions, err := d.StartFindingRules(ctx, queryWord, auditLog)
 	if err != nil {
 		auditLog.Add(GrammarAuditEvent{
@@ -378,7 +303,7 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 			Source: "cache",
 		})
 	} else {
-		err = d.Cache.SetWithTTL(queryWord, string(stringifiedDeclension), ttl)
+		err = d.Cache.SetWithTTL(grammarCacheKey(queryWord), string(stringifiedDeclension), ttl)
 
 		if err != nil {
 			auditLog.Add(GrammarAuditEvent{

@@ -161,6 +161,16 @@ message TextModeResponse {
   RateLimitInfo rate_limit = 2;
   repeated TextToken tokens = 3;
   GrammarAudit audit = 4;
+  string original_text = 5;
+  string literal_translation = 6;
+  TextSearchStatus text_search = 7;
+}
+
+message TextSearchStatus {
+  bool searched = 1;
+  bool found = 2;
+  string status = 3;
+  string message = 4;
 }
 
 message RateLimitInfo {
@@ -171,8 +181,12 @@ message RateLimitInfo {
 
 message TextToken {
   string token = 1;
+  // Zero-based position in the normalized token sequence.
   uint32 position = 2;
   repeated DeclensionResult results = 3;
+  string gloss = 4;
+  bool resolved = 5;
+  string message = 6;
 }
 
 message ExplainWordRequest {

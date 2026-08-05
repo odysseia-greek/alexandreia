@@ -60,7 +60,7 @@ func TestCheckGrammarHTTPContract(t *testing.T) {
 		}
 		payload, err := json.Marshal(cached)
 		require.NoError(t, err)
-		require.NoError(t, cache.SetWithTTL("λόγοι", string(payload), time.Hour))
+		require.NoError(t, cache.SetWithTTL(grammarCacheKey("λόγοι"), string(payload), time.Hour))
 
 		router := InitRoutes(&DionysosHandler{Cache: cache})
 		response := performGetRequest(router, "/dionysios/v1/checkGrammar?word=λόγοι&audit=true")

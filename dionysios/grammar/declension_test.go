@@ -26,6 +26,66 @@ func declensionConfigFromFixture(t *testing.T, names ...string) *models.Declensi
 	return config
 }
 
+func TestGrammarInputLowercasesCapitalizedGreekWithoutMovingAccent(t *testing.T) {
+	assert.Equal(t, "ἀρχὴ", normalizeGrammarInput("Ἀρχὴ"))
+}
+
+func TestExactArticleWinsOverAccentInsensitiveConjunction(t *testing.T) {
+	handler := DionysosHandler{DeclensionConfig: models.DeclensionConfig{Declensions: []models.Declension{
+		{
+			Type: "conjunction",
+			Declensions: []models.DeclensionElement{
+				{Declension: "ἤ", RuleName: "conjunction", SearchTerm: []string{"ἤ"}},
+			},
+		},
+		{
+			Type: "article",
+			Declensions: []models.DeclensionElement{
+				{Declension: "ἡ", RuleName: "article - sing - fem - nom", SearchTerm: []string{"ὁ"}},
+			},
+		},
+	}}}
+
+	isMisc, form := handler.isAWordWithoutDeclensions("ἡ")
+	assert.False(t, isMisc)
+	assert.Nil(t, form)
+}
+
+func TestExactAccentedEndingDistinguishesNominativeFromDative(t *testing.T) {
+	assert.True(t, matchesExactEnding("ἀρχή", "-ή"))
+	assert.False(t, matchesExactEnding("ἀρχή", "-ῃ"))
+	assert.True(t, matchesExactEnding("ἀρχῇ", "-ῇ"))
+}
+
+func TestFeminineGenitiveCanReconstructFinalSigmaLemma(t *testing.T) {
+	handler := DionysosHandler{}
+	form := models.DeclensionElement{
+		Declension: "-ης",
+		RuleName:   "noun - sing - fem - gen",
+		SearchTerm: []string{""},
+	}
+
+	rules := handler.loopOverDeclensions("πάσης", form, false, "firstDeclension")
+	require.Len(t, rules.Rules, 1)
+	require.Len(t, rules.Rules[0].SearchTerms, 1)
+	assert.Equal(t, "πας", normalizeDictionaryTerm(rules.Rules[0].SearchTerms[0]))
+	assert.Equal(t, "πᾶς", canonicalizeFinalSigma("πᾶσ"))
+}
+
+func TestContractedPresentMiddleInfinitiveReconstructsEpsilonContractLemma(t *testing.T) {
+	handler := DionysosHandler{}
+	form := models.DeclensionElement{
+		Declension: "-εῖσθαι",
+		RuleName:   "inf - pres - mid (contracted -έω)",
+		SearchTerm: []string{"έω"},
+	}
+
+	rules := handler.loopOverDeclensions("αἱρεῖσθαι", form, false, "infinitive")
+	require.Len(t, rules.Rules, 1)
+	require.Len(t, rules.Rules[0].SearchTerms, 1)
+	assert.Equal(t, "αιρέω", rules.Rules[0].SearchTerms[0])
+}
+
 func TestCheckGrammarEndPointIrregularVerb(t *testing.T) {
 	numberOfRules := 1
 

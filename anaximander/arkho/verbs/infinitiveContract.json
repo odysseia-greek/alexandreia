@@ -1,0 +1,21 @@
+{
+  "name": "infinitiveContract",
+  "type": "infinitive",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-εῖσθαι",
+      "ruleName": "inf - pres - mid (contracted -έω)",
+      "searchTerm": [
+        "έω"
+      ]
+    },
+    {
+      "declension": "-εῖσθαι",
+      "ruleName": "inf - pres - pas (contracted -έω)",
+      "searchTerm": [
+        "έω"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,581 @@
+{
+  "name": "irregular",
+  "type": "irregular",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "εἰμί",
+      "ruleName": "1st sing - pres - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "εἶ",
+      "ruleName": "2nd sing - pres - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἐστί",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἐστίν",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἐσμέν",
+      "ruleName": "1st plural - pres - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἐστέ",
+      "ruleName": "2nd plural - pres - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "εἰσί",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "εἰσίν",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "γίγνομαι",
+      "ruleName": "1st sing - pres - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γίγνῃ",
+      "ruleName": "2nd sing - pres - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γίγνει",
+      "ruleName": "2nd sing - pres - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γίγνεται",
+      "ruleName": "3rd sing - pres - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γιγνόμεθα",
+      "ruleName": "1st plural - pres - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γίγνεσθε",
+      "ruleName": "2nd plural - pres - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γίγνονται",
+      "ruleName": "3rd plural - pres - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "φημί",
+      "ruleName": "1st sing - pres - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φής",
+      "ruleName": "2nd sing - pres - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φησί",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φησίν",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φαμέν",
+      "ruleName": "1st plural - pres - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φατέ",
+      "ruleName": "2nd plural - pres - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φασί",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φασίν",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "οἶδα",
+      "ruleName": "1st sing - perf - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "οἶσθα",
+      "ruleName": "2nd sing - perf - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "οἶδε",
+      "ruleName": "3rd sing - perf - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "ἴσμεν",
+      "ruleName": "1st plural - perf - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "ἴστε",
+      "ruleName": "2nd plural - perf - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "ἴσασι",
+      "ruleName": "3rd plural - perf - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "ἴσασιν",
+      "ruleName": "3rd plural - perf - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "ἵημι",
+      "ruleName": "1st sing - pres - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἵης",
+      "ruleName": "2nd sing - pres - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἵησι",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἵησιν",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἵεμεν",
+      "ruleName": "1st plural - pres - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἵετε",
+      "ruleName": "2nd plural - pres - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἱᾶσι",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἱᾶσιν",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "δίδωμι",
+      "ruleName": "1st sing - pres - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "δίδως",
+      "ruleName": "2nd sing - pres - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "δίδωσι",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "δίδωσιν",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "δίδομεν",
+      "ruleName": "1st plural - pres - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "δίδοτε",
+      "ruleName": "2nd plural - pres - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "διδόασι",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "διδόασιν",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "τίθημι",
+      "ruleName": "1st sing - pres - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "τίθης",
+      "ruleName": "2nd sing - pres - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "τίθησι",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "τίθησιν",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "τίθεμεν",
+      "ruleName": "1st plural - pres - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "τίθετε",
+      "ruleName": "2nd plural - pres - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "τιθέασι",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "τιθέασιν",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἵστημι",
+      "ruleName": "1st sing - pres - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἵστης",
+      "ruleName": "2nd sing - pres - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἵστησι",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἵστησιν",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἵσταμεν",
+      "ruleName": "1st plural - pres - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἵστατε",
+      "ruleName": "2nd plural - pres - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἱστᾶσι",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἱστᾶσιν",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "εἶμι",
+      "ruleName": "1st sing - pres - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "εἶ",
+      "ruleName": "2nd sing - pres - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "εἶσι",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "εἶσιν",
+      "ruleName": "3rd sing - pres - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "ἴμεν",
+      "ruleName": "1st plural - pres - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "ἴτε",
+      "ruleName": "2nd plural - pres - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "ἴασι",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "ἴασιν",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "κεῖμαι",
+      "ruleName": "1st sing - pres - ind - mid/pas",
+      "searchTerm": [
+        "κεῖμαι"
+      ]
+    },
+    {
+      "declension": "κεῖσαι",
+      "ruleName": "2nd sing - pres - ind - mid/pas",
+      "searchTerm": [
+        "κεῖμαι"
+      ]
+    },
+    {
+      "declension": "κεῖται",
+      "ruleName": "3rd sing - pres - ind - mid/pas",
+      "searchTerm": [
+        "κεῖμαι"
+      ]
+    },
+    {
+      "declension": "κείμεθα",
+      "ruleName": "1st plural - pres - ind - mid/pas",
+      "searchTerm": [
+        "κεῖμαι"
+      ]
+    },
+    {
+      "declension": "κεῖσθε",
+      "ruleName": "2nd plural - pres - ind - mid/pas",
+      "searchTerm": [
+        "κεῖμαι"
+      ]
+    },
+    {
+      "declension": "κεῖνται",
+      "ruleName": "3rd plural - pres - ind - mid/pas",
+      "searchTerm": [
+        "κεῖμαι"
+      ]
+    },
+    {
+      "declension": "κάθημαι",
+      "ruleName": "1st sing - pres - ind - mid/pas",
+      "searchTerm": [
+        "κάθημαι"
+      ]
+    },
+    {
+      "declension": "κάθησαι",
+      "ruleName": "2nd sing - pres - ind - mid/pas",
+      "searchTerm": [
+        "κάθημαι"
+      ]
+    },
+    {
+      "declension": "κάθηται",
+      "ruleName": "3rd sing - pres - ind - mid/pas",
+      "searchTerm": [
+        "κάθημαι"
+      ]
+    },
+    {
+      "declension": "καθήμεθα",
+      "ruleName": "1st plural - pres - ind - mid/pas",
+      "searchTerm": [
+        "κάθημαι"
+      ]
+    },
+    {
+      "declension": "κάθησθε",
+      "ruleName": "2nd plural - pres - ind - mid/pas",
+      "searchTerm": [
+        "κάθημαι"
+      ]
+    },
+    {
+      "declension": "κάθηνται",
+      "ruleName": "3rd plural - pres - ind - mid/pas",
+      "searchTerm": [
+        "κάθημαι"
+      ]
+    }
+  ]
+}

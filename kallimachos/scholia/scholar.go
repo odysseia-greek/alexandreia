@@ -8,16 +8,23 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/odysseia-greek/agora/aristoteles/models"
 	"github.com/odysseia-greek/agora/plato/logging"
 	ariv1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	v1 "github.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
-	"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
-func (l *ScholarServiceImpl) Health(ctx context.Context, request *emptypb.Empty) (*v1.HealthResponse, error) {
+const (
+	minimumFindTextWords = 3
+	maximumFindTextWords = 50
+)
+
+func (l *ScholarServiceImpl) Health(ctx context.Context, request *v1.HealthRequest) (*v1.HealthResponse, error) {
 	elasticHealth := l.Elastic.Health().Info()
 	dbHealth := &v1.DatabaseHealth{
 		Healthy:       elasticHealth.Healthy,
@@ -103,6 +110,139 @@ func (l *ScholarServiceImpl) Analyze(ctx context.Context, request *v1.AnalyzeReq
 	))
 
 	return response, nil
+}
+
+func (l *ScholarServiceImpl) FindText(ctx context.Context, request *v1.FindTextRequest) (*v1.FindTextResponse, error) {
+	text := strings.TrimSpace(request.GetText())
+	if text == "" {
+		return nil, status.Error(codes.InvalidArgument, "text is required")
+	}
+	words := textWords(text)
+	if len(words) < minimumFindTextWords {
+		return nil, status.Errorf(codes.InvalidArgument, "text must contain at least %d words; use Analyze for shorter searches", minimumFindTextWords)
+	}
+	if len(words) > maximumFindTextWords {
+		return nil, status.Errorf(codes.InvalidArgument, "text must contain at most %d words", maximumFindTextWords)
+	}
+
+	limit := sanitizeLimit(request.GetLimit())
+	response := &v1.FindTextResponse{Query: text}
+	strategies := findTextStrategies(text, words)
+	attempted := make([]string, 0, len(strategies))
+
+	for _, strategy := range strategies {
+		attempted = append(attempted, strategy.name)
+		elasticResponse, _, err := l.queryTexts(ctx, createFindTextQuery(strategy.phrases, limit))
+		if err != nil {
+			return nil, fmt.Errorf("%s search failed: %w", strategy.name, err)
+		}
+
+		matches, err := findTextMatches(elasticResponse, strategy.phrases, limit)
+		if err != nil {
+			return nil, err
+		}
+		if len(matches) == 0 {
+			continue
+		}
+
+		response.Found = true
+		response.Matches = matches
+		response.MatchCount = uint32(len(matches))
+		response.Message = fmt.Sprintf("match found using %s after trying: %s", strategy.name, strings.Join(attempted, ", "))
+		return response, nil
+	}
+
+	response.Message = fmt.Sprintf("no match found after trying: %s", strings.Join(attempted, ", "))
+	return response, nil
+}
+
+type findTextStrategy struct {
+	name    string
+	phrases []string
+}
+
+func findTextStrategies(text string, words []string) []findTextStrategy {
+	strategies := []findTextStrategy{{name: "original phrase", phrases: []string{text}}}
+	normalized := strings.Join(words, " ")
+	if normalized != text {
+		strategies = append(strategies, findTextStrategy{name: "punctuation-normalized phrase", phrases: []string{normalized}})
+	}
+
+	for _, size := range fallbackWindowSizes(len(words)) {
+		strategies = append(strategies, findTextStrategy{
+			name:    fmt.Sprintf("%d-word windows", size),
+			phrases: textWindows(words, size),
+		})
+	}
+	return strategies
+}
+
+func fallbackWindowSizes(wordCount int) []int {
+	var candidates []int
+	if wordCount <= 10 {
+		candidates = []int{wordCount - 1, (wordCount + 1) / 2}
+	} else {
+		candidates = []int{(wordCount + 3) / 4, (wordCount + 7) / 8}
+	}
+
+	sizes := make([]int, 0, len(candidates))
+	for _, size := range candidates {
+		if size < minimumFindTextWords || size >= wordCount {
+			continue
+		}
+		if len(sizes) == 0 || sizes[len(sizes)-1] != size {
+			sizes = append(sizes, size)
+		}
+	}
+	return sizes
+}
+
+func textWindows(words []string, size int) []string {
+	windows := make([]string, 0, len(words)-size+1)
+	for start := 0; start+size <= len(words); start++ {
+		windows = append(windows, strings.Join(words[start:start+size], " "))
+	}
+	return windows
+}
+
+func findTextMatches(response *models.Response, phrases []string, limit uint32) ([]*v1.AnalyzeResult, error) {
+	if response == nil {
+		return nil, nil
+	}
+
+	matches := make([]*v1.AnalyzeResult, 0)
+	for _, hit := range response.Hits.Hits {
+		document, err := decodeTextDocument(hit.Source)
+		if err != nil {
+			return nil, err
+		}
+		for _, section := range document.Rhemai {
+			if !containsAnyPhrase(section.Greek, phrases) {
+				continue
+			}
+			matches = append(matches, &v1.AnalyzeResult{
+				ReferenceLink: buildReferenceLink(document.Author, document.Book, document.Reference),
+				Author:        document.Author,
+				Book:          document.Book,
+				Reference:     document.Reference,
+				Text:          &v1.Rhema{Greek: section.Greek, Translations: section.Translations, Section: section.Section},
+			})
+			if uint32(len(matches)) >= limit {
+				return matches, nil
+			}
+		}
+	}
+	return matches, nil
+}
+
+func containsAnyPhrase(text string, phrases []string) bool {
+	normalizedText := normalizeTextPhrase(text)
+	for _, phrase := range phrases {
+		if strings.Contains(normalizedText, normalizeTextPhrase(phrase)) {
+			return true
+		}
+	}
+	return false
 }
 
 func collectAnalyzeResults(response *models.Response, words []string, limit uint32) ([]*v1.AnalyzeResult, error) {
@@ -383,4 +523,37 @@ func createGreekTextQuery(words []string, limit uint32) map[string]interface{} {
 			},
 		},
 	}
+}
+
+func createFindTextQuery(phrases []string, limit uint32) map[string]interface{} {
+	should := make([]map[string]interface{}, 0, len(phrases))
+	for _, phrase := range phrases {
+		should = append(should, map[string]interface{}{
+			"match_phrase": map[string]interface{}{"rhemai.greek": phrase},
+		})
+	}
+	return map[string]interface{}{
+		"size": limit,
+		"query": map[string]interface{}{
+			"nested": map[string]interface{}{
+				"path": "rhemai",
+				"query": map[string]interface{}{
+					"bool": map[string]interface{}{
+						"should":               should,
+						"minimum_should_match": 1,
+					},
+				},
+			},
+		},
+	}
+}
+
+func normalizeTextPhrase(text string) string {
+	return strings.Join(textWords(text), " ")
+}
+
+func textWords(text string) []string {
+	return strings.FieldsFunc(strings.ToLower(text), func(r rune) bool {
+		return !unicode.IsLetter(r) && !unicode.IsMark(r)
+	})
 }

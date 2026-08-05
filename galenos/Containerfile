@@ -1,0 +1,13 @@
+FROM golang:1.26.5-alpine AS test
+
+WORKDIR /src
+
+# Build this image with the Alexandreia repository root as its context.
+COPY galenos ./galenos
+COPY dionysios ./dionysios
+
+WORKDIR /src/galenos
+RUN go test -run '^$' ./...
+
+ENV DIONYSIOS_GRPC_ADDRESS=dionysios:50060
+ENTRYPOINT ["go", "test", "-v", "./..."]

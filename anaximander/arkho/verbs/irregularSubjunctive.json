@@ -1,0 +1,56 @@
+{
+  "name": "irregular",
+  "type": "irregular",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "ὦ",
+      "ruleName": "1st sing - pres - subj - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ᾖς",
+      "ruleName": "2nd sing - pres - subj - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ᾖ",
+      "ruleName": "3rd sing - pres - subj - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ὦμεν",
+      "ruleName": "1st plural - pres - subj - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἦτε",
+      "ruleName": "2nd plural - pres - subj - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ὦσι",
+      "ruleName": "3rd plural - pres - subj - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ὦσιν",
+      "ruleName": "3rd plural - pres - subj - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    }
+  ]
+}

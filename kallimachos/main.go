@@ -61,8 +61,8 @@ func main() {
 		),
 	)
 
-	reflection.Register(server)
 	v1.RegisterKallimachosServiceServer(server, cfg)
+	reflection.Register(server)
 
 	logging.Info(fmt.Sprintf("Server listening on %s", port))
 	if err := server.Serve(listener); err != nil {

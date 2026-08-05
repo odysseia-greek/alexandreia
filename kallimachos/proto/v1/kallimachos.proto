@@ -4,12 +4,13 @@ package kallimachos.v1;
 
 option go_package = "github.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1;kallimachosv1";
 
-import "google/protobuf/empty.proto";
-
 service KallimachosService {
   rpc Analyze(AnalyzeRequest) returns (AnalyzeResponse);
-  rpc Health(google.protobuf.Empty) returns (HealthResponse);
+  rpc FindText(FindTextRequest) returns (FindTextResponse);
+  rpc Health(HealthRequest) returns (HealthResponse);
 }
+
+message HealthRequest {}
 
 message HealthResponse {
   bool healthy = 1;
@@ -28,6 +29,19 @@ message DatabaseHealth {
 message AnalyzeRequest {
   string rootword = 1;
   uint32 limit = 2;
+}
+
+message FindTextRequest {
+  string text = 1;
+  uint32 limit = 2;
+}
+
+message FindTextResponse {
+  string query = 1;
+  bool found = 2;
+  uint32 match_count = 3;
+  repeated AnalyzeResult matches = 4;
+  string message = 5;
 }
 
 message AnalyzeResponse {

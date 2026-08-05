@@ -3,6 +3,7 @@ package scholia
 import (
 	"context"
 	"fmt"
+	"strings"
 	"testing"
 
 	elastic "github.com/odysseia-greek/agora/aristoteles"
@@ -10,6 +11,8 @@ import (
 	ariv1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	v1 "github.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 const (
@@ -143,6 +146,93 @@ func TestAnalyzeRequiresRootword(t *testing.T) {
 
 	assert.Nil(t, response)
 	assert.EqualError(t, err, "rootword is required")
+}
+
+func TestFindTextReturnsMatchingSection(t *testing.T) {
+	service := newTestScholarService(t, nil, directTextHit)
+
+	response, err := service.FindText(context.Background(), &v1.FindTextRequest{
+		Text:  "ὁ λόγος καλός.",
+		Limit: 5,
+	})
+
+	assert.NoError(t, err)
+	assert.True(t, response.Found)
+	assert.Equal(t, uint32(1), response.MatchCount)
+	assert.Len(t, response.Matches, 1)
+	assert.Equal(t, "Plato", response.Matches[0].Author)
+	assert.Equal(t, "Republic", response.Matches[0].Book)
+	assert.Equal(t, "ὁ λόγος καλός", response.Matches[0].Text.Greek)
+	assert.Contains(t, response.Message, "original phrase")
+}
+
+func TestFindTextReturnsFoundFalseWhenPhraseIsAbsent(t *testing.T) {
+	service := newTestScholarService(t, nil, emptyTextHit, emptyTextHit, emptyTextHit)
+
+	response, err := service.FindText(context.Background(), &v1.FindTextRequest{Text: "τοῦτο τὸ χωρίον οὐκ ἔστιν"})
+
+	assert.NoError(t, err)
+	assert.False(t, response.Found)
+	assert.Zero(t, response.MatchCount)
+	assert.Empty(t, response.Matches)
+	assert.Equal(t, "no match found after trying: original phrase, 4-word windows, 3-word windows", response.Message)
+}
+
+func TestFindTextRequiresText(t *testing.T) {
+	response, err := (&ScholarServiceImpl{}).FindText(context.Background(), &v1.FindTextRequest{Text: "   "})
+
+	assert.Nil(t, response)
+	assert.Equal(t, "text is required", status.Convert(err).Message())
+}
+
+func TestCreateFindTextQueryUsesNestedPhraseMatch(t *testing.T) {
+	query := createFindTextQuery([]string{"ἀρχὴ πάσης", "πάσης πράξεως"}, 5)
+	nested := query["query"].(map[string]interface{})["nested"].(map[string]interface{})
+	boolQuery := nested["query"].(map[string]interface{})["bool"].(map[string]interface{})
+	phrases := boolQuery["should"].([]map[string]interface{})
+
+	assert.Equal(t, "rhemai", nested["path"])
+	assert.Equal(t, "ἀρχὴ πάσης", phrases[0]["match_phrase"].(map[string]interface{})["rhemai.greek"])
+	assert.Equal(t, "πάσης πράξεως", phrases[1]["match_phrase"].(map[string]interface{})["rhemai.greek"])
+	assert.Equal(t, 1, boolQuery["minimum_should_match"])
+	assert.Equal(t, uint32(5), query["size"])
+}
+
+func TestFindTextUsesNormalizedPhraseFallback(t *testing.T) {
+	service := newTestScholarService(t, nil, emptyTextHit, directTextHit)
+
+	response, err := service.FindText(context.Background(), &v1.FindTextRequest{Text: "ὁ λόγος καλός!"})
+
+	assert.NoError(t, err)
+	assert.True(t, response.Found)
+	assert.Contains(t, response.Message, "punctuation-normalized phrase")
+}
+
+func TestFindTextRejectsTextOutsideWordBounds(t *testing.T) {
+	tests := []struct {
+		text    string
+		message string
+	}{
+		{text: "λόγος καλός", message: "text must contain at least 3 words; use Analyze for shorter searches"},
+		{text: strings.Repeat("λόγος ", 51), message: "text must contain at most 50 words"},
+	}
+
+	for _, test := range tests {
+		response, err := (&ScholarServiceImpl{}).FindText(context.Background(), &v1.FindTextRequest{Text: test.text})
+		assert.Nil(t, response)
+		assert.Equal(t, codes.InvalidArgument, status.Code(err))
+		assert.Equal(t, test.message, status.Convert(err).Message())
+	}
+}
+
+func TestFallbackWindowSizesScaleWithTextLength(t *testing.T) {
+	assert.Equal(t, []int{4, 3}, fallbackWindowSizes(5))
+	assert.Equal(t, []int{10, 5}, fallbackWindowSizes(39))
+}
+
+func TestTextWindowsUsesContiguousSlidingPhrases(t *testing.T) {
+	windows := textWindows([]string{"one", "two", "three", "four", "five"}, 4)
+	assert.Equal(t, []string{"one two three four", "two three four five"}, windows)
 }
 
 func TestAnalyzeReturnsDirectOnlyWhenNoExpandedWords(t *testing.T) {

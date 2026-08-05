@@ -1,5 +1,5 @@
 # Base build
-FROM golang:1.25-alpine as base
+FROM golang:1.26-alpine as base
 
 ARG project_name
 ARG TARGETOS
@@ -41,7 +41,7 @@ USER 65532:65532
 ENTRYPOINT ["/app/kallimachos"]
 
 # Production build
-FROM alpine:3.23.2 as prod
+FROM alpine:3.24.0 as prod
 WORKDIR /app
 
 ARG project_name

@@ -87,8 +87,8 @@ github.com/odysseia-greek/agora/hesiodos v0.1.1 h1:+3o+4Yvvq39hoJ+Z9rneeD7sJIiHy
 github.com/odysseia-greek/agora/hesiodos v0.1.1/go.mod h1:HR/ElUBEzkc0LR2ChtZLo6IlFO0mP8MF36/h3LMGR8o=
 github.com/odysseia-greek/agora/plato v0.2.16 h1:FUb51WxE1NThsj9DUroaCIx53VVLaOdL0QGxWg6Jgto=
 github.com/odysseia-greek/agora/plato v0.2.16/go.mod h1:8Y89JmcuT7XH9OHi9aIxTu8BXZNV/C4QbWdlfWuzm0E=
-github.com/odysseia-greek/alexandreia/aristarchos v0.0.6 h1:psQsP9lUG458IX5hoI0PawJvy95G+DoiBdm1ExY3R6Q=
-github.com/odysseia-greek/alexandreia/aristarchos v0.0.6/go.mod h1:iaMG5czM4NpHWrU6MUwLMZTFZyPRHLWQU2V5TGtjcAc=
+github.com/odysseia-greek/alexandreia/aristarchos v0.0.7 h1:CI41hIzetUl15b6FXE7FUV5fa3W4pO48kh3+oFxPwCU=
+github.com/odysseia-greek/alexandreia/aristarchos v0.0.7/go.mod h1:kqQnJJodQ8XhZtLhdqGyuHI2wXa2mWB+x5KjeWgKnwo=
 github.com/odysseia-greek/alexandreia/eratosthenes v0.0.2 h1:T3xFeJmYe3eKM7Zw4t7iGiVQN1k3dulYgTdOYoC+1mQ=
 github.com/odysseia-greek/alexandreia/eratosthenes v0.0.2/go.mod h1:7saEPoXSy7H42OYboOQ99ApAh6U1+bNsmtf7SoLU8oc=
 github.com/odysseia-greek/alexandreia/kallimachos v0.0.2-rho1 h1:p/fzz+5wGsSe134EkIE2I4hLZJUtKhPMa25V60iOYs4=

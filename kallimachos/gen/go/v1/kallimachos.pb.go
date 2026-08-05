@@ -9,7 +9,6 @@ package kallimachosv1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -21,6 +20,42 @@ const (
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
+
+type HealthRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HealthRequest) Reset() {
+	*x = HealthRequest{}
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HealthRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HealthRequest) ProtoMessage() {}
+
+func (x *HealthRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HealthRequest.ProtoReflect.Descriptor instead.
+func (*HealthRequest) Descriptor() ([]byte, []int) {
+	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{0}
+}
 
 type HealthResponse struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
@@ -34,7 +69,7 @@ type HealthResponse struct {
 
 func (x *HealthResponse) Reset() {
 	*x = HealthResponse{}
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[0]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -46,7 +81,7 @@ func (x *HealthResponse) String() string {
 func (*HealthResponse) ProtoMessage() {}
 
 func (x *HealthResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[0]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -59,7 +94,7 @@ func (x *HealthResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HealthResponse.ProtoReflect.Descriptor instead.
 func (*HealthResponse) Descriptor() ([]byte, []int) {
-	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{0}
+	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *HealthResponse) GetHealthy() bool {
@@ -102,7 +137,7 @@ type DatabaseHealth struct {
 
 func (x *DatabaseHealth) Reset() {
 	*x = DatabaseHealth{}
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[1]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -114,7 +149,7 @@ func (x *DatabaseHealth) String() string {
 func (*DatabaseHealth) ProtoMessage() {}
 
 func (x *DatabaseHealth) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[1]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -127,7 +162,7 @@ func (x *DatabaseHealth) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DatabaseHealth.ProtoReflect.Descriptor instead.
 func (*DatabaseHealth) Descriptor() ([]byte, []int) {
-	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{1}
+	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *DatabaseHealth) GetHealthy() bool {
@@ -168,7 +203,7 @@ type AnalyzeRequest struct {
 
 func (x *AnalyzeRequest) Reset() {
 	*x = AnalyzeRequest{}
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[2]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -180,7 +215,7 @@ func (x *AnalyzeRequest) String() string {
 func (*AnalyzeRequest) ProtoMessage() {}
 
 func (x *AnalyzeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[2]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -193,7 +228,7 @@ func (x *AnalyzeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AnalyzeRequest.ProtoReflect.Descriptor instead.
 func (*AnalyzeRequest) Descriptor() ([]byte, []int) {
-	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{2}
+	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *AnalyzeRequest) GetRootword() string {
@@ -210,6 +245,134 @@ func (x *AnalyzeRequest) GetLimit() uint32 {
 	return 0
 }
 
+type FindTextRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Text          string                 `protobuf:"bytes,1,opt,name=text,proto3" json:"text,omitempty"`
+	Limit         uint32                 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FindTextRequest) Reset() {
+	*x = FindTextRequest{}
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FindTextRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindTextRequest) ProtoMessage() {}
+
+func (x *FindTextRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindTextRequest.ProtoReflect.Descriptor instead.
+func (*FindTextRequest) Descriptor() ([]byte, []int) {
+	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *FindTextRequest) GetText() string {
+	if x != nil {
+		return x.Text
+	}
+	return ""
+}
+
+func (x *FindTextRequest) GetLimit() uint32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+type FindTextResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Query         string                 `protobuf:"bytes,1,opt,name=query,proto3" json:"query,omitempty"`
+	Found         bool                   `protobuf:"varint,2,opt,name=found,proto3" json:"found,omitempty"`
+	MatchCount    uint32                 `protobuf:"varint,3,opt,name=match_count,json=matchCount,proto3" json:"match_count,omitempty"`
+	Matches       []*AnalyzeResult       `protobuf:"bytes,4,rep,name=matches,proto3" json:"matches,omitempty"`
+	Message       string                 `protobuf:"bytes,5,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FindTextResponse) Reset() {
+	*x = FindTextResponse{}
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FindTextResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindTextResponse) ProtoMessage() {}
+
+func (x *FindTextResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindTextResponse.ProtoReflect.Descriptor instead.
+func (*FindTextResponse) Descriptor() ([]byte, []int) {
+	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *FindTextResponse) GetQuery() string {
+	if x != nil {
+		return x.Query
+	}
+	return ""
+}
+
+func (x *FindTextResponse) GetFound() bool {
+	if x != nil {
+		return x.Found
+	}
+	return false
+}
+
+func (x *FindTextResponse) GetMatchCount() uint32 {
+	if x != nil {
+		return x.MatchCount
+	}
+	return 0
+}
+
+func (x *FindTextResponse) GetMatches() []*AnalyzeResult {
+	if x != nil {
+		return x.Matches
+	}
+	return nil
+}
+
+func (x *FindTextResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 type AnalyzeResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Rootword      string                 `protobuf:"bytes,1,opt,name=rootword,proto3" json:"rootword,omitempty"`
@@ -223,7 +386,7 @@ type AnalyzeResponse struct {
 
 func (x *AnalyzeResponse) Reset() {
 	*x = AnalyzeResponse{}
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[3]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -235,7 +398,7 @@ func (x *AnalyzeResponse) String() string {
 func (*AnalyzeResponse) ProtoMessage() {}
 
 func (x *AnalyzeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[3]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -248,7 +411,7 @@ func (x *AnalyzeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AnalyzeResponse.ProtoReflect.Descriptor instead.
 func (*AnalyzeResponse) Descriptor() ([]byte, []int) {
-	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{3}
+	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *AnalyzeResponse) GetRootword() string {
@@ -296,7 +459,7 @@ type Conjugation struct {
 
 func (x *Conjugation) Reset() {
 	*x = Conjugation{}
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[4]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -308,7 +471,7 @@ func (x *Conjugation) String() string {
 func (*Conjugation) ProtoMessage() {}
 
 func (x *Conjugation) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[4]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -321,7 +484,7 @@ func (x *Conjugation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Conjugation.ProtoReflect.Descriptor instead.
 func (*Conjugation) Descriptor() ([]byte, []int) {
-	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{4}
+	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *Conjugation) GetWord() string {
@@ -351,7 +514,7 @@ type AnalyzeResult struct {
 
 func (x *AnalyzeResult) Reset() {
 	*x = AnalyzeResult{}
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[5]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -363,7 +526,7 @@ func (x *AnalyzeResult) String() string {
 func (*AnalyzeResult) ProtoMessage() {}
 
 func (x *AnalyzeResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[5]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -376,7 +539,7 @@ func (x *AnalyzeResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AnalyzeResult.ProtoReflect.Descriptor instead.
 func (*AnalyzeResult) Descriptor() ([]byte, []int) {
-	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{5}
+	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *AnalyzeResult) GetReferenceLink() string {
@@ -424,7 +587,7 @@ type DirectResult struct {
 
 func (x *DirectResult) Reset() {
 	*x = DirectResult{}
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[6]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -436,7 +599,7 @@ func (x *DirectResult) String() string {
 func (*DirectResult) ProtoMessage() {}
 
 func (x *DirectResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[6]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -449,7 +612,7 @@ func (x *DirectResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DirectResult.ProtoReflect.Descriptor instead.
 func (*DirectResult) Descriptor() ([]byte, []int) {
-	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{6}
+	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *DirectResult) GetRequestedWord() string {
@@ -477,7 +640,7 @@ type Rhema struct {
 
 func (x *Rhema) Reset() {
 	*x = Rhema{}
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[7]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -489,7 +652,7 @@ func (x *Rhema) String() string {
 func (*Rhema) ProtoMessage() {}
 
 func (x *Rhema) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_kallimachos_proto_msgTypes[7]
+	mi := &file_proto_v1_kallimachos_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -502,7 +665,7 @@ func (x *Rhema) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Rhema.ProtoReflect.Descriptor instead.
 func (*Rhema) Descriptor() ([]byte, []int) {
-	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{7}
+	return file_proto_v1_kallimachos_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *Rhema) GetGreek() string {
@@ -530,7 +693,8 @@ var File_proto_v1_kallimachos_proto protoreflect.FileDescriptor
 
 const file_proto_v1_kallimachos_proto_rawDesc = "" +
 	"\n" +
-	"\x1aproto/v1/kallimachos.proto\x12\x0ekallimachos.v1\x1a\x1bgoogle/protobuf/empty.proto\"\xa1\x01\n" +
+	"\x1aproto/v1/kallimachos.proto\x12\x0ekallimachos.v1\"\x0f\n" +
+	"\rHealthRequest\"\xa1\x01\n" +
 	"\x0eHealthResponse\x12\x18\n" +
 	"\ahealthy\x18\x01 \x01(\bR\ahealthy\x12\x12\n" +
 	"\x04time\x18\x02 \x01(\tR\x04time\x12\x18\n" +
@@ -544,7 +708,17 @@ const file_proto_v1_kallimachos_proto_rawDesc = "" +
 	"\x0eserver_version\x18\x04 \x01(\tR\rserverVersion\"B\n" +
 	"\x0eAnalyzeRequest\x12\x1a\n" +
 	"\brootword\x18\x01 \x01(\tR\brootword\x12\x14\n" +
-	"\x05limit\x18\x02 \x01(\rR\x05limit\"\x90\x02\n" +
+	"\x05limit\x18\x02 \x01(\rR\x05limit\";\n" +
+	"\x0fFindTextRequest\x12\x12\n" +
+	"\x04text\x18\x01 \x01(\tR\x04text\x12\x14\n" +
+	"\x05limit\x18\x02 \x01(\rR\x05limit\"\xb2\x01\n" +
+	"\x10FindTextResponse\x12\x14\n" +
+	"\x05query\x18\x01 \x01(\tR\x05query\x12\x14\n" +
+	"\x05found\x18\x02 \x01(\bR\x05found\x12\x1f\n" +
+	"\vmatch_count\x18\x03 \x01(\rR\n" +
+	"matchCount\x127\n" +
+	"\amatches\x18\x04 \x03(\v2\x1d.kallimachos.v1.AnalyzeResultR\amatches\x12\x18\n" +
+	"\amessage\x18\x05 \x01(\tR\amessage\"\x90\x02\n" +
 	"\x0fAnalyzeResponse\x12\x1a\n" +
 	"\brootword\x18\x01 \x01(\tR\brootword\x12$\n" +
 	"\x0epart_of_speech\x18\x02 \x01(\tR\fpartOfSpeech\x12?\n" +
@@ -566,10 +740,11 @@ const file_proto_v1_kallimachos_proto_rawDesc = "" +
 	"\x05Rhema\x12\x14\n" +
 	"\x05greek\x18\x01 \x01(\tR\x05greek\x12\"\n" +
 	"\ftranslations\x18\x02 \x03(\tR\ftranslations\x12\x18\n" +
-	"\asection\x18\x03 \x01(\tR\asection2\xa2\x01\n" +
+	"\asection\x18\x03 \x01(\tR\asection2\xf8\x01\n" +
 	"\x12KallimachosService\x12J\n" +
-	"\aAnalyze\x12\x1e.kallimachos.v1.AnalyzeRequest\x1a\x1f.kallimachos.v1.AnalyzeResponse\x12@\n" +
-	"\x06Health\x12\x16.google.protobuf.Empty\x1a\x1e.kallimachos.v1.HealthResponseB\xca\x01\n" +
+	"\aAnalyze\x12\x1e.kallimachos.v1.AnalyzeRequest\x1a\x1f.kallimachos.v1.AnalyzeResponse\x12M\n" +
+	"\bFindText\x12\x1f.kallimachos.v1.FindTextRequest\x1a .kallimachos.v1.FindTextResponse\x12G\n" +
+	"\x06Health\x12\x1d.kallimachos.v1.HealthRequest\x1a\x1e.kallimachos.v1.HealthResponseB\xca\x01\n" +
 	"\x12com.kallimachos.v1B\x10KallimachosProtoP\x01ZIgithub.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1;kallimachosv1\xa2\x02\x03KXX\xaa\x02\x0eKallimachos.V1\xca\x02\x0eKallimachos\\V1\xe2\x02\x1aKallimachos\\V1\\GPBMetadata\xea\x02\x0fKallimachos::V1b\x06proto3"
 
 var (
@@ -584,34 +759,39 @@ func file_proto_v1_kallimachos_proto_rawDescGZIP() []byte {
 	return file_proto_v1_kallimachos_proto_rawDescData
 }
 
-var file_proto_v1_kallimachos_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_proto_v1_kallimachos_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_proto_v1_kallimachos_proto_goTypes = []any{
-	(*HealthResponse)(nil),  // 0: kallimachos.v1.HealthResponse
-	(*DatabaseHealth)(nil),  // 1: kallimachos.v1.DatabaseHealth
-	(*AnalyzeRequest)(nil),  // 2: kallimachos.v1.AnalyzeRequest
-	(*AnalyzeResponse)(nil), // 3: kallimachos.v1.AnalyzeResponse
-	(*Conjugation)(nil),     // 4: kallimachos.v1.Conjugation
-	(*AnalyzeResult)(nil),   // 5: kallimachos.v1.AnalyzeResult
-	(*DirectResult)(nil),    // 6: kallimachos.v1.DirectResult
-	(*Rhema)(nil),           // 7: kallimachos.v1.Rhema
-	(*emptypb.Empty)(nil),   // 8: google.protobuf.Empty
+	(*HealthRequest)(nil),    // 0: kallimachos.v1.HealthRequest
+	(*HealthResponse)(nil),   // 1: kallimachos.v1.HealthResponse
+	(*DatabaseHealth)(nil),   // 2: kallimachos.v1.DatabaseHealth
+	(*AnalyzeRequest)(nil),   // 3: kallimachos.v1.AnalyzeRequest
+	(*FindTextRequest)(nil),  // 4: kallimachos.v1.FindTextRequest
+	(*FindTextResponse)(nil), // 5: kallimachos.v1.FindTextResponse
+	(*AnalyzeResponse)(nil),  // 6: kallimachos.v1.AnalyzeResponse
+	(*Conjugation)(nil),      // 7: kallimachos.v1.Conjugation
+	(*AnalyzeResult)(nil),    // 8: kallimachos.v1.AnalyzeResult
+	(*DirectResult)(nil),     // 9: kallimachos.v1.DirectResult
+	(*Rhema)(nil),            // 10: kallimachos.v1.Rhema
 }
 var file_proto_v1_kallimachos_proto_depIdxs = []int32{
-	1, // 0: kallimachos.v1.HealthResponse.database_health:type_name -> kallimachos.v1.DatabaseHealth
-	4, // 1: kallimachos.v1.AnalyzeResponse.conjugations:type_name -> kallimachos.v1.Conjugation
-	6, // 2: kallimachos.v1.AnalyzeResponse.direct_result:type_name -> kallimachos.v1.DirectResult
-	5, // 3: kallimachos.v1.AnalyzeResponse.results:type_name -> kallimachos.v1.AnalyzeResult
-	7, // 4: kallimachos.v1.AnalyzeResult.text:type_name -> kallimachos.v1.Rhema
-	5, // 5: kallimachos.v1.DirectResult.texts:type_name -> kallimachos.v1.AnalyzeResult
-	2, // 6: kallimachos.v1.KallimachosService.Analyze:input_type -> kallimachos.v1.AnalyzeRequest
-	8, // 7: kallimachos.v1.KallimachosService.Health:input_type -> google.protobuf.Empty
-	3, // 8: kallimachos.v1.KallimachosService.Analyze:output_type -> kallimachos.v1.AnalyzeResponse
-	0, // 9: kallimachos.v1.KallimachosService.Health:output_type -> kallimachos.v1.HealthResponse
-	8, // [8:10] is the sub-list for method output_type
-	6, // [6:8] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	2,  // 0: kallimachos.v1.HealthResponse.database_health:type_name -> kallimachos.v1.DatabaseHealth
+	8,  // 1: kallimachos.v1.FindTextResponse.matches:type_name -> kallimachos.v1.AnalyzeResult
+	7,  // 2: kallimachos.v1.AnalyzeResponse.conjugations:type_name -> kallimachos.v1.Conjugation
+	9,  // 3: kallimachos.v1.AnalyzeResponse.direct_result:type_name -> kallimachos.v1.DirectResult
+	8,  // 4: kallimachos.v1.AnalyzeResponse.results:type_name -> kallimachos.v1.AnalyzeResult
+	10, // 5: kallimachos.v1.AnalyzeResult.text:type_name -> kallimachos.v1.Rhema
+	8,  // 6: kallimachos.v1.DirectResult.texts:type_name -> kallimachos.v1.AnalyzeResult
+	3,  // 7: kallimachos.v1.KallimachosService.Analyze:input_type -> kallimachos.v1.AnalyzeRequest
+	4,  // 8: kallimachos.v1.KallimachosService.FindText:input_type -> kallimachos.v1.FindTextRequest
+	0,  // 9: kallimachos.v1.KallimachosService.Health:input_type -> kallimachos.v1.HealthRequest
+	6,  // 10: kallimachos.v1.KallimachosService.Analyze:output_type -> kallimachos.v1.AnalyzeResponse
+	5,  // 11: kallimachos.v1.KallimachosService.FindText:output_type -> kallimachos.v1.FindTextResponse
+	1,  // 12: kallimachos.v1.KallimachosService.Health:output_type -> kallimachos.v1.HealthResponse
+	10, // [10:13] is the sub-list for method output_type
+	7,  // [7:10] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_v1_kallimachos_proto_init() }
@@ -625,7 +805,7 @@ func file_proto_v1_kallimachos_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_v1_kallimachos_proto_rawDesc), len(file_proto_v1_kallimachos_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

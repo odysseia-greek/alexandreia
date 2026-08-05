@@ -1334,13 +1334,16 @@ func (x *TextModeRequest) GetIncludeAudit() bool {
 }
 
 type TextModeResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	RateLimit     *RateLimitInfo         `protobuf:"bytes,2,opt,name=rate_limit,json=rateLimit,proto3" json:"rate_limit,omitempty"`
-	Tokens        []*TextToken           `protobuf:"bytes,3,rep,name=tokens,proto3" json:"tokens,omitempty"`
-	Audit         *GrammarAudit          `protobuf:"bytes,4,opt,name=audit,proto3" json:"audit,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	SessionId          string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	RateLimit          *RateLimitInfo         `protobuf:"bytes,2,opt,name=rate_limit,json=rateLimit,proto3" json:"rate_limit,omitempty"`
+	Tokens             []*TextToken           `protobuf:"bytes,3,rep,name=tokens,proto3" json:"tokens,omitempty"`
+	Audit              *GrammarAudit          `protobuf:"bytes,4,opt,name=audit,proto3" json:"audit,omitempty"`
+	OriginalText       string                 `protobuf:"bytes,5,opt,name=original_text,json=originalText,proto3" json:"original_text,omitempty"`
+	LiteralTranslation string                 `protobuf:"bytes,6,opt,name=literal_translation,json=literalTranslation,proto3" json:"literal_translation,omitempty"`
+	TextSearch         *TextSearchStatus      `protobuf:"bytes,7,opt,name=text_search,json=textSearch,proto3" json:"text_search,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *TextModeResponse) Reset() {
@@ -1401,6 +1404,95 @@ func (x *TextModeResponse) GetAudit() *GrammarAudit {
 	return nil
 }
 
+func (x *TextModeResponse) GetOriginalText() string {
+	if x != nil {
+		return x.OriginalText
+	}
+	return ""
+}
+
+func (x *TextModeResponse) GetLiteralTranslation() string {
+	if x != nil {
+		return x.LiteralTranslation
+	}
+	return ""
+}
+
+func (x *TextModeResponse) GetTextSearch() *TextSearchStatus {
+	if x != nil {
+		return x.TextSearch
+	}
+	return nil
+}
+
+type TextSearchStatus struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Searched      bool                   `protobuf:"varint,1,opt,name=searched,proto3" json:"searched,omitempty"`
+	Found         bool                   `protobuf:"varint,2,opt,name=found,proto3" json:"found,omitempty"`
+	Status        string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
+	Message       string                 `protobuf:"bytes,4,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TextSearchStatus) Reset() {
+	*x = TextSearchStatus{}
+	mi := &file_v1_dionysios_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TextSearchStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TextSearchStatus) ProtoMessage() {}
+
+func (x *TextSearchStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_dionysios_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TextSearchStatus.ProtoReflect.Descriptor instead.
+func (*TextSearchStatus) Descriptor() ([]byte, []int) {
+	return file_v1_dionysios_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *TextSearchStatus) GetSearched() bool {
+	if x != nil {
+		return x.Searched
+	}
+	return false
+}
+
+func (x *TextSearchStatus) GetFound() bool {
+	if x != nil {
+		return x.Found
+	}
+	return false
+}
+
+func (x *TextSearchStatus) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *TextSearchStatus) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 type RateLimitInfo struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	UpstreamIp      string                 `protobuf:"bytes,1,opt,name=upstream_ip,json=upstreamIp,proto3" json:"upstream_ip,omitempty"`
@@ -1412,7 +1504,7 @@ type RateLimitInfo struct {
 
 func (x *RateLimitInfo) Reset() {
 	*x = RateLimitInfo{}
-	mi := &file_v1_dionysios_proto_msgTypes[19]
+	mi := &file_v1_dionysios_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1424,7 +1516,7 @@ func (x *RateLimitInfo) String() string {
 func (*RateLimitInfo) ProtoMessage() {}
 
 func (x *RateLimitInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_dionysios_proto_msgTypes[19]
+	mi := &file_v1_dionysios_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1437,7 +1529,7 @@ func (x *RateLimitInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RateLimitInfo.ProtoReflect.Descriptor instead.
 func (*RateLimitInfo) Descriptor() ([]byte, []int) {
-	return file_v1_dionysios_proto_rawDescGZIP(), []int{19}
+	return file_v1_dionysios_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *RateLimitInfo) GetUpstreamIp() string {
@@ -1462,17 +1554,21 @@ func (x *RateLimitInfo) GetNextAllowedTime() string {
 }
 
 type TextToken struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
-	Position      uint32                 `protobuf:"varint,2,opt,name=position,proto3" json:"position,omitempty"`
-	Results       []*DeclensionResult    `protobuf:"bytes,3,rep,name=results,proto3" json:"results,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Token string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	// Zero-based position in the normalized token sequence.
+	Position      uint32              `protobuf:"varint,2,opt,name=position,proto3" json:"position,omitempty"`
+	Results       []*DeclensionResult `protobuf:"bytes,3,rep,name=results,proto3" json:"results,omitempty"`
+	Gloss         string              `protobuf:"bytes,4,opt,name=gloss,proto3" json:"gloss,omitempty"`
+	Resolved      bool                `protobuf:"varint,5,opt,name=resolved,proto3" json:"resolved,omitempty"`
+	Message       string              `protobuf:"bytes,6,opt,name=message,proto3" json:"message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *TextToken) Reset() {
 	*x = TextToken{}
-	mi := &file_v1_dionysios_proto_msgTypes[20]
+	mi := &file_v1_dionysios_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1484,7 +1580,7 @@ func (x *TextToken) String() string {
 func (*TextToken) ProtoMessage() {}
 
 func (x *TextToken) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_dionysios_proto_msgTypes[20]
+	mi := &file_v1_dionysios_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1497,7 +1593,7 @@ func (x *TextToken) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TextToken.ProtoReflect.Descriptor instead.
 func (*TextToken) Descriptor() ([]byte, []int) {
-	return file_v1_dionysios_proto_rawDescGZIP(), []int{20}
+	return file_v1_dionysios_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *TextToken) GetToken() string {
@@ -1521,6 +1617,27 @@ func (x *TextToken) GetResults() []*DeclensionResult {
 	return nil
 }
 
+func (x *TextToken) GetGloss() string {
+	if x != nil {
+		return x.Gloss
+	}
+	return ""
+}
+
+func (x *TextToken) GetResolved() bool {
+	if x != nil {
+		return x.Resolved
+	}
+	return false
+}
+
+func (x *TextToken) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 type ExplainWordRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Word          string                 `protobuf:"bytes,1,opt,name=word,proto3" json:"word,omitempty"`
@@ -1532,7 +1649,7 @@ type ExplainWordRequest struct {
 
 func (x *ExplainWordRequest) Reset() {
 	*x = ExplainWordRequest{}
-	mi := &file_v1_dionysios_proto_msgTypes[21]
+	mi := &file_v1_dionysios_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1544,7 +1661,7 @@ func (x *ExplainWordRequest) String() string {
 func (*ExplainWordRequest) ProtoMessage() {}
 
 func (x *ExplainWordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_dionysios_proto_msgTypes[21]
+	mi := &file_v1_dionysios_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1557,7 +1674,7 @@ func (x *ExplainWordRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExplainWordRequest.ProtoReflect.Descriptor instead.
 func (*ExplainWordRequest) Descriptor() ([]byte, []int) {
-	return file_v1_dionysios_proto_rawDescGZIP(), []int{21}
+	return file_v1_dionysios_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ExplainWordRequest) GetWord() string {
@@ -1591,7 +1708,7 @@ type ExplainWordResponse struct {
 
 func (x *ExplainWordResponse) Reset() {
 	*x = ExplainWordResponse{}
-	mi := &file_v1_dionysios_proto_msgTypes[22]
+	mi := &file_v1_dionysios_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1603,7 +1720,7 @@ func (x *ExplainWordResponse) String() string {
 func (*ExplainWordResponse) ProtoMessage() {}
 
 func (x *ExplainWordResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_dionysios_proto_msgTypes[22]
+	mi := &file_v1_dionysios_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1616,7 +1733,7 @@ func (x *ExplainWordResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExplainWordResponse.ProtoReflect.Descriptor instead.
 func (*ExplainWordResponse) Descriptor() ([]byte, []int) {
-	return file_v1_dionysios_proto_rawDescGZIP(), []int{22}
+	return file_v1_dionysios_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ExplainWordResponse) GetWord() string {
@@ -1644,7 +1761,7 @@ type DiveTextRequest struct {
 
 func (x *DiveTextRequest) Reset() {
 	*x = DiveTextRequest{}
-	mi := &file_v1_dionysios_proto_msgTypes[23]
+	mi := &file_v1_dionysios_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1656,7 +1773,7 @@ func (x *DiveTextRequest) String() string {
 func (*DiveTextRequest) ProtoMessage() {}
 
 func (x *DiveTextRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_dionysios_proto_msgTypes[23]
+	mi := &file_v1_dionysios_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1669,7 +1786,7 @@ func (x *DiveTextRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DiveTextRequest.ProtoReflect.Descriptor instead.
 func (*DiveTextRequest) Descriptor() ([]byte, []int) {
-	return file_v1_dionysios_proto_rawDescGZIP(), []int{23}
+	return file_v1_dionysios_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *DiveTextRequest) GetTextId() string {
@@ -1703,7 +1820,7 @@ type DiveTextResponse struct {
 
 func (x *DiveTextResponse) Reset() {
 	*x = DiveTextResponse{}
-	mi := &file_v1_dionysios_proto_msgTypes[24]
+	mi := &file_v1_dionysios_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1715,7 +1832,7 @@ func (x *DiveTextResponse) String() string {
 func (*DiveTextResponse) ProtoMessage() {}
 
 func (x *DiveTextResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_dionysios_proto_msgTypes[24]
+	mi := &file_v1_dionysios_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1728,7 +1845,7 @@ func (x *DiveTextResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DiveTextResponse.ProtoReflect.Descriptor instead.
 func (*DiveTextResponse) Descriptor() ([]byte, []int) {
-	return file_v1_dionysios_proto_rawDescGZIP(), []int{24}
+	return file_v1_dionysios_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *DiveTextResponse) GetTextId() string {
@@ -1866,23 +1983,35 @@ const file_v1_dionysios_proto_rawDesc = "" +
 	"\x04text\x18\x01 \x01(\tR\x04text\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x02 \x01(\tR\tsessionId\x12#\n" +
-	"\rinclude_audit\x18\x03 \x01(\bR\fincludeAudit\"\xd0\x01\n" +
+	"\rinclude_audit\x18\x03 \x01(\bR\fincludeAudit\"\xe7\x02\n" +
 	"\x10TextModeResponse\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12:\n" +
 	"\n" +
 	"rate_limit\x18\x02 \x01(\v2\x1b.dionysios.v1.RateLimitInfoR\trateLimit\x12/\n" +
 	"\x06tokens\x18\x03 \x03(\v2\x17.dionysios.v1.TextTokenR\x06tokens\x120\n" +
-	"\x05audit\x18\x04 \x01(\v2\x1a.dionysios.v1.GrammarAuditR\x05audit\"\x83\x01\n" +
+	"\x05audit\x18\x04 \x01(\v2\x1a.dionysios.v1.GrammarAuditR\x05audit\x12#\n" +
+	"\roriginal_text\x18\x05 \x01(\tR\foriginalText\x12/\n" +
+	"\x13literal_translation\x18\x06 \x01(\tR\x12literalTranslation\x12?\n" +
+	"\vtext_search\x18\a \x01(\v2\x1e.dionysios.v1.TextSearchStatusR\n" +
+	"textSearch\"v\n" +
+	"\x10TextSearchStatus\x12\x1a\n" +
+	"\bsearched\x18\x01 \x01(\bR\bsearched\x12\x14\n" +
+	"\x05found\x18\x02 \x01(\bR\x05found\x12\x16\n" +
+	"\x06status\x18\x03 \x01(\tR\x06status\x12\x18\n" +
+	"\amessage\x18\x04 \x01(\tR\amessage\"\x83\x01\n" +
 	"\rRateLimitInfo\x12\x1f\n" +
 	"\vupstream_ip\x18\x01 \x01(\tR\n" +
 	"upstreamIp\x12%\n" +
 	"\x0ewindow_seconds\x18\x02 \x01(\rR\rwindowSeconds\x12*\n" +
-	"\x11next_allowed_time\x18\x03 \x01(\tR\x0fnextAllowedTime\"w\n" +
+	"\x11next_allowed_time\x18\x03 \x01(\tR\x0fnextAllowedTime\"\xc3\x01\n" +
 	"\tTextToken\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\x12\x1a\n" +
 	"\bposition\x18\x02 \x01(\rR\bposition\x128\n" +
-	"\aresults\x18\x03 \x03(\v2\x1e.dionysios.v1.DeclensionResultR\aresults\"a\n" +
+	"\aresults\x18\x03 \x03(\v2\x1e.dionysios.v1.DeclensionResultR\aresults\x12\x14\n" +
+	"\x05gloss\x18\x04 \x01(\tR\x05gloss\x12\x1a\n" +
+	"\bresolved\x18\x05 \x01(\bR\bresolved\x12\x18\n" +
+	"\amessage\x18\x06 \x01(\tR\amessage\"a\n" +
 	"\x12ExplainWordRequest\x12\x12\n" +
 	"\x04word\x18\x01 \x01(\tR\x04word\x12\x1d\n" +
 	"\n" +
@@ -1920,7 +2049,7 @@ func file_v1_dionysios_proto_rawDescGZIP() []byte {
 	return file_v1_dionysios_proto_rawDescData
 }
 
-var file_v1_dionysios_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
+var file_v1_dionysios_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
 var file_v1_dionysios_proto_goTypes = []any{
 	(*HealthRequest)(nil),        // 0: dionysios.v1.HealthRequest
 	(*HealthResponse)(nil),       // 1: dionysios.v1.HealthResponse
@@ -1941,12 +2070,13 @@ var file_v1_dionysios_proto_goTypes = []any{
 	(*Rhema)(nil),                // 16: dionysios.v1.Rhema
 	(*TextModeRequest)(nil),      // 17: dionysios.v1.TextModeRequest
 	(*TextModeResponse)(nil),     // 18: dionysios.v1.TextModeResponse
-	(*RateLimitInfo)(nil),        // 19: dionysios.v1.RateLimitInfo
-	(*TextToken)(nil),            // 20: dionysios.v1.TextToken
-	(*ExplainWordRequest)(nil),   // 21: dionysios.v1.ExplainWordRequest
-	(*ExplainWordResponse)(nil),  // 22: dionysios.v1.ExplainWordResponse
-	(*DiveTextRequest)(nil),      // 23: dionysios.v1.DiveTextRequest
-	(*DiveTextResponse)(nil),     // 24: dionysios.v1.DiveTextResponse
+	(*TextSearchStatus)(nil),     // 19: dionysios.v1.TextSearchStatus
+	(*RateLimitInfo)(nil),        // 20: dionysios.v1.RateLimitInfo
+	(*TextToken)(nil),            // 21: dionysios.v1.TextToken
+	(*ExplainWordRequest)(nil),   // 22: dionysios.v1.ExplainWordRequest
+	(*ExplainWordResponse)(nil),  // 23: dionysios.v1.ExplainWordResponse
+	(*DiveTextRequest)(nil),      // 24: dionysios.v1.DiveTextRequest
+	(*DiveTextResponse)(nil),     // 25: dionysios.v1.DiveTextResponse
 }
 var file_v1_dionysios_proto_depIdxs = []int32{
 	6,  // 0: dionysios.v1.HealthResponse.database_health:type_name -> dionysios.v1.DatabaseHealth
@@ -1963,27 +2093,28 @@ var file_v1_dionysios_proto_depIdxs = []int32{
 	14, // 11: dionysios.v1.ResearchResponse.conjugations:type_name -> dionysios.v1.Conjugation
 	15, // 12: dionysios.v1.ResearchResponse.results:type_name -> dionysios.v1.AnalyzeResult
 	16, // 13: dionysios.v1.AnalyzeResult.text:type_name -> dionysios.v1.Rhema
-	19, // 14: dionysios.v1.TextModeResponse.rate_limit:type_name -> dionysios.v1.RateLimitInfo
-	20, // 15: dionysios.v1.TextModeResponse.tokens:type_name -> dionysios.v1.TextToken
+	20, // 14: dionysios.v1.TextModeResponse.rate_limit:type_name -> dionysios.v1.RateLimitInfo
+	21, // 15: dionysios.v1.TextModeResponse.tokens:type_name -> dionysios.v1.TextToken
 	10, // 16: dionysios.v1.TextModeResponse.audit:type_name -> dionysios.v1.GrammarAudit
-	9,  // 17: dionysios.v1.TextToken.results:type_name -> dionysios.v1.DeclensionResult
-	0,  // 18: dionysios.v1.DionysiosService.Health:input_type -> dionysios.v1.HealthRequest
-	7,  // 19: dionysios.v1.DionysiosService.CheckGrammar:input_type -> dionysios.v1.CheckGrammarRequest
-	12, // 20: dionysios.v1.DionysiosService.Research:input_type -> dionysios.v1.ResearchRequest
-	17, // 21: dionysios.v1.DionysiosService.TextMode:input_type -> dionysios.v1.TextModeRequest
-	21, // 22: dionysios.v1.DionysiosService.ExplainWord:input_type -> dionysios.v1.ExplainWordRequest
-	23, // 23: dionysios.v1.DionysiosService.DiveText:input_type -> dionysios.v1.DiveTextRequest
-	1,  // 24: dionysios.v1.DionysiosService.Health:output_type -> dionysios.v1.HealthResponse
-	8,  // 25: dionysios.v1.DionysiosService.CheckGrammar:output_type -> dionysios.v1.CheckGrammarResponse
-	13, // 26: dionysios.v1.DionysiosService.Research:output_type -> dionysios.v1.ResearchResponse
-	18, // 27: dionysios.v1.DionysiosService.TextMode:output_type -> dionysios.v1.TextModeResponse
-	22, // 28: dionysios.v1.DionysiosService.ExplainWord:output_type -> dionysios.v1.ExplainWordResponse
-	24, // 29: dionysios.v1.DionysiosService.DiveText:output_type -> dionysios.v1.DiveTextResponse
-	24, // [24:30] is the sub-list for method output_type
-	18, // [18:24] is the sub-list for method input_type
-	18, // [18:18] is the sub-list for extension type_name
-	18, // [18:18] is the sub-list for extension extendee
-	0,  // [0:18] is the sub-list for field type_name
+	19, // 17: dionysios.v1.TextModeResponse.text_search:type_name -> dionysios.v1.TextSearchStatus
+	9,  // 18: dionysios.v1.TextToken.results:type_name -> dionysios.v1.DeclensionResult
+	0,  // 19: dionysios.v1.DionysiosService.Health:input_type -> dionysios.v1.HealthRequest
+	7,  // 20: dionysios.v1.DionysiosService.CheckGrammar:input_type -> dionysios.v1.CheckGrammarRequest
+	12, // 21: dionysios.v1.DionysiosService.Research:input_type -> dionysios.v1.ResearchRequest
+	17, // 22: dionysios.v1.DionysiosService.TextMode:input_type -> dionysios.v1.TextModeRequest
+	22, // 23: dionysios.v1.DionysiosService.ExplainWord:input_type -> dionysios.v1.ExplainWordRequest
+	24, // 24: dionysios.v1.DionysiosService.DiveText:input_type -> dionysios.v1.DiveTextRequest
+	1,  // 25: dionysios.v1.DionysiosService.Health:output_type -> dionysios.v1.HealthResponse
+	8,  // 26: dionysios.v1.DionysiosService.CheckGrammar:output_type -> dionysios.v1.CheckGrammarResponse
+	13, // 27: dionysios.v1.DionysiosService.Research:output_type -> dionysios.v1.ResearchResponse
+	18, // 28: dionysios.v1.DionysiosService.TextMode:output_type -> dionysios.v1.TextModeResponse
+	23, // 29: dionysios.v1.DionysiosService.ExplainWord:output_type -> dionysios.v1.ExplainWordResponse
+	25, // 30: dionysios.v1.DionysiosService.DiveText:output_type -> dionysios.v1.DiveTextResponse
+	25, // [25:31] is the sub-list for method output_type
+	19, // [19:25] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_v1_dionysios_proto_init() }
@@ -1997,7 +2128,7 @@ func file_v1_dionysios_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_dionysios_proto_rawDesc), len(file_v1_dionysios_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   25,
+			NumMessages:   26,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

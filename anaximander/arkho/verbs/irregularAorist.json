@@ -1,0 +1,637 @@
+{
+  "name": "irregular",
+  "type": "irregular",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "ἐγενόμην",
+      "ruleName": "1st sing - aor - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "ἐγένου",
+      "ruleName": "2nd sing - aor - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "ἐγένετο",
+      "ruleName": "3rd sing - aor - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "ἐγενόμεθα",
+      "ruleName": "1st plural - aor - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "ἐγένεσθε",
+      "ruleName": "2nd plural - aor - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "ἐγένοντο",
+      "ruleName": "3rd plural - aor - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "εἶδον",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "εἶδες",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "εἶδε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "εἶδεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "εἴδομεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "εἴδετε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "εἶδον",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "εἶπον",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": [
+        "λέγω"
+      ]
+    },
+    {
+      "declension": "εἶπες",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": [
+        "λέγω"
+      ]
+    },
+    {
+      "declension": "εἶπε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "λέγω"
+      ]
+    },
+    {
+      "declension": "εἶπεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "λέγω"
+      ]
+    },
+    {
+      "declension": "εἴπομεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": [
+        "λέγω"
+      ]
+    },
+    {
+      "declension": "εἴπετε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": [
+        "λέγω"
+      ]
+    },
+    {
+      "declension": "εἶπον",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": [
+        "λέγω"
+      ]
+    },
+    {
+      "declension": "ἔσχον",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἔσχες",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἔσχε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἔσχεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἔσχομεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἔσχετε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἔσχον",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἤνεγκον",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "ἤνεγκας",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "ἤνεγκε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "ἤνεγκεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "ἠνέγκαμεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "ἠνέγκατε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "ἤνεγκαν",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "ἦλθον",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "ἦλθες",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "ἦλθε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "ἦλθεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "ἤλθομεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "ἤλθετε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "ἦλθον",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "ἔλαβον",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "ἔλαβες",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "ἔλαβε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "ἔλαβεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "ἐλάβομεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "ἐλάβετε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "ἔλαβον",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "ἔπιον",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "ἔπιες",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "ἔπιε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "ἔπιεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "ἐπίομεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "ἐπίετε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "ἔπιον",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "ἔδραμον",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    },
+    {
+      "declension": "ἔδραμες",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    },
+    {
+      "declension": "ἔδραμε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    },
+    {
+      "declension": "ἔδραμεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    },
+    {
+      "declension": "ἐδράμομεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    },
+    {
+      "declension": "ἐδράμετε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    },
+    {
+      "declension": "ἔδραμον",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    },
+    {
+      "declension": "ἧκα",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἧκας",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἧκε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἧκεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "εἵκαμεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "εἵκατε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἧκαν",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἔδωκα",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἔδωκας",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἔδωκε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἔδωκεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἔδομεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἔδοτε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἔδοσαν",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἔθηκα",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἔθηκας",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἔθηκε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἔθηκεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἔθεμεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἔθετε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἔθεσαν",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἔστησα",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἔστησας",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἔστησε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἔστησεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἐστήσαμεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἐστήσατε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἔστησαν",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    }
+  ]
+}

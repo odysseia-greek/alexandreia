@@ -11,12 +11,12 @@ import (
 	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type ScholarService interface {
 	WaitForHealthyState() bool
 	Analyze(ctx context.Context, entry *v1.AnalyzeRequest) (*v1.AnalyzeResponse, error)
+	FindText(ctx context.Context, request *v1.FindTextRequest) (*v1.FindTextResponse, error)
 }
 
 type AggregatorResolver interface {
@@ -60,7 +60,7 @@ func (s *ScholarClient) WaitForHealthyState() bool {
 	endTime := time.Now().Add(timeout)
 
 	for time.Now().Before(endTime) {
-		response, err := s.Health(context.Background(), &emptypb.Empty{})
+		response, err := s.Health(context.Background(), &v1.HealthRequest{})
 		if err == nil && response.Healthy {
 			return true
 		}
@@ -71,10 +71,14 @@ func (s *ScholarClient) WaitForHealthyState() bool {
 	return false
 }
 
-func (s *ScholarClient) Health(ctx context.Context, request *emptypb.Empty) (*v1.HealthResponse, error) {
+func (s *ScholarClient) Health(ctx context.Context, request *v1.HealthRequest) (*v1.HealthResponse, error) {
 	return s.library.Health(ctx, request)
 }
 
 func (s *ScholarClient) Analyze(ctx context.Context, request *v1.AnalyzeRequest) (*v1.AnalyzeResponse, error) {
 	return s.library.Analyze(ctx, request)
+}
+
+func (s *ScholarClient) FindText(ctx context.Context, request *v1.FindTextRequest) (*v1.FindTextResponse, error) {
+	return s.library.FindText(ctx, request)
 }
