@@ -91,8 +91,8 @@ github.com/odysseia-greek/alexandreia/aristarchos v0.0.7 h1:CI41hIzetUl15b6FXE7F
 github.com/odysseia-greek/alexandreia/aristarchos v0.0.7/go.mod h1:kqQnJJodQ8XhZtLhdqGyuHI2wXa2mWB+x5KjeWgKnwo=
 github.com/odysseia-greek/alexandreia/eratosthenes v0.0.2 h1:T3xFeJmYe3eKM7Zw4t7iGiVQN1k3dulYgTdOYoC+1mQ=
 github.com/odysseia-greek/alexandreia/eratosthenes v0.0.2/go.mod h1:7saEPoXSy7H42OYboOQ99ApAh6U1+bNsmtf7SoLU8oc=
-github.com/odysseia-greek/alexandreia/kallimachos v0.0.2-rho1 h1:p/fzz+5wGsSe134EkIE2I4hLZJUtKhPMa25V60iOYs4=
-github.com/odysseia-greek/alexandreia/kallimachos v0.0.2-rho1/go.mod h1:uHZIE5aEvMbcg6B6Bt1g4l7Z6GodsTbyiE+AIej0pJ8=
+github.com/odysseia-greek/alexandreia/kallimachos v0.0.2-rho2 h1:GQ5QPvMiIPIiWXzy3l209yQ+tBpehNxiSpqVp4ysRlM=
+github.com/odysseia-greek/alexandreia/kallimachos v0.0.2-rho2/go.mod h1:rrjCvcfvawPdQGAtPfq7EKVTfnT7+tJmf3I5TYJaRSg=
 github.com/odysseia-greek/attike/aristophanes v0.8.0 h1:PsLWTLWXXxUbKP/uB4ysaQnxmajFQrO+gcvVp0qV9Wg=
 github.com/odysseia-greek/attike/aristophanes v0.8.0/go.mod h1:vTOK5FnkKpD9qRUiX8i2O8DqlbwLZJwmtHKfwzY+9sg=
 github.com/odysseia-greek/delphi/aristides v0.0.1 h1:cr1bWw3po+WLNIfrg/CK2ey2uVk2RZLD767zwSdktWk=

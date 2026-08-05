@@ -36,6 +36,7 @@ func (l *LibraryServiceImpl) Health(ctx context.Context, request *emptypb.Empty)
 func (l *LibraryServiceImpl) Resolve(ctx context.Context, entry *v1.ResolveRequest) (*v1.ResolveResponse, error) {
 	start := time.Now()
 	normalizedWord := transform.RemoveAccents(entry.Term)
+	cacheKey := resolveCacheKey(entry.Term)
 	response := &v1.ResolveResponse{
 		Term:           entry.Term,
 		NormalizedTerm: normalizedWord,
@@ -47,7 +48,7 @@ func (l *LibraryServiceImpl) Resolve(ctx context.Context, entry *v1.ResolveReque
 		entry.Term, normalizedWord, entry.Limit,
 	))
 
-	cacheItem, _ := l.Archytas.Read(entry.Term)
+	cacheItem, _ := l.Cache.Read(cacheKey)
 	if cacheItem != nil {
 		var candidates []*v1.Candidate
 		err := json.Unmarshal(cacheItem, &candidates)
@@ -62,7 +63,7 @@ func (l *LibraryServiceImpl) Resolve(ctx context.Context, entry *v1.ResolveReque
 			entry.Term, len(response.Candidates), time.Since(start),
 		))
 
-		go comedy.CacheSpan(string(cacheItem), entry.Term, ctx, l.Streamer)
+		go comedy.CacheSpan(string(cacheItem), cacheKey, ctx, l.Streamer)
 		return response, nil
 	}
 
@@ -115,7 +116,7 @@ func (l *LibraryServiceImpl) Resolve(ctx context.Context, entry *v1.ResolveReque
 	itemToCache, _ := json.Marshal(candidates)
 
 	standardDuration := time.Minute * 30
-	err = l.Archytas.SetWithTTL(entry.Term, string(itemToCache), standardDuration)
+	err = l.Cache.SetWithTTL(cacheKey, string(itemToCache), standardDuration)
 	if err != nil {
 		logging.Error(err.Error())
 	}
@@ -175,6 +176,9 @@ func (l *LibraryServiceImpl) queryElastic(ctx context.Context, word string, norm
 
 func (l *LibraryServiceImpl) reviewCandidates(lemmas []Lemma, queryTerm string, normalized bool) ([]*v1.Candidate, error) {
 	var candidates []*v1.Candidate
+	if canonical, ok := bestCanonicalLemma(lemmas, queryTerm, normalized); ok {
+		lemmas = []Lemma{canonical}
+	}
 
 	for _, lemma := range lemmas {
 		lemmaGreek := strings.TrimSpace(lemma.Greek)
@@ -212,6 +216,64 @@ func (l *LibraryServiceImpl) reviewCandidates(lemmas []Lemma, queryTerm string, 
 	})
 
 	return candidates, nil
+}
+
+func resolveCacheKey(term string) string {
+	return "resolve:v2:" + term
+}
+
+// bestCanonicalLemma prefers the enriched lexical document when legacy flat
+// entries exist for the same exact lemma. Fuzzy candidates remain available
+// when no exact structured entry exists.
+func bestCanonicalLemma(lemmas []Lemma, queryTerm string, normalized bool) (Lemma, bool) {
+	bestIndex := -1
+	bestQuality := -1
+	query := comparableLemma(queryTerm, normalized)
+	for index, lemma := range lemmas {
+		if comparableLemma(extractBaseWord(strings.TrimSpace(lemma.Greek)), normalized) != query {
+			continue
+		}
+		quality := canonicalLemmaQuality(lemma)
+		if quality == 0 || quality <= bestQuality {
+			continue
+		}
+		bestIndex = index
+		bestQuality = quality
+	}
+	if bestIndex < 0 {
+		return Lemma{}, false
+	}
+	return lemmas[bestIndex], true
+}
+
+func comparableLemma(value string, normalized bool) string {
+	value = strings.ToLower(strings.TrimSpace(value))
+	if normalized {
+		value = transform.RemoveAccents(value)
+	}
+	return value
+}
+
+func canonicalLemmaQuality(lemma Lemma) int {
+	quality := 0
+	if lemma.PartOfSpeech != "" {
+		quality += 10
+	}
+	if lemma.Normalized != "" {
+		quality += 5
+	}
+	if lemma.Noun != nil || lemma.Verb != nil {
+		quality += 20
+	}
+	quality += len(lemma.QuickGlosses) * 5
+	for _, definition := range lemma.Definitions {
+		if definition == nil {
+			continue
+		}
+		quality += 20
+		quality += len(definition.Meanings) * 5
+	}
+	return quality
 }
 
 func extractGlosses(l Lemma) []string {

@@ -127,7 +127,7 @@ func CreateNewConfig(ctx context.Context) (*LibraryServiceImpl, error) {
 		return nil, fmt.Errorf("no index found in environment please set %s", config.EnvIndex)
 	}
 
-	cache, err := archytas.CreateBadgerClient()
+	cache, err := archytas.CreateBadgerClientWithOptions(archytas.WithLogging(false))
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +137,7 @@ func CreateNewConfig(ctx context.Context) (*LibraryServiceImpl, error) {
 	return &LibraryServiceImpl{
 		Index:    index,
 		Elastic:  elastic,
-		Archytas: cache,
+		Cache:    cache,
 		Version:  version,
 		Streamer: streamer,
 	}, nil

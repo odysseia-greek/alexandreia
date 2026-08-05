@@ -8,7 +8,8 @@ The baseline deliberately checks only externally useful guarantees:
 - service health and loaded grammar mappings;
 - representative grammar analysis and audit output;
 - request validation for grammar, research, and text mode;
-- the current `Unimplemented` contract of the scholar placeholders.
+- a Herodotus reference passage that exercises grammar, canonical dictionary
+  resolution, known-text discovery, and the evidence intended for Demosthenes.
 
 ## Run
 

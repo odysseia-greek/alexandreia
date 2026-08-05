@@ -23,8 +23,6 @@ const (
 	DionysiosService_CheckGrammar_FullMethodName = "/dionysios.v1.DionysiosService/CheckGrammar"
 	DionysiosService_Research_FullMethodName     = "/dionysios.v1.DionysiosService/Research"
 	DionysiosService_TextMode_FullMethodName     = "/dionysios.v1.DionysiosService/TextMode"
-	DionysiosService_ExplainWord_FullMethodName  = "/dionysios.v1.DionysiosService/ExplainWord"
-	DionysiosService_DiveText_FullMethodName     = "/dionysios.v1.DionysiosService/DiveText"
 )
 
 // DionysiosServiceClient is the client API for DionysiosService service.
@@ -39,9 +37,6 @@ type DionysiosServiceClient interface {
 	// observed from gRPC peer/metadata. Resource-exhausted should be returned
 	// when either identity has sent a request inside the configured window.
 	TextMode(ctx context.Context, in *TextModeRequest, opts ...grpc.CallOption) (*TextModeResponse, error)
-	// Scholar-mode placeholders.
-	ExplainWord(ctx context.Context, in *ExplainWordRequest, opts ...grpc.CallOption) (*ExplainWordResponse, error)
-	DiveText(ctx context.Context, in *DiveTextRequest, opts ...grpc.CallOption) (*DiveTextResponse, error)
 }
 
 type dionysiosServiceClient struct {
@@ -92,26 +87,6 @@ func (c *dionysiosServiceClient) TextMode(ctx context.Context, in *TextModeReque
 	return out, nil
 }
 
-func (c *dionysiosServiceClient) ExplainWord(ctx context.Context, in *ExplainWordRequest, opts ...grpc.CallOption) (*ExplainWordResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ExplainWordResponse)
-	err := c.cc.Invoke(ctx, DionysiosService_ExplainWord_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *dionysiosServiceClient) DiveText(ctx context.Context, in *DiveTextRequest, opts ...grpc.CallOption) (*DiveTextResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DiveTextResponse)
-	err := c.cc.Invoke(ctx, DionysiosService_DiveText_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // DionysiosServiceServer is the server API for DionysiosService service.
 // All implementations must embed UnimplementedDionysiosServiceServer
 // for forward compatibility.
@@ -124,9 +99,6 @@ type DionysiosServiceServer interface {
 	// observed from gRPC peer/metadata. Resource-exhausted should be returned
 	// when either identity has sent a request inside the configured window.
 	TextMode(context.Context, *TextModeRequest) (*TextModeResponse, error)
-	// Scholar-mode placeholders.
-	ExplainWord(context.Context, *ExplainWordRequest) (*ExplainWordResponse, error)
-	DiveText(context.Context, *DiveTextRequest) (*DiveTextResponse, error)
 	mustEmbedUnimplementedDionysiosServiceServer()
 }
 
@@ -148,12 +120,6 @@ func (UnimplementedDionysiosServiceServer) Research(context.Context, *ResearchRe
 }
 func (UnimplementedDionysiosServiceServer) TextMode(context.Context, *TextModeRequest) (*TextModeResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method TextMode not implemented")
-}
-func (UnimplementedDionysiosServiceServer) ExplainWord(context.Context, *ExplainWordRequest) (*ExplainWordResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ExplainWord not implemented")
-}
-func (UnimplementedDionysiosServiceServer) DiveText(context.Context, *DiveTextRequest) (*DiveTextResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method DiveText not implemented")
 }
 func (UnimplementedDionysiosServiceServer) mustEmbedUnimplementedDionysiosServiceServer() {}
 func (UnimplementedDionysiosServiceServer) testEmbeddedByValue()                          {}
@@ -248,42 +214,6 @@ func _DionysiosService_TextMode_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DionysiosService_ExplainWord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExplainWordRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DionysiosServiceServer).ExplainWord(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: DionysiosService_ExplainWord_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DionysiosServiceServer).ExplainWord(ctx, req.(*ExplainWordRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _DionysiosService_DiveText_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DiveTextRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DionysiosServiceServer).DiveText(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: DionysiosService_DiveText_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DionysiosServiceServer).DiveText(ctx, req.(*DiveTextRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // DionysiosService_ServiceDesc is the grpc.ServiceDesc for DionysiosService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -306,14 +236,6 @@ var DionysiosService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "TextMode",
 			Handler:    _DionysiosService_TextMode_Handler,
-		},
-		{
-			MethodName: "ExplainWord",
-			Handler:    _DionysiosService_ExplainWord_Handler,
-		},
-		{
-			MethodName: "DiveText",
-			Handler:    _DionysiosService_DiveText_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

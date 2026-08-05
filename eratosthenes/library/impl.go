@@ -28,7 +28,7 @@ type LibraryServiceImpl struct {
 	Index    string
 	Version  string
 	Streamer arv1.TraceService_ChorusClient
-	Archytas archytas.Client
+	Cache    archytas.Client
 	v1.UnimplementedEratosthenesServiceServer
 }
 

@@ -1,13 +1,27 @@
-FROM golang:1.26.5-alpine AS test
+FROM golang:1.26-alpine AS builder
 
-WORKDIR /src
+ARG project_name
+ENV project_name=${project_name}
 
-# Build this image with the Alexandreia repository root as its context.
-COPY galenos ./galenos
-COPY dionysios ./dionysios
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
 
-WORKDIR /src/galenos
-RUN go test -run '^$' ./...
+COPY . .
 
-ENV DIONYSIOS_GRPC_ADDRESS=dionysios:50060
-ENTRYPOINT ["go", "test", "-v", "./..."]
+# Install ginkgo CLI for building
+RUN go install github.com/onsi/ginkgo/v2/ginkgo
+
+# Build the test binary for the current directory
+RUN ginkgo build -o /app/${project_name}.test
+
+FROM alpine:3.24.0 as prod
+
+ARG project_name
+ENV project_name=${project_name}
+
+WORKDIR /app
+COPY --from=builder /app/${project_name}.test .
+
+# Run with -ginkgo.v for verbose output
+ENTRYPOINT [ "/app/galenos.test", "-ginkgo.v" ]

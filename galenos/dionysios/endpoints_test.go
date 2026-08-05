@@ -1,12 +1,19 @@
 package dionysios_test
 
 import (
+	"context"
+	"fmt"
+	"time"
+
 	dionysiosv1 "github.com/odysseia-greek/alexandreia/dionysios/gen/go/v1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
+
+const herodotusReferenceText = "μήτε ἔργα μεγάλα τε καὶ θωμαστά, τὰ μὲν Ἕλλησι τὰ δὲ βαρβάροισι ἀποδεχθέντα, ἀκλεᾶ γένηται,"
 
 var _ = Describe("Dionysios gRPC endpoints", func() {
 	It("reports a useful health baseline", func() {
@@ -76,21 +83,70 @@ var _ = Describe("Dionysios gRPC endpoints", func() {
 		Entry("punctuation only", &dionysiosv1.TextModeRequest{Text: "...", SessionId: "galenos"}, "at least one word"),
 	)
 
-	DescribeTable("advertises scholar endpoints that are not implemented yet",
-		func(call func() error) {
-			Expect(status.Code(call())).To(Equal(codes.Unimplemented))
-		},
-		Entry("ExplainWord", func() error {
-			ctx, cancel := callContext()
-			defer cancel()
-			_, err := dionysiosClient.ExplainWord(ctx, &dionysiosv1.ExplainWordRequest{Word: "λόγος", SessionId: "galenos"})
-			return err
-		}),
-		Entry("DiveText", func() error {
-			ctx, cancel := callContext()
-			defer cancel()
-			_, err := dionysiosClient.DiveText(ctx, &dionysiosv1.DiveTextRequest{TextId: "baseline", SessionId: "galenos"})
-			return err
-		}),
-	)
+	It("produces structured evidence for the Herodotus reference passage", func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+		ctx = metadata.AppendToOutgoingContext(ctx, "x-forwarded-for", "127.0.0.99")
+
+		response, err := dionysiosClient.TextMode(ctx, &dionysiosv1.TextModeRequest{
+			Text:         herodotusReferenceText,
+			SessionId:    fmt.Sprintf("galenos-herodotus-%d", time.Now().UnixNano()),
+			IncludeAudit: true,
+		})
+
+		Expect(err).NotTo(HaveOccurred())
+		Expect(response.GetOriginalText()).To(Equal(herodotusReferenceText))
+		Expect(response.GetTokens()).To(HaveLen(15))
+		Expect(response.GetLiteralTranslation()).NotTo(BeEmpty())
+		Expect(resolvedTokenCount(response.GetTokens())).To(BeNumerically(">=", 12))
+
+		assertSingleTokenResult(response.GetTokens(), "μεγάλα", "μέγας", "adjective - plural - neut - nom/voc/acc")
+		assertSingleTokenResult(response.GetTokens(), "θωμαστά", "θαυμαστός", "adjective - plural - neut - nom/voc/acc (ionic)")
+		assertSingleTokenResult(response.GetTokens(), "γένηται", "γίγνομαι", "3rd sing - aor - subj - mid/pas")
+
+		search := response.GetTextSearch()
+		Expect(search).NotTo(BeNil())
+		Expect(search.GetSearched()).To(BeTrue())
+		Expect(search.GetFound()).To(BeTrue())
+		Expect(search.GetStatus()).To(Equal("found"))
+		Expect(search.GetMatchCount()).To(BeNumerically(">=", 1))
+		Expect(search.GetMessage()).To(ContainSubstring("match found using"))
+		Expect(search.GetMatches()).To(ContainElement(And(
+			HaveField("Author", "Herodotus"),
+			HaveField("Book", "Histories"),
+			HaveField("Reference", "1.1"),
+		)))
+
+		Expect(response.GetAudit()).NotTo(BeNil())
+		Expect(response.GetAudit().GetEvents()).To(ContainElement(And(
+			HaveField("Step", "text.search"),
+			HaveField("Status", "found"),
+			HaveField("Source", "kallimachos"),
+		)))
+	})
 })
+
+func assertSingleTokenResult(tokens []*dionysiosv1.TextToken, token, rootWord, rule string) {
+	var found *dionysiosv1.TextToken
+	for _, candidate := range tokens {
+		if candidate.GetToken() == token {
+			found = candidate
+			break
+		}
+	}
+	Expect(found).NotTo(BeNil(), "expected token %q", token)
+	Expect(found.GetResolved()).To(BeTrue())
+	Expect(found.GetResults()).To(HaveLen(1), "expected one canonical lexical result for %q", token)
+	Expect(found.GetResults()[0].GetRootWord()).To(Equal(rootWord))
+	Expect(found.GetResults()[0].GetRule()).To(Equal(rule))
+}
+
+func resolvedTokenCount(tokens []*dionysiosv1.TextToken) int {
+	count := 0
+	for _, token := range tokens {
+		if token.GetResolved() {
+			count++
+		}
+	}
+	return count
+}

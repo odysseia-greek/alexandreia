@@ -51,6 +51,90 @@
       "searchTerm": [
         "εἰμί"
       ]
+    },
+    {
+      "declension": "γίγνωμαι",
+      "ruleName": "1st sing - pres - subj - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γίγνῃ",
+      "ruleName": "2nd sing - pres - subj - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γίγνηται",
+      "ruleName": "3rd sing - pres - subj - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γιγνώμεθα",
+      "ruleName": "1st plural - pres - subj - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γίγνησθε",
+      "ruleName": "2nd plural - pres - subj - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γίγνωνται",
+      "ruleName": "3rd plural - pres - subj - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γένωμαι",
+      "ruleName": "1st sing - aor - subj - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γένῃ",
+      "ruleName": "2nd sing - aor - subj - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γένηται",
+      "ruleName": "3rd sing - aor - subj - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενώμεθα",
+      "ruleName": "1st plural - aor - subj - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γένησθε",
+      "ruleName": "2nd plural - aor - subj - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γένωνται",
+      "ruleName": "3rd plural - aor - subj - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
     }
   ]
 }

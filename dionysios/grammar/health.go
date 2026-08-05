@@ -14,6 +14,7 @@ import (
 	"github.com/odysseia-greek/agora/plato/middleware"
 	pba "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	v1 "github.com/odysseia-greek/alexandreia/dionysios/gen/go/v1"
+	sv1 "github.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -100,7 +101,7 @@ func (d *DionysosHandler) detailedHealth(ctx context.Context) *v1.HealthResponse
 			started := time.Now()
 			checkCtx, checkCancel := context.WithTimeout(ctx, dependencyHealthTimeout)
 			defer checkCancel()
-			value, err := d.ScholarService.Client.Health(checkCtx, &emptypb.Empty{})
+			value, err := d.ScholarService.Client.Health(checkCtx, &sv1.HealthRequest{})
 			return result{name: "kallimachos", component: component("kallimachos", err == nil && value.GetHealthy(), time.Since(started), errorMessage(err))}
 		},
 		func() result {

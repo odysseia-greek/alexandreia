@@ -3,9 +3,11 @@ package library
 import (
 	"context"
 	"encoding/json"
+	"strings"
 	"testing"
 	"time"
 
+	"github.com/odysseia-greek/agora/archytas"
 	elastic "github.com/odysseia-greek/agora/aristoteles"
 	v1 "github.com/odysseia-greek/alexandreia/eratosthenes/gen/go/v1"
 	"github.com/stretchr/testify/assert"
@@ -102,8 +104,16 @@ func (f *fakeCache) Set(key, value string) error {
 	return nil
 }
 
+func (f *fakeCache) SetBytes(key string, value []byte) error {
+	return f.Set(key, string(value))
+}
+
 func (f *fakeCache) SetWithTTL(key, value string, ttl time.Duration) error {
 	return f.Set(key, value)
+}
+
+func (f *fakeCache) SetBytesWithTTL(key string, value []byte, ttl time.Duration) error {
+	return f.SetBytes(key, value)
 }
 
 func (f *fakeCache) Read(key string) ([]byte, error) {
@@ -113,6 +123,40 @@ func (f *fakeCache) Read(key string) ([]byte, error) {
 	return f.items[key], nil
 }
 
+func (f *fakeCache) Get(key string) ([]byte, error) { return f.Read(key) }
+
+func (f *fakeCache) GetString(key string) (string, error) {
+	value, err := f.Read(key)
+	return string(value), err
+}
+
+func (f *fakeCache) Exists(key string) (bool, error) {
+	value, err := f.Read(key)
+	return value != nil, err
+}
+
+func (f *fakeCache) Delete(key string) error {
+	delete(f.items, key)
+	delete(f.set, key)
+	return nil
+}
+
+func (f *fakeCache) DeletePrefix(prefix string) error {
+	for key := range f.items {
+		if strings.HasPrefix(key, prefix) {
+			delete(f.items, key)
+		}
+	}
+	for key := range f.set {
+		if strings.HasPrefix(key, prefix) {
+			delete(f.set, key)
+		}
+	}
+	return nil
+}
+
+func (f *fakeCache) Stats() (archytas.Stats, error) { return archytas.Stats{}, nil }
+
 func TestResolveReturnsCachedCandidates(t *testing.T) {
 	cachedCandidates := []*v1.Candidate{
 		{Lemma: "λόγος", Score: 100, Levenshtein: 0, Glosses: []string{"word"}},
@@ -121,7 +165,7 @@ func TestResolveReturnsCachedCandidates(t *testing.T) {
 	assert.Nil(t, err)
 
 	service := LibraryServiceImpl{
-		Archytas: &fakeCache{items: map[string][]byte{"λόγος": cached}},
+		Cache: &fakeCache{items: map[string][]byte{resolveCacheKey("λόγος"): cached}},
 	}
 
 	response, err := service.Resolve(context.Background(), &v1.ResolveRequest{Term: "λόγος", Limit: 5})
@@ -143,11 +187,11 @@ func TestResolveQueriesElasticAndCachesCandidates(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, "λόγος", response.Term)
 	assert.Equal(t, "λογος", response.NormalizedTerm)
-	assert.Len(t, response.Candidates, 2)
+	assert.Len(t, response.Candidates, 1)
 	assert.Equal(t, "λόγος", response.Candidates[0].Lemma)
 	assert.Equal(t, int32(100), response.Candidates[0].Score)
 	assert.ElementsMatch(t, []string{"word, account"}, response.Candidates[0].Glosses)
-	assert.NotEmpty(t, cache.set["λόγος"])
+	assert.NotEmpty(t, cache.set[resolveCacheKey("λόγος")])
 }
 
 func TestResolveFallsBackToNormalizedQuery(t *testing.T) {
@@ -157,7 +201,7 @@ func TestResolveFallsBackToNormalizedQuery(t *testing.T) {
 	response, err := service.Resolve(context.Background(), &v1.ResolveRequest{Term: "λόγος", Limit: 5})
 
 	assert.Nil(t, err)
-	assert.Len(t, response.Candidates, 2)
+	assert.Len(t, response.Candidates, 1)
 	assert.Equal(t, "λόγος", response.Candidates[0].Lemma)
 	assert.Equal(t, int32(90), response.Candidates[0].Score)
 }
@@ -197,6 +241,46 @@ func TestReviewCandidatesReturnsErrorWithoutUsableLemmas(t *testing.T) {
 
 	assert.Nil(t, candidates)
 	assert.EqualError(t, err, "no candidates found")
+}
+
+func TestReviewCandidatesPrefersStructuredExactLemmaOverLegacyDuplicates(t *testing.T) {
+	service := LibraryServiceImpl{}
+	lemmas := []Lemma{
+		{Greek: "γίγνομαι", English: "become, be born"},
+		{
+			Greek:        "γίγνομαι",
+			Normalized:   "γιγνομαι",
+			PartOfSpeech: "verb",
+			Verb:         &VerbInfo{PrincipalParts: []string{"γίγνομαι", "γενήσομαι", "ἐγενόμην"}},
+			Definitions: []*Definition{{
+				Grade:    3,
+				Meanings: []*Meaning{{Language: "en", Definition: "to become; to be born"}},
+			}},
+		},
+		{Greek: "γίγνομαι", English: "to become, to be"},
+		{Greek: "ἐκγίγνομαι", English: "to be born of"},
+	}
+
+	candidates, err := service.reviewCandidates(lemmas, "γίγνομαι", false)
+
+	assert.NoError(t, err)
+	assert.Len(t, candidates, 1)
+	assert.Equal(t, "γίγνομαι", candidates[0].Lemma)
+	assert.Equal(t, int32(100), candidates[0].Score)
+	assert.Equal(t, []string{"to become; to be born"}, candidates[0].Glosses)
+}
+
+func TestReviewCandidatesRetainsFuzzyResultsWithoutCanonicalEntry(t *testing.T) {
+	service := LibraryServiceImpl{}
+	lemmas := []Lemma{
+		{Greek: "λόγον", English: "word in accusative"},
+		{Greek: "λογίζομαι", English: "reckon"},
+	}
+
+	candidates, err := service.reviewCandidates(lemmas, "λόγος", false)
+
+	assert.NoError(t, err)
+	assert.Len(t, candidates, 2)
 }
 
 func TestExtractGlossesPrefersGradeThreeEnglishDefinitions(t *testing.T) {
@@ -261,8 +345,8 @@ func newTestLibraryService(t *testing.T, cache *fakeCache, fixtures ...string) *
 	assert.Nil(t, err)
 
 	return &LibraryServiceImpl{
-		Elastic:  mockElasticClient,
-		Index:    testLibraryIndex,
-		Archytas: cache,
+		Elastic: mockElasticClient,
+		Index:   testLibraryIndex,
+		Cache:   cache,
 	}
 }

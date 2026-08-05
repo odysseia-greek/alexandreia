@@ -72,6 +72,47 @@ func TestFeminineGenitiveCanReconstructFinalSigmaLemma(t *testing.T) {
 	assert.Equal(t, "πᾶς", canonicalizeFinalSigma("πᾶσ"))
 }
 
+func TestExplicitAdjectiveFormsUseCanonicalDictionaryLemmas(t *testing.T) {
+	handler := DionysosHandler{}
+	tests := []struct {
+		word         string
+		form         models.DeclensionElement
+		expected     string
+		expectedRule string
+	}{
+		{
+			word: "μεγάλα",
+			form: models.DeclensionElement{
+				Declension: "μεγάλα",
+				RuleName:   "adjective - plural - neut - nom/voc/acc",
+				SearchTerm: []string{"μέγας"},
+			},
+			expected:     "μέγας",
+			expectedRule: "adjective - plural - neut - nom/voc/acc",
+		},
+		{
+			word: "θωμαστά",
+			form: models.DeclensionElement{
+				Declension: "θωμαστά",
+				RuleName:   "adjective - plural - neut - nom/voc/acc (ionic)",
+				SearchTerm: []string{"θαυμαστός"},
+			},
+			expected:     "θαυμαστός",
+			expectedRule: "adjective - plural - neut - nom/voc/acc (ionic)",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.word, func(t *testing.T) {
+			rules := handler.loopOverDeclensions(test.word, test.form, false, "adjective")
+			require.Len(t, rules.Rules, 1)
+			assert.Equal(t, test.expectedRule, rules.Rules[0].Rule)
+			require.Len(t, rules.Rules[0].SearchTerms, 1)
+			assert.Equal(t, test.expected, normalizeDictionaryTerm(rules.Rules[0].SearchTerms[0]))
+		})
+	}
+}
+
 func TestContractedPresentMiddleInfinitiveReconstructsEpsilonContractLemma(t *testing.T) {
 	handler := DionysosHandler{}
 	form := models.DeclensionElement{

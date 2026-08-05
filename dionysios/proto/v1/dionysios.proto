@@ -14,10 +14,6 @@ service DionysiosService {
   // observed from gRPC peer/metadata. Resource-exhausted should be returned
   // when either identity has sent a request inside the configured window.
   rpc TextMode(TextModeRequest) returns (TextModeResponse);
-
-  // Scholar-mode placeholders.
-  rpc ExplainWord(ExplainWordRequest) returns (ExplainWordResponse);
-  rpc DiveText(DiveTextRequest) returns (DiveTextResponse);
 }
 
 message HealthRequest {}
@@ -171,6 +167,9 @@ message TextSearchStatus {
   bool found = 2;
   string status = 3;
   string message = 4;
+  repeated AnalyzeResult matches = 5;
+  uint32 match_count = 6;
+  string query = 7;
 }
 
 message RateLimitInfo {
@@ -187,26 +186,4 @@ message TextToken {
   string gloss = 4;
   bool resolved = 5;
   string message = 6;
-}
-
-message ExplainWordRequest {
-  string word = 1;
-  string session_id = 2;
-  string context = 3;
-}
-
-message ExplainWordResponse {
-  string word = 1;
-  string placeholder = 2;
-}
-
-message DiveTextRequest {
-  string text_id = 1;
-  string session_id = 2;
-  string selection = 3;
-}
-
-message DiveTextResponse {
-  string text_id = 1;
-  string placeholder = 2;
 }

@@ -68,6 +68,10 @@
       "ruleName": "conjunction"
     },
     {
+      "declension": "τε",
+      "ruleName": "conjunction"
+    },
+    {
       "declension": "ἀλλʼ",
       "ruleName": "conjunction",
       "searchTerm": [

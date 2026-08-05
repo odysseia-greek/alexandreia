@@ -1431,6 +1431,9 @@ type TextSearchStatus struct {
 	Found         bool                   `protobuf:"varint,2,opt,name=found,proto3" json:"found,omitempty"`
 	Status        string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
 	Message       string                 `protobuf:"bytes,4,opt,name=message,proto3" json:"message,omitempty"`
+	Matches       []*AnalyzeResult       `protobuf:"bytes,5,rep,name=matches,proto3" json:"matches,omitempty"`
+	MatchCount    uint32                 `protobuf:"varint,6,opt,name=match_count,json=matchCount,proto3" json:"match_count,omitempty"`
+	Query         string                 `protobuf:"bytes,7,opt,name=query,proto3" json:"query,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1489,6 +1492,27 @@ func (x *TextSearchStatus) GetStatus() string {
 func (x *TextSearchStatus) GetMessage() string {
 	if x != nil {
 		return x.Message
+	}
+	return ""
+}
+
+func (x *TextSearchStatus) GetMatches() []*AnalyzeResult {
+	if x != nil {
+		return x.Matches
+	}
+	return nil
+}
+
+func (x *TextSearchStatus) GetMatchCount() uint32 {
+	if x != nil {
+		return x.MatchCount
+	}
+	return 0
+}
+
+func (x *TextSearchStatus) GetQuery() string {
+	if x != nil {
+		return x.Query
 	}
 	return ""
 }
@@ -1638,230 +1662,6 @@ func (x *TextToken) GetMessage() string {
 	return ""
 }
 
-type ExplainWordRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Word          string                 `protobuf:"bytes,1,opt,name=word,proto3" json:"word,omitempty"`
-	SessionId     string                 `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	Context       string                 `protobuf:"bytes,3,opt,name=context,proto3" json:"context,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ExplainWordRequest) Reset() {
-	*x = ExplainWordRequest{}
-	mi := &file_v1_dionysios_proto_msgTypes[22]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ExplainWordRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ExplainWordRequest) ProtoMessage() {}
-
-func (x *ExplainWordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_dionysios_proto_msgTypes[22]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ExplainWordRequest.ProtoReflect.Descriptor instead.
-func (*ExplainWordRequest) Descriptor() ([]byte, []int) {
-	return file_v1_dionysios_proto_rawDescGZIP(), []int{22}
-}
-
-func (x *ExplainWordRequest) GetWord() string {
-	if x != nil {
-		return x.Word
-	}
-	return ""
-}
-
-func (x *ExplainWordRequest) GetSessionId() string {
-	if x != nil {
-		return x.SessionId
-	}
-	return ""
-}
-
-func (x *ExplainWordRequest) GetContext() string {
-	if x != nil {
-		return x.Context
-	}
-	return ""
-}
-
-type ExplainWordResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Word          string                 `protobuf:"bytes,1,opt,name=word,proto3" json:"word,omitempty"`
-	Placeholder   string                 `protobuf:"bytes,2,opt,name=placeholder,proto3" json:"placeholder,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ExplainWordResponse) Reset() {
-	*x = ExplainWordResponse{}
-	mi := &file_v1_dionysios_proto_msgTypes[23]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ExplainWordResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ExplainWordResponse) ProtoMessage() {}
-
-func (x *ExplainWordResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_dionysios_proto_msgTypes[23]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ExplainWordResponse.ProtoReflect.Descriptor instead.
-func (*ExplainWordResponse) Descriptor() ([]byte, []int) {
-	return file_v1_dionysios_proto_rawDescGZIP(), []int{23}
-}
-
-func (x *ExplainWordResponse) GetWord() string {
-	if x != nil {
-		return x.Word
-	}
-	return ""
-}
-
-func (x *ExplainWordResponse) GetPlaceholder() string {
-	if x != nil {
-		return x.Placeholder
-	}
-	return ""
-}
-
-type DiveTextRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TextId        string                 `protobuf:"bytes,1,opt,name=text_id,json=textId,proto3" json:"text_id,omitempty"`
-	SessionId     string                 `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	Selection     string                 `protobuf:"bytes,3,opt,name=selection,proto3" json:"selection,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DiveTextRequest) Reset() {
-	*x = DiveTextRequest{}
-	mi := &file_v1_dionysios_proto_msgTypes[24]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DiveTextRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DiveTextRequest) ProtoMessage() {}
-
-func (x *DiveTextRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_dionysios_proto_msgTypes[24]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DiveTextRequest.ProtoReflect.Descriptor instead.
-func (*DiveTextRequest) Descriptor() ([]byte, []int) {
-	return file_v1_dionysios_proto_rawDescGZIP(), []int{24}
-}
-
-func (x *DiveTextRequest) GetTextId() string {
-	if x != nil {
-		return x.TextId
-	}
-	return ""
-}
-
-func (x *DiveTextRequest) GetSessionId() string {
-	if x != nil {
-		return x.SessionId
-	}
-	return ""
-}
-
-func (x *DiveTextRequest) GetSelection() string {
-	if x != nil {
-		return x.Selection
-	}
-	return ""
-}
-
-type DiveTextResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TextId        string                 `protobuf:"bytes,1,opt,name=text_id,json=textId,proto3" json:"text_id,omitempty"`
-	Placeholder   string                 `protobuf:"bytes,2,opt,name=placeholder,proto3" json:"placeholder,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DiveTextResponse) Reset() {
-	*x = DiveTextResponse{}
-	mi := &file_v1_dionysios_proto_msgTypes[25]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DiveTextResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DiveTextResponse) ProtoMessage() {}
-
-func (x *DiveTextResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_dionysios_proto_msgTypes[25]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DiveTextResponse.ProtoReflect.Descriptor instead.
-func (*DiveTextResponse) Descriptor() ([]byte, []int) {
-	return file_v1_dionysios_proto_rawDescGZIP(), []int{25}
-}
-
-func (x *DiveTextResponse) GetTextId() string {
-	if x != nil {
-		return x.TextId
-	}
-	return ""
-}
-
-func (x *DiveTextResponse) GetPlaceholder() string {
-	if x != nil {
-		return x.Placeholder
-	}
-	return ""
-}
-
 var File_v1_dionysios_proto protoreflect.FileDescriptor
 
 const file_v1_dionysios_proto_rawDesc = "" +
@@ -1994,12 +1794,16 @@ const file_v1_dionysios_proto_rawDesc = "" +
 	"\roriginal_text\x18\x05 \x01(\tR\foriginalText\x12/\n" +
 	"\x13literal_translation\x18\x06 \x01(\tR\x12literalTranslation\x12?\n" +
 	"\vtext_search\x18\a \x01(\v2\x1e.dionysios.v1.TextSearchStatusR\n" +
-	"textSearch\"v\n" +
+	"textSearch\"\xe4\x01\n" +
 	"\x10TextSearchStatus\x12\x1a\n" +
 	"\bsearched\x18\x01 \x01(\bR\bsearched\x12\x14\n" +
 	"\x05found\x18\x02 \x01(\bR\x05found\x12\x16\n" +
 	"\x06status\x18\x03 \x01(\tR\x06status\x12\x18\n" +
-	"\amessage\x18\x04 \x01(\tR\amessage\"\x83\x01\n" +
+	"\amessage\x18\x04 \x01(\tR\amessage\x125\n" +
+	"\amatches\x18\x05 \x03(\v2\x1b.dionysios.v1.AnalyzeResultR\amatches\x12\x1f\n" +
+	"\vmatch_count\x18\x06 \x01(\rR\n" +
+	"matchCount\x12\x14\n" +
+	"\x05query\x18\a \x01(\tR\x05query\"\x83\x01\n" +
 	"\rRateLimitInfo\x12\x1f\n" +
 	"\vupstream_ip\x18\x01 \x01(\tR\n" +
 	"upstreamIp\x12%\n" +
@@ -2011,30 +1815,12 @@ const file_v1_dionysios_proto_rawDesc = "" +
 	"\aresults\x18\x03 \x03(\v2\x1e.dionysios.v1.DeclensionResultR\aresults\x12\x14\n" +
 	"\x05gloss\x18\x04 \x01(\tR\x05gloss\x12\x1a\n" +
 	"\bresolved\x18\x05 \x01(\bR\bresolved\x12\x18\n" +
-	"\amessage\x18\x06 \x01(\tR\amessage\"a\n" +
-	"\x12ExplainWordRequest\x12\x12\n" +
-	"\x04word\x18\x01 \x01(\tR\x04word\x12\x1d\n" +
-	"\n" +
-	"session_id\x18\x02 \x01(\tR\tsessionId\x12\x18\n" +
-	"\acontext\x18\x03 \x01(\tR\acontext\"K\n" +
-	"\x13ExplainWordResponse\x12\x12\n" +
-	"\x04word\x18\x01 \x01(\tR\x04word\x12 \n" +
-	"\vplaceholder\x18\x02 \x01(\tR\vplaceholder\"g\n" +
-	"\x0fDiveTextRequest\x12\x17\n" +
-	"\atext_id\x18\x01 \x01(\tR\x06textId\x12\x1d\n" +
-	"\n" +
-	"session_id\x18\x02 \x01(\tR\tsessionId\x12\x1c\n" +
-	"\tselection\x18\x03 \x01(\tR\tselection\"M\n" +
-	"\x10DiveTextResponse\x12\x17\n" +
-	"\atext_id\x18\x01 \x01(\tR\x06textId\x12 \n" +
-	"\vplaceholder\x18\x02 \x01(\tR\vplaceholder2\xe3\x03\n" +
+	"\amessage\x18\x06 \x01(\tR\amessage2\xc4\x02\n" +
 	"\x10DionysiosService\x12C\n" +
 	"\x06Health\x12\x1b.dionysios.v1.HealthRequest\x1a\x1c.dionysios.v1.HealthResponse\x12U\n" +
 	"\fCheckGrammar\x12!.dionysios.v1.CheckGrammarRequest\x1a\".dionysios.v1.CheckGrammarResponse\x12I\n" +
 	"\bResearch\x12\x1d.dionysios.v1.ResearchRequest\x1a\x1e.dionysios.v1.ResearchResponse\x12I\n" +
-	"\bTextMode\x12\x1d.dionysios.v1.TextModeRequest\x1a\x1e.dionysios.v1.TextModeResponse\x12R\n" +
-	"\vExplainWord\x12 .dionysios.v1.ExplainWordRequest\x1a!.dionysios.v1.ExplainWordResponse\x12I\n" +
-	"\bDiveText\x12\x1d.dionysios.v1.DiveTextRequest\x1a\x1e.dionysios.v1.DiveTextResponseB\xba\x01\n" +
+	"\bTextMode\x12\x1d.dionysios.v1.TextModeRequest\x1a\x1e.dionysios.v1.TextModeResponseB\xba\x01\n" +
 	"\x10com.dionysios.v1B\x0eDionysiosProtoP\x01ZEgithub.com/odysseia-greek/alexandreia/dionysios/gen/go/v1;dionysiosv1\xa2\x02\x03DXX\xaa\x02\fDionysios.V1\xca\x02\fDionysios\\V1\xe2\x02\x18Dionysios\\V1\\GPBMetadata\xea\x02\rDionysios::V1b\x06proto3"
 
 var (
@@ -2049,7 +1835,7 @@ func file_v1_dionysios_proto_rawDescGZIP() []byte {
 	return file_v1_dionysios_proto_rawDescData
 }
 
-var file_v1_dionysios_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
+var file_v1_dionysios_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_v1_dionysios_proto_goTypes = []any{
 	(*HealthRequest)(nil),        // 0: dionysios.v1.HealthRequest
 	(*HealthResponse)(nil),       // 1: dionysios.v1.HealthResponse
@@ -2073,10 +1859,6 @@ var file_v1_dionysios_proto_goTypes = []any{
 	(*TextSearchStatus)(nil),     // 19: dionysios.v1.TextSearchStatus
 	(*RateLimitInfo)(nil),        // 20: dionysios.v1.RateLimitInfo
 	(*TextToken)(nil),            // 21: dionysios.v1.TextToken
-	(*ExplainWordRequest)(nil),   // 22: dionysios.v1.ExplainWordRequest
-	(*ExplainWordResponse)(nil),  // 23: dionysios.v1.ExplainWordResponse
-	(*DiveTextRequest)(nil),      // 24: dionysios.v1.DiveTextRequest
-	(*DiveTextResponse)(nil),     // 25: dionysios.v1.DiveTextResponse
 }
 var file_v1_dionysios_proto_depIdxs = []int32{
 	6,  // 0: dionysios.v1.HealthResponse.database_health:type_name -> dionysios.v1.DatabaseHealth
@@ -2097,24 +1879,21 @@ var file_v1_dionysios_proto_depIdxs = []int32{
 	21, // 15: dionysios.v1.TextModeResponse.tokens:type_name -> dionysios.v1.TextToken
 	10, // 16: dionysios.v1.TextModeResponse.audit:type_name -> dionysios.v1.GrammarAudit
 	19, // 17: dionysios.v1.TextModeResponse.text_search:type_name -> dionysios.v1.TextSearchStatus
-	9,  // 18: dionysios.v1.TextToken.results:type_name -> dionysios.v1.DeclensionResult
-	0,  // 19: dionysios.v1.DionysiosService.Health:input_type -> dionysios.v1.HealthRequest
-	7,  // 20: dionysios.v1.DionysiosService.CheckGrammar:input_type -> dionysios.v1.CheckGrammarRequest
-	12, // 21: dionysios.v1.DionysiosService.Research:input_type -> dionysios.v1.ResearchRequest
-	17, // 22: dionysios.v1.DionysiosService.TextMode:input_type -> dionysios.v1.TextModeRequest
-	22, // 23: dionysios.v1.DionysiosService.ExplainWord:input_type -> dionysios.v1.ExplainWordRequest
-	24, // 24: dionysios.v1.DionysiosService.DiveText:input_type -> dionysios.v1.DiveTextRequest
-	1,  // 25: dionysios.v1.DionysiosService.Health:output_type -> dionysios.v1.HealthResponse
-	8,  // 26: dionysios.v1.DionysiosService.CheckGrammar:output_type -> dionysios.v1.CheckGrammarResponse
-	13, // 27: dionysios.v1.DionysiosService.Research:output_type -> dionysios.v1.ResearchResponse
-	18, // 28: dionysios.v1.DionysiosService.TextMode:output_type -> dionysios.v1.TextModeResponse
-	23, // 29: dionysios.v1.DionysiosService.ExplainWord:output_type -> dionysios.v1.ExplainWordResponse
-	25, // 30: dionysios.v1.DionysiosService.DiveText:output_type -> dionysios.v1.DiveTextResponse
-	25, // [25:31] is the sub-list for method output_type
-	19, // [19:25] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	15, // 18: dionysios.v1.TextSearchStatus.matches:type_name -> dionysios.v1.AnalyzeResult
+	9,  // 19: dionysios.v1.TextToken.results:type_name -> dionysios.v1.DeclensionResult
+	0,  // 20: dionysios.v1.DionysiosService.Health:input_type -> dionysios.v1.HealthRequest
+	7,  // 21: dionysios.v1.DionysiosService.CheckGrammar:input_type -> dionysios.v1.CheckGrammarRequest
+	12, // 22: dionysios.v1.DionysiosService.Research:input_type -> dionysios.v1.ResearchRequest
+	17, // 23: dionysios.v1.DionysiosService.TextMode:input_type -> dionysios.v1.TextModeRequest
+	1,  // 24: dionysios.v1.DionysiosService.Health:output_type -> dionysios.v1.HealthResponse
+	8,  // 25: dionysios.v1.DionysiosService.CheckGrammar:output_type -> dionysios.v1.CheckGrammarResponse
+	13, // 26: dionysios.v1.DionysiosService.Research:output_type -> dionysios.v1.ResearchResponse
+	18, // 27: dionysios.v1.DionysiosService.TextMode:output_type -> dionysios.v1.TextModeResponse
+	24, // [24:28] is the sub-list for method output_type
+	20, // [20:24] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_v1_dionysios_proto_init() }
@@ -2128,7 +1907,7 @@ func file_v1_dionysios_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_dionysios_proto_rawDesc), len(file_v1_dionysios_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   26,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
