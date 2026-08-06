@@ -5,16 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/odysseia-greek/agora/plato/config"
+	"io"
+	"strings"
+
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/transform"
 	v1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
-	v1ar "github.com/odysseia-greek/attike/aristophanes/proto"
-
-	"io"
-	"strings"
-	"time"
 )
 
 const (
@@ -28,39 +25,24 @@ func (a *AggregatorServiceImpl) Health(context.Context, *v1.HealthRequest) (*v1.
 }
 
 func (a *AggregatorServiceImpl) CreateNewEntry(stream v1.Aristarchos_CreateNewEntryServer) error {
+	ctx := stream.Context()
+
 	for {
 		in, err := stream.Recv()
 		if err == io.EOF {
-			return stream.SendAndClose(&v1.AggregatorStreamResponse{
-				Ack: "acknowledged",
-			})
+			return stream.SendAndClose(&v1.AggregatorStreamResponse{Ack: "acknowledged"})
 		}
 		if err != nil {
 			return err
 		}
 
-		go a.createOrUpdate(in)
+		req := in
+
+		go a.createOrUpdate(ctx, req)
 	}
 }
 
-func (a *AggregatorServiceImpl) createOrUpdate(request *v1.AggregatorCreationRequest) {
-	startTime := time.Now()
-	splitID := strings.Split(request.TraceId, "+")
-
-	traceCall := false
-	var traceID, spanID string
-
-	if len(splitID) >= 3 {
-		traceCall = splitID[2] == "1"
-	}
-
-	if len(splitID) >= 1 {
-		traceID = splitID[0]
-	}
-	if len(splitID) >= 2 {
-		spanID = splitID[1]
-	}
-
+func (a *AggregatorServiceImpl) createOrUpdate(ctx context.Context, request *v1.AggregatorCreationRequest) error {
 	parsedWord := transform.RemoveAccents(request.RootWord)
 
 	createNewWord := false
@@ -89,56 +71,33 @@ func (a *AggregatorServiceImpl) createOrUpdate(request *v1.AggregatorCreationReq
 			},
 		},
 	}
-	response, err := a.Elastic.Query().Match(a.Index, query)
+	response, err := a.Elastic.Query().MatchWithContext(ctx, a.Index, query)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "404") {
 			createNewWord = true
 		} else {
 			logging.Error(err.Error())
-			return
+			return fmt.Errorf("query root word: %w", err)
 		}
 	} else if len(response.Hits.Hits) == 0 {
 		createNewWord = true
 	}
 
-	if traceCall {
-		go func() {
-			parsedQuery, _ := json.Marshal(query)
-			hits := int64(0)
-			took := int64(0)
-			if response != nil {
-				hits = response.Hits.Total.Value
-				took = response.Took
-			}
-			dataBaseSpan := &v1ar.ParabasisRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       spanID,
-				RequestType: &v1ar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &v1ar.DatabaseSpanRequest{
-					Action:   "search",
-					Query:    string(parsedQuery),
-					Hits:     hits,
-					TimeTook: took,
-				}},
-			}
-
-			err := streamer.Send(dataBaseSpan)
-			if err != nil {
-				logging.Error(fmt.Sprintf("error returned from tracer: %s", err.Error()))
-			}
-		}()
+	if response != nil {
+		go comedy.DatabaseSpan(query, response.Hits.Total.Value, response.Took, ctx, a.Streamer)
 	}
 
 	entry, err := a.mapAndHandleGrammaticalCategories(request)
 	if err != nil {
 		logging.Error(fmt.Sprintf("error returned from mapping: %s", err.Error()))
-		return
+		return fmt.Errorf("map grammatical categories: %w", err)
 	}
 
 	if entry.Categories == nil {
-		logging.Error(fmt.Sprintf("could not map the word %s to a workable form", parsedWord))
-		return
+		err := fmt.Errorf("could not map the word %s to a workable form", parsedWord)
+		logging.Error(err.Error())
+		return err
 	}
 
 	if createNewWord {
@@ -147,19 +106,28 @@ func (a *AggregatorServiceImpl) createOrUpdate(request *v1.AggregatorCreationReq
 			Score:      1,
 		}
 		entry.Variants = append(entry.Variants, variant)
-		entryAsJson, _ := json.Marshal(entry)
-		createDocument, err := a.Elastic.Index().CreateDocument(a.Index, entryAsJson)
+		entryAsJson, err := json.Marshal(entry)
+		if err != nil {
+			return fmt.Errorf("marshal new root word entry: %w", err)
+		}
+		createDocument, err := a.Elastic.Index().CreateDocumentWithContext(ctx, a.Index, entryAsJson)
 		if err != nil {
 			logging.Error(err.Error())
-			return
+			return fmt.Errorf("create root word entry: %w", err)
 		}
 
 		logging.Debug(fmt.Sprintf("created document with id: %s and rootWordEntry: %s", createDocument.ID, request.RootWord))
-		return
+		return nil
 	}
 
-	jsonHit, _ := json.Marshal(response.Hits.Hits[0].Source)
-	rootWordEntry, _ := UnmarshalRootWordEntry(jsonHit)
+	jsonHit, err := json.Marshal(response.Hits.Hits[0].Source)
+	if err != nil {
+		return fmt.Errorf("marshal existing root word entry: %w", err)
+	}
+	rootWordEntry, err := UnmarshalRootWordEntry(jsonHit)
+	if err != nil {
+		return fmt.Errorf("unmarshal existing root word entry: %w", err)
+	}
 
 	for i, conjugation := range rootWordEntry.Categories {
 		formFound := false
@@ -220,60 +188,21 @@ func (a *AggregatorServiceImpl) createOrUpdate(request *v1.AggregatorCreationReq
 		}
 	}
 
-	entryAsJson, _ := json.Marshal(rootWordEntry)
-	createDocument, err := a.Elastic.Document().Update(a.Index, response.Hits.Hits[0].ID, entryAsJson)
+	entryAsJson, err := json.Marshal(rootWordEntry)
+	if err != nil {
+		return fmt.Errorf("marshal updated root word entry: %w", err)
+	}
+	createDocument, err := a.Elastic.Document().UpdateWithContext(ctx, a.Index, response.Hits.Hits[0].ID, entryAsJson)
 	if err != nil {
 		logging.Error(err.Error())
-		return
-	}
-
-	if traceCall {
-		go func() {
-			parabasis := &v1ar.ParabasisRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       comedy.GenerateSpanID(),
-				RequestType: &v1ar.ParabasisRequest_Span{
-					Span: &v1ar.SpanRequest{
-						Action: "CloseSpan",
-						Took:   fmt.Sprintf("%v", time.Since(startTime)),
-						Status: "updated document",
-					},
-				},
-			}
-			if err := streamer.Send(parabasis); err != nil {
-				logging.Error(fmt.Sprintf("failed to send trace data: %v", err))
-			}
-		}()
+		return fmt.Errorf("update root word entry: %w", err)
 	}
 
 	logging.Debug(fmt.Sprintf("updated document with id: %s and rootWordEntry: %s", createDocument.ID, request.RootWord))
-	return
+	return nil
 }
 
 func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *v1.AggregatorRequest) (*v1.RootWordResponse, error) {
-	startTime := time.Now()
-	requestID, ok := ctx.Value(config.DefaultTracingName).(string)
-	if !ok {
-		requestID = "donot+trace+0"
-	}
-
-	splitID := strings.Split(requestID, "+")
-
-	traceCall := false
-	var traceID, spanID string
-
-	if len(splitID) >= 3 {
-		traceCall = splitID[2] == "1"
-	}
-
-	if len(splitID) >= 1 {
-		traceID = splitID[0]
-	}
-	if len(splitID) >= 2 {
-		spanID = splitID[1]
-	}
-
 	parsedWord := transform.RemoveAccents(request.RootWord)
 	shouldQueries := []map[string]interface{}{
 		{"match_phrase": map[string]string{"rootWordEntry": request.RootWord}}, // Match root word
@@ -301,41 +230,15 @@ func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *v1.A
 		},
 	}
 
-	response, err := a.Elastic.Query().Match(a.Index, query)
-
-	if traceCall {
-		go func() {
-			hits := int64(0)
-			took := int64(0)
-			if response != nil {
-				hits = response.Hits.Total.Value
-				took = response.Took
-			}
-			parsedQuery, _ := json.Marshal(query)
-			dataBaseSpan := &v1ar.ParabasisRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       spanID,
-				RequestType: &v1ar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &v1ar.DatabaseSpanRequest{
-					Action:   "search",
-					Query:    string(parsedQuery),
-					Hits:     hits,
-					TimeTook: took,
-				}},
-			}
-
-			err := streamer.Send(dataBaseSpan)
-			if err != nil {
-				logging.Error(fmt.Sprintf("error returned from tracer: %s", err.Error()))
-			}
-		}()
-	}
+	response, err := a.Elastic.Query().MatchWithContext(ctx, a.Index, query)
 
 	if err != nil {
 		return nil, err
 	} else if len(response.Hits.Hits) == 0 {
 		return nil, fmt.Errorf("no entry can be found")
 	}
+
+	go comedy.DatabaseSpan(query, response.Hits.Total.Value, response.Took, ctx, a.Streamer)
 
 	var responsev1 v1.RootWordResponse
 	jsonHit, _ := json.Marshal(response.Hits.Hits[0].Source)
@@ -358,56 +261,16 @@ func (a *AggregatorServiceImpl) RetrieveEntry(ctx context.Context, request *v1.A
 		responsev1.Categories = append(responsev1.Categories, conjv1)
 	}
 
-	if traceCall {
-		go func() {
-			parabasis := &v1ar.ParabasisRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       comedy.GenerateSpanID(),
-				RequestType: &v1ar.ParabasisRequest_Span{
-					Span: &v1ar.SpanRequest{
-						Action: "CloseSpan",
-						Took:   fmt.Sprintf("%v", time.Since(startTime)),
-					},
-				},
-			}
-			if err := streamer.Send(parabasis); err != nil {
-				logging.Error(fmt.Sprintf("failed to send trace data: %v", err))
-			}
-		}()
-	}
-
 	return &responsev1, nil
 }
 
 func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request *v1.AggregatorRequest) (*v1.SearchWordResponse, error) {
-	startTime := time.Now()
-	requestID, ok := ctx.Value(config.DefaultTracingName).(string)
-	if !ok {
-		requestID = "donot+trace+0"
-	}
-
-	splitID := strings.Split(requestID, "+")
-
-	traceCall := false
-	var traceID, spanID string
-
-	if len(splitID) >= 3 {
-		traceCall = splitID[2] == "1"
-	}
-
-	if len(splitID) >= 1 {
-		traceID = splitID[0]
-	}
-	if len(splitID) >= 2 {
-		spanID = splitID[1]
-	}
 
 	parsedWord := transform.RemoveAccents(request.RootWord)
 	request.RootWord = parsedWord
 
 	query := a.Elastic.Builder().MatchQuery(ROOTWORD, request.RootWord)
-	response, err := a.Elastic.Query().Match(a.Index, query)
+	response, err := a.Elastic.Query().MatchWithContext(ctx, a.Index, query)
 
 	if err != nil {
 		return nil, err
@@ -415,34 +278,7 @@ func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request
 		return nil, fmt.Errorf("no entry can be found")
 	}
 
-	if traceCall {
-		go func() {
-			parsedQuery, _ := json.Marshal(query)
-			hits := int64(0)
-			took := int64(0)
-			if response != nil {
-				hits = response.Hits.Total.Value
-				took = response.Took
-			}
-
-			dataBaseSpan := &v1ar.ParabasisRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       spanID,
-				RequestType: &v1ar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &v1ar.DatabaseSpanRequest{
-					Action:   "search",
-					Query:    string(parsedQuery),
-					Hits:     hits,
-					TimeTook: took,
-				}},
-			}
-
-			err := streamer.Send(dataBaseSpan)
-			if err != nil {
-				logging.Error(fmt.Sprintf("error returned from tracer: %s", err.Error()))
-			}
-		}()
-	}
+	go comedy.DatabaseSpan(query, response.Hits.Total.Value, response.Took, ctx, a.Streamer)
 
 	var responsev1 v1.SearchWordResponse
 	jsonHit, _ := json.Marshal(response.Hits.Hits[0].Source)
@@ -454,52 +290,10 @@ func (a *AggregatorServiceImpl) RetrieveSearchWords(ctx context.Context, request
 		}
 	}
 
-	if traceCall {
-		go func() {
-			parabasis := &v1ar.ParabasisRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       comedy.GenerateSpanID(),
-				RequestType: &v1ar.ParabasisRequest_Span{
-					Span: &v1ar.SpanRequest{
-						Action: "CloseSpan",
-						Took:   fmt.Sprintf("%v", time.Since(startTime)),
-					},
-				},
-			}
-			if err := streamer.Send(parabasis); err != nil {
-				logging.Error(fmt.Sprintf("failed to send trace data: %v", err))
-			}
-		}()
-	}
-
 	return &responsev1, nil
 }
 
 func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context, request *v1.AggregatorRequest) (*v1.FormsResponse, error) {
-	startTime := time.Now()
-	requestID, ok := ctx.Value(config.DefaultTracingName).(string)
-	if !ok {
-		logging.Error("could not extract combinedId")
-		requestID = "donot+trace+0"
-	}
-
-	splitID := strings.Split(requestID, "+")
-
-	traceCall := false
-	var traceID, spanID string
-
-	if len(splitID) >= 3 {
-		traceCall = splitID[2] == "1"
-	}
-
-	if len(splitID) >= 1 {
-		traceID = splitID[0]
-	}
-	if len(splitID) >= 2 {
-		spanID = splitID[1]
-	}
-
 	var responsev1 v1.FormsResponse
 	responsev1.Word = request.RootWord
 	parsedWord := transform.RemoveAccents(request.RootWord)
@@ -523,7 +317,7 @@ func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context,
 			},
 		},
 	}
-	response, err := a.Elastic.Query().Match(a.Index, query)
+	response, err := a.Elastic.Query().MatchWithContext(ctx, a.Index, query)
 
 	if err != nil {
 		return nil, err
@@ -531,34 +325,7 @@ func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context,
 		return nil, fmt.Errorf("no entry can be found")
 	}
 
-	if traceCall {
-		go func() {
-			parsedQuery, _ := json.Marshal(query)
-			hits := int64(0)
-			took := int64(0)
-			if response != nil {
-				hits = response.Hits.Total.Value
-				took = response.Took
-			}
-
-			dataBaseSpan := &v1ar.ParabasisRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       spanID,
-				RequestType: &v1ar.ParabasisRequest_DatabaseSpan{DatabaseSpan: &v1ar.DatabaseSpanRequest{
-					Action:   "search",
-					Query:    string(parsedQuery),
-					Hits:     hits,
-					TimeTook: took,
-				}},
-			}
-
-			err := streamer.Send(dataBaseSpan)
-			if err != nil {
-				logging.Error(fmt.Sprintf("error returned from tracer: %s", err.Error()))
-			}
-		}()
-	}
+	go comedy.DatabaseSpan(query, response.Hits.Total.Value, response.Took, ctx, a.Streamer)
 
 	jsonHit, _ := json.Marshal(response.Hits.Hits[0].Source)
 
@@ -580,25 +347,6 @@ func (a *AggregatorServiceImpl) RetrieveRootFromGrammarForm(ctx context.Context,
 				responsev1.Word = form.Word
 			}
 		}
-	}
-
-	if traceCall {
-		go func() {
-			parabasis := &v1ar.ParabasisRequest{
-				TraceId:      traceID,
-				ParentSpanId: spanID,
-				SpanId:       comedy.GenerateSpanID(),
-				RequestType: &v1ar.ParabasisRequest_Span{
-					Span: &v1ar.SpanRequest{
-						Action: "CloseSpan",
-						Took:   fmt.Sprintf("%v", time.Since(startTime)),
-					},
-				},
-			}
-			if err := streamer.Send(parabasis); err != nil {
-				logging.Error(fmt.Sprintf("failed to send trace data: %v", err))
-			}
-		}()
 	}
 
 	return &responsev1, nil

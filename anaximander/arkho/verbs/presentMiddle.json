@@ -5,7 +5,7 @@
   "declensions": [
     {
       "declension": "-ομαι",
-      "ruleName": "1st sing - pres - mid - ind",
+      "ruleName": "1st sing - pres - ind - mid/pas",
       "searchTerm": [
         "ομαι",
         "ω"
@@ -13,14 +13,14 @@
     },
     {
       "declension": "-μαι",
-      "ruleName": "1st sing - pres - mid - ind",
+      "ruleName": "1st sing - pres - ind - mid/pas",
       "searchTerm": [
         "μαι"
       ]
     },
     {
       "declension": "-ει",
-      "ruleName": "2nd sing - pres - mid - ind",
+      "ruleName": "2nd sing - pres - ind - mid/pas",
       "searchTerm": [
         "ομαι",
         "ω"
@@ -28,7 +28,7 @@
     },
     {
       "declension": "-ῃ",
-      "ruleName": "2nd sing - pres - mid - ind",
+      "ruleName": "2nd sing - pres - ind - mid/pas",
       "searchTerm": [
         "ομαι",
         "ω"
@@ -36,14 +36,14 @@
     },
     {
       "declension": "-σαι",
-      "ruleName": "2nd sing - pres - mid - ind",
+      "ruleName": "2nd sing - pres - ind - mid/pas",
       "searchTerm": [
         "μαι"
       ]
     },
     {
       "declension": "-εται",
-      "ruleName": "3th sing - pres - mid - ind",
+      "ruleName": "3th sing - pres - ind - mid/pas",
       "searchTerm": [
         "ομαι",
         "ω"
@@ -51,14 +51,14 @@
     },
     {
       "declension": "-ται",
-      "ruleName": "3th sing - pres - mid - ind",
+      "ruleName": "3th sing - pres - ind - mid/pas",
       "searchTerm": [
         "μαι"
       ]
     },
     {
       "declension": "-όμεθα",
-      "ruleName": "1st plural - pres - mid - ind",
+      "ruleName": "1st plural - pres - ind - mid/pas",
       "searchTerm": [
         "ομαι",
         "ω"
@@ -66,14 +66,14 @@
     },
     {
       "declension": "-μεθα",
-      "ruleName": "1st plural - pres - mid - ind",
+      "ruleName": "1st plural - pres - ind - mid/pas",
       "searchTerm": [
         "μαι"
       ]
     },
     {
       "declension": "-εσθε",
-      "ruleName": "2nd plural - pres - mid - ind",
+      "ruleName": "2nd plural - pres - ind - mid/pas",
       "searchTerm": [
         "ομαι",
         "ω"
@@ -81,14 +81,14 @@
     },
     {
       "declension": "-σθε",
-      "ruleName": "2nd plural - pres - mid - ind",
+      "ruleName": "2nd plural - pres - ind - mid/pas",
       "searchTerm": [
         "μαι"
       ]
     },
     {
       "declension": "-ονται",
-      "ruleName": "3th plural - pres - mid - ind",
+      "ruleName": "3th plural - pres - ind - mid/pas",
       "searchTerm": [
         "ομαι",
         "ω"
@@ -96,7 +96,7 @@
     },
     {
       "declension": "-νται",
-      "ruleName": "3th plural - pres - mid - ind",
+      "ruleName": "3th plural - pres - ind - mid/pas",
       "searchTerm": [
         "μαι"
       ]
@@ -126,6 +126,102 @@
       "declension": "-έσθων",
       "ruleName": "3rd plural - pres - imper - mid/pas",
       "searchTerm": [
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ωμαι",
+      "ruleName": "1st sing - pres - subj - mid/pas",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ῃ",
+      "ruleName": "2nd sing - pres - subj - mid/pas",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ηται",
+      "ruleName": "3rd sing - pres - subj - mid/pas",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ώμεθα",
+      "ruleName": "1st plural - pres - subj - mid/pas",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ησθε",
+      "ruleName": "2nd plural - pres - subj - mid/pas",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-ωνται",
+      "ruleName": "3rd plural - pres - subj - mid/pas",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οιμην",
+      "ruleName": "1st sing - pres - opt - mid/pas",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οιο",
+      "ruleName": "2nd sing - pres - opt - mid/pas",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οιτο",
+      "ruleName": "3rd sing - pres - opt - mid/pas",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οιμεθα",
+      "ruleName": "1st plural - pres - opt - mid/pas",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οισθε",
+      "ruleName": "2nd plural - pres - opt - mid/pas",
+      "searchTerm": [
+        "ομαι",
+        "ω"
+      ]
+    },
+    {
+      "declension": "-οιντο",
+      "ruleName": "3rd plural - pres - opt - mid/pas",
+      "searchTerm": [
+        "ομαι",
         "ω"
       ]
     }

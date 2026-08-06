@@ -7,9 +7,11 @@ import (
 	"net"
 	"os"
 
+	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
 	v1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	"github.com/odysseia-greek/alexandreia/aristarchos/scholar"
+	"github.com/odysseia-greek/attike/aristophanes/comedy"
 	"google.golang.org/grpc"
 )
 
@@ -38,16 +40,21 @@ func main() {
 	logging.System("starting up and getting env variables")
 
 	ctx := context.Background()
-	config, err := scholar.CreateNewConfig(ctx)
+	cfg, err := scholar.CreateNewConfig(ctx)
 	if err != nil {
 		logging.Error(err.Error())
 		log.Fatal("death has found me")
 	}
 
-	err = scholar.CreateIndexAtStartup(config.PolicyName, config.Index, config.Elastic)
+	err = scholar.CreateIndexAtStartup(cfg.PolicyName, cfg.Index, cfg.Elastic)
 	if err != nil {
 		logging.Error(err.Error())
 	}
+
+	queueCtx, cancelQueueListener := context.WithCancel(ctx)
+	defer cancelQueueListener()
+	go cfg.StartQueueListener(queueCtx, scholar.QueuePollIntervalFromEnv(os.Getenv(scholar.EnvQueuePollInterval)))
+
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
@@ -55,9 +62,18 @@ func main() {
 
 	var server *grpc.Server
 
-	server = grpc.NewServer(grpc.UnaryInterceptor(scholar.AggregatorInterceptor))
+	server = grpc.NewServer(
+		grpc.UnaryInterceptor(
+			comedy.UnaryServerInterceptor(
+				cfg.Streamer,
+				comedy.WithHeaderKey(config.HeaderKey),
+				comedy.WithContextKeyName(config.DefaultTracingName),
+				comedy.WithCloseHop(),
+			),
+		),
+	)
 
-	v1.RegisterAristarchosServer(server, config)
+	v1.RegisterAristarchosServer(server, cfg)
 
 	logging.Info(fmt.Sprintf("Server listening on %s", port))
 	if err := server.Serve(listener); err != nil {

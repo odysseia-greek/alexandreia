@@ -1,0 +1,27 @@
+FROM golang:1.26.5-alpine AS builder
+
+ARG project_name=galenos
+ENV project_name=${project_name}
+
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+# Install ginkgo CLI for building
+RUN go install github.com/onsi/ginkgo/v2/ginkgo
+
+# Build the test binary for the current directory
+RUN ginkgo build -o /app/${project_name}.test
+
+FROM alpine:3.24.0 AS prod
+
+ARG project_name=galenos
+ENV project_name=${project_name}
+
+WORKDIR /app
+COPY --from=builder /app/${project_name}.test .
+
+# Run with -ginkgo.v for verbose output
+ENTRYPOINT ["/app/galenos.test", "-ginkgo.v"]

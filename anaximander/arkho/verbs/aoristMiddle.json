@@ -5,14 +5,14 @@
   "declensions": [
     {
       "declension": "-σαμην",
-      "ruleName": "1st sing - aorist - ind - mid",
+      "ruleName": "1st sing - aorist - ind - mid/pas",
       "searchTerm": [
         "ω"
       ]
     },
     {
       "declension": "-ψαμην",
-      "ruleName": "1st sing - aorist - ind - mid",
+      "ruleName": "1st sing - aorist - ind - mid/pas",
       "searchTerm": [
         "φω",
         "πτω"
@@ -20,7 +20,7 @@
     },
     {
       "declension": "-ξαμην",
-      "ruleName": "1st sing - aorist - ind - mid",
+      "ruleName": "1st sing - aorist - ind - mid/pas",
       "searchTerm": [
         "κω",
         "σκω",
@@ -30,21 +30,21 @@
     },
     {
       "declension": "-εσαμην",
-      "ruleName": "1st sing - aorist - ind - mid",
+      "ruleName": "1st sing - aorist - ind - mid/pas",
       "searchTerm": [
         "ομαι"
       ]
     },
     {
       "declension": "-σω",
-      "ruleName": "2nd sing - aorist - ind - mid",
+      "ruleName": "2nd sing - aorist - ind - mid/pas",
       "searchTerm": [
         "ω"
       ]
     },
     {
       "declension": "-ψω",
-      "ruleName": "2nd sing - aorist - ind - mid",
+      "ruleName": "2nd sing - aorist - ind - mid/pas",
       "searchTerm": [
         "φω",
         "πτω"
@@ -52,7 +52,7 @@
     },
     {
       "declension": "-ξω",
-      "ruleName": "2nd sing - aorist - ind - mid",
+      "ruleName": "2nd sing - aorist - ind - mid/pas",
       "searchTerm": [
         "κω",
         "σκω",
@@ -62,21 +62,21 @@
     },
     {
       "declension": "-εσω",
-      "ruleName": "2nd sing - aorist - ind - mid",
+      "ruleName": "2nd sing - aorist - ind - mid/pas",
       "searchTerm": [
         "ομαι"
       ]
     },
     {
       "declension": "-σατο",
-      "ruleName": "3th sing - aorist - ind - mid",
+      "ruleName": "3th sing - aorist - ind - mid/pas",
       "searchTerm": [
         "ω"
       ]
     },
     {
       "declension": "-ψατο",
-      "ruleName": "3th sing - aorist - ind - mid",
+      "ruleName": "3th sing - aorist - ind - mid/pas",
       "searchTerm": [
         "φω",
         "πτω"
@@ -84,7 +84,7 @@
     },
     {
       "declension": "-ξατο",
-      "ruleName": "3th sing - aorist - ind - mid",
+      "ruleName": "3th sing - aorist - ind - mid/pas",
       "searchTerm": [
         "κω",
         "σκω",
@@ -94,21 +94,21 @@
     },
     {
       "declension": "-εσατο",
-      "ruleName": "3th sing - aorist - ind - mid",
+      "ruleName": "3th sing - aorist - ind - mid/pas",
       "searchTerm": [
         "ομαι"
       ]
     },
     {
       "declension": "-σαμεθα",
-      "ruleName": "1st plural - aorist - ind - mid",
+      "ruleName": "1st plural - aorist - ind - mid/pas",
       "searchTerm": [
         "ω"
       ]
     },
     {
       "declension": "-ψαμεθα",
-      "ruleName": "1st plural - aorist - ind - mid",
+      "ruleName": "1st plural - aorist - ind - mid/pas",
       "searchTerm": [
         "φω",
         "πτω"
@@ -116,7 +116,7 @@
     },
     {
       "declension": "-ξαμεθα",
-      "ruleName": "1st plural - aorist - ind - mid",
+      "ruleName": "1st plural - aorist - ind - mid/pas",
       "searchTerm": [
         "κω",
         "σκω",
@@ -126,21 +126,21 @@
     },
     {
       "declension": "-εσαμεθα",
-      "ruleName": "1st plural - aorist - ind - mid",
+      "ruleName": "1st plural - aorist - ind - mid/pas",
       "searchTerm": [
         "ομαι"
       ]
     },
     {
       "declension": "-σασθε",
-      "ruleName": "2nd plural - aorist - ind - mid",
+      "ruleName": "2nd plural - aorist - ind - mid/pas",
       "searchTerm": [
         "ω"
       ]
     },
     {
       "declension": "-ψασθε",
-      "ruleName": "2nd plural - aorist - ind - mid",
+      "ruleName": "2nd plural - aorist - ind - mid/pas",
       "searchTerm": [
         "φω",
         "πτω"
@@ -148,7 +148,7 @@
     },
     {
       "declension": "-ξασθε",
-      "ruleName": "2nd plural - aorist - ind - mid",
+      "ruleName": "2nd plural - aorist - ind - mid/pas",
       "searchTerm": [
         "κω",
         "σκω",
@@ -158,21 +158,21 @@
     },
     {
       "declension": "-εσασθε",
-      "ruleName": "2nd plural - aorist - ind - mid",
+      "ruleName": "2nd plural - aorist - ind - mid/pas",
       "searchTerm": [
         "ομαι"
       ]
     },
     {
       "declension": "-σαντο",
-      "ruleName": "3th plural - aorist - ind - mid",
+      "ruleName": "3th plural - aorist - ind - mid/pas",
       "searchTerm": [
         "ω"
       ]
     },
     {
       "declension": "-ψαντο",
-      "ruleName": "3th plural - aorist - ind - mid",
+      "ruleName": "3th plural - aorist - ind - mid/pas",
       "searchTerm": [
         "φω",
         "πτω"
@@ -180,7 +180,7 @@
     },
     {
       "declension": "-ξαντο",
-      "ruleName": "3th plural - aorist - ind - mid",
+      "ruleName": "3th plural - aorist - ind - mid/pas",
       "searchTerm": [
         "κω",
         "σκω",
@@ -190,7 +190,7 @@
     },
     {
       "declension": "-εσαντο",
-      "ruleName": "3th plural - aorist - ind - mid",
+      "ruleName": "3th plural - aorist - ind - mid/pas",
       "searchTerm": [
         "ομαι"
       ]

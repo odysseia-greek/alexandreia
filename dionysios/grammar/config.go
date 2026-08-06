@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"os"
 	"time"
 
@@ -12,13 +13,18 @@ import (
 	"github.com/odysseia-greek/agora/aristoteles"
 	elastic "github.com/odysseia-greek/agora/aristoteles"
 	"github.com/odysseia-greek/agora/aristoteles/models"
+	"github.com/odysseia-greek/agora/eupalinos/stomion"
+	eupalinospb "github.com/odysseia-greek/agora/eupalinos/v1"
+	"github.com/odysseia-greek/agora/hesiodos"
 	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
 	plato "github.com/odysseia-greek/agora/plato/models"
 	"github.com/odysseia-greek/agora/plato/service"
 	aristarchos "github.com/odysseia-greek/alexandreia/aristarchos/scholar"
+	"github.com/odysseia-greek/alexandreia/eratosthenes/library"
+	"github.com/odysseia-greek/alexandreia/kallimachos/scholia"
 	aristophanes "github.com/odysseia-greek/attike/aristophanes/comedy"
-	pbar "github.com/odysseia-greek/attike/aristophanes/proto"
+	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"github.com/odysseia-greek/delphi/aristides/diplomat"
 	pb "github.com/odysseia-greek/delphi/aristides/proto"
 	"google.golang.org/grpc/metadata"
@@ -58,10 +64,10 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 	spanID := aristophanes.GenerateSpanID()
 	combinedID := fmt.Sprintf("%s+%s+%d", traceID, spanID, 1)
 
-	ambassadorCtx, ctxCancel := context.WithTimeout(context.Background(), 30*time.Second)
+	ambassadorCtx, ctxCancel := context.WithTimeout(ctx, 30*time.Second)
 	defer ctxCancel()
 
-	payload := &pbar.StartTraceRequest{
+	payload := &arv1.ObserveTraceStart{
 		Method:        "GetSecret",
 		Url:           diplomat.DEFAULTADDRESS,
 		Host:          "",
@@ -70,12 +76,12 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 	}
 
 	go func() {
-		parabasis := &pbar.ParabasisRequest{
+		parabasis := &arv1.ObserveRequest{
 			TraceId:      traceID,
 			ParentSpanId: spanID,
 			SpanId:       spanID,
-			RequestType: &pbar.ParabasisRequest_StartTrace{
-				StartTrace: payload,
+			Kind: &arv1.ObserveRequest_TraceStart{
+				TraceStart: payload,
 			},
 		}
 		if err := streamer.Send(parabasis); err != nil {
@@ -86,7 +92,7 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 	}()
 
 	md := metadata.New(map[string]string{service.HeaderKey: combinedID})
-	ambassadorCtx = metadata.NewOutgoingContext(context.Background(), md)
+	ambassadorCtx = metadata.NewOutgoingContext(ambassadorCtx, md)
 	vaultConfig, err := ambassador.GetSecret(ambassadorCtx, &pb.VaultRequest{})
 	if err != nil {
 		logging.Error(err.Error())
@@ -94,12 +100,12 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 	}
 
 	go func() {
-		parabasis := &pbar.ParabasisRequest{
+		parabasis := &arv1.ObserveRequest{
 			TraceId:      traceID,
 			ParentSpanId: spanID,
 			SpanId:       spanID,
-			RequestType: &pbar.ParabasisRequest_CloseTrace{
-				CloseTrace: &pbar.CloseTraceRequest{
+			Kind: &arv1.ObserveRequest_TraceStop{
+				TraceStop: &arv1.ObserveTraceStop{
 					ResponseBody: fmt.Sprintf("user retrieved from vault: %s", vaultConfig.ElasticUsername),
 				},
 			},
@@ -127,13 +133,8 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 		return nil, err
 	}
 
-	err = aristoteles.HealthCheck(elastic)
-	if err != nil {
-		return nil, err
-	}
-
 	index := config.StringFromEnv(config.EnvIndex, defaultIndex)
-	cache, err := archytas.CreateBadgerClient()
+	cache, err := archytas.CreateBadgerClientWithOptions(archytas.WithLogging(false))
 	if err != nil {
 		return nil, err
 	}
@@ -158,36 +159,114 @@ func CreateNewConfig(ctx context.Context) (*DionysosHandler, error) {
 
 	logging.Debug("aggregator client created and healthy")
 
-	// New context for aggregator streamer
-	aggrContext, aggregatorCancel := context.WithCancel(context.Background())
-	aristarchosStreamer, err := aggregator.CreateNewEntry(aggrContext)
+	eupalinosAddress := config.StringFromEnv(config.EnvEupalinosService, config.DefaultEupalinosService)
+	queue, err := stomion.NewEupalinosClient(eupalinosAddress)
 	if err != nil {
 		logging.Error(err.Error())
-		aggregatorCancel()
 		return nil, err
 	}
+	if err := waitForEupalinos(ctx, queue, eupalinosAddress); err != nil {
+		return nil, err
+	}
+	aggregatorChannel := config.StringFromEnv(config.EnvChannel, defaultAggregatorChannel)
+
+	libraryClientAddress := config.StringFromEnv("ERATOSTHENES_SERVICE", "eratosthenes:50060")
+	libraryClient, err := hesiodos.NewGenericGrpcClient[*library.LibraryClient](
+		libraryClientAddress,
+		library.NewEratosthenesClient,
+	)
+
+	if err != nil {
+		logging.Error(err.Error())
+	}
+
+	scholarClientAddress := config.StringFromEnv("KALLIMACHOS_SERVICE", "kallimachos:50060")
+	scholarClient, err := hesiodos.NewGenericGrpcClient[*scholia.ScholarClient](
+		scholarClientAddress,
+		scholia.NewKallimachosClient,
+	)
 
 	ctx, cancel := context.WithCancel(ctx)
 
+	version := os.Getenv(config.EnvVersion)
+
 	return &DionysosHandler{
-		Elastic:          elastic,
-		Cache:            cache,
-		Index:            index,
-		Client:           client,
-		DeclensionConfig: plato.DeclensionConfig{},
-		Streamer:         streamer,
-		Aggregator:       aristarchosStreamer,
-		AggregatorClient: aggregator,
-		AggregatorCancel: aggregatorCancel,
-		StreamerCancel:   cancel,
+		Elastic:           elastic,
+		Cache:             cache,
+		Index:             index,
+		Version:           version,
+		Client:            client,
+		DeclensionConfig:  plato.DeclensionConfig{},
+		LibraryService:    libraryClient,
+		ScholarService:    scholarClient,
+		Streamer:          streamer,
+		AggregatorQueue:   queue,
+		AggregatorChannel: aggregatorChannel,
+		AggregatorClient:  aggregator,
+		StreamerCancel:    cancel,
 	}, nil
 }
 
-func QueryRuleSet(es elastic.Client, index string) (*plato.DeclensionConfig, error) {
+type eupalinosHealthClient interface {
+	Health(context.Context, *eupalinospb.HealthRequest) (*eupalinospb.HealthResponse, error)
+}
+
+func waitForEupalinos(parent context.Context, client eupalinosHealthClient, address string) error {
+	const (
+		startupTimeout = 30 * time.Second
+		attemptTimeout = 2 * time.Second
+		retryInterval  = time.Second
+	)
+
+	ctx, cancel := context.WithTimeout(parent, startupTimeout)
+	defer cancel()
+	ticker := time.NewTicker(retryInterval)
+	defer ticker.Stop()
+
+	var lastErr error
+	for {
+		attemptCtx, attemptCancel := context.WithTimeout(ctx, attemptTimeout)
+		response, err := client.Health(attemptCtx, &eupalinospb.HealthRequest{})
+		attemptCancel()
+		if err == nil && response.GetHealthy() {
+			return nil
+		}
+		if err != nil {
+			lastErr = err
+		} else {
+			lastErr = fmt.Errorf("health response reported healthy=false")
+		}
+
+		select {
+		case <-ctx.Done():
+			return fmt.Errorf("eupalinos at %q was not healthy within %s: %w", address, startupTimeout, lastErr)
+		case <-ticker.C:
+		}
+	}
+}
+
+func QueryRuleSet(ctx context.Context, es elastic.Client, index string) (*plato.DeclensionConfig, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	if es == nil {
+		mockElastic, err := elastic.NewMockClient("declensionsDionysos", http.StatusOK)
+		if err != nil {
+			return nil, err
+		}
+		es = mockElastic
+	}
+
 	query := es.Builder().MatchAll()
-	response, err := es.Query().MatchWithScroll(index, query)
+
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+	response, err := es.Query().MatchWithScrollWithContext(ctx, index, query)
 
 	if err != nil {
+		return nil, err
+	}
+	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
 

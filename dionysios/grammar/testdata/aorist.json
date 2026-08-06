@@ -1,0 +1,37 @@
+{
+  "name": "aorist",
+  "type": "past",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-ψα",
+      "ruleName": "1st sing - aorist - ind - act",
+      "searchTerm": ["φω", "πτω"]
+    },
+    {
+      "declension": "-σαμεν",
+      "ruleName": "1st plural - aorist - ind - act",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-ξεν",
+      "ruleName": "3th sing - aorist - ind - act",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξατε",
+      "ruleName": "2nd plural - aorist - ind - act",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξαν",
+      "ruleName": "3th plural - aorist - ind - act",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    },
+    {
+      "declension": "-ξας",
+      "ruleName": "2nd sing - aorist - ind - act",
+      "searchTerm": ["κω", "σκω", "γω", "χω"]
+    }
+  ]
+}

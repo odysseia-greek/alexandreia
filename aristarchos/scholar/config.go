@@ -9,11 +9,12 @@ import (
 	"github.com/google/uuid"
 	"github.com/odysseia-greek/agora/aristoteles"
 	"github.com/odysseia-greek/agora/aristoteles/models"
+	"github.com/odysseia-greek/agora/eupalinos/stomion"
 	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/service"
 	aristophanes "github.com/odysseia-greek/attike/aristophanes/comedy"
-	pbar "github.com/odysseia-greek/attike/aristophanes/proto"
+	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"github.com/odysseia-greek/delphi/aristides/diplomat"
 	pb "github.com/odysseia-greek/delphi/aristides/proto"
 	"google.golang.org/grpc/metadata"
@@ -22,8 +23,6 @@ import (
 const (
 	defaultIndex string = "aggregator"
 )
-
-var streamer pbar.TraceService_ChorusClient
 
 func CreateNewConfig(ctx context.Context) (*AggregatorServiceImpl, error) {
 	tls := config.BoolFromEnv(config.EnvTlSKey)
@@ -35,7 +34,7 @@ func CreateNewConfig(ctx context.Context) (*AggregatorServiceImpl, error) {
 		os.Exit(1)
 	}
 
-	streamer, err = tracer.Chorus(ctx)
+	streamer, err := tracer.Chorus(ctx)
 	if err != nil {
 		logging.Error(err.Error())
 	}
@@ -56,7 +55,7 @@ func CreateNewConfig(ctx context.Context) (*AggregatorServiceImpl, error) {
 	ambassadorCtx, ctxCancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer ctxCancel()
 
-	payload := &pbar.StartTraceRequest{
+	payload := &arv1.ObserveTraceStart{
 		Method:        "GetSecret",
 		Url:           diplomat.DEFAULTADDRESS,
 		Host:          "",
@@ -65,12 +64,12 @@ func CreateNewConfig(ctx context.Context) (*AggregatorServiceImpl, error) {
 	}
 
 	go func() {
-		parabasis := &pbar.ParabasisRequest{
+		parabasis := &arv1.ObserveRequest{
 			TraceId:      traceID,
 			ParentSpanId: spanID,
 			SpanId:       spanID,
-			RequestType: &pbar.ParabasisRequest_StartTrace{
-				StartTrace: payload,
+			Kind: &arv1.ObserveRequest_TraceStart{
+				TraceStart: payload,
 			},
 		}
 		if err := streamer.Send(parabasis); err != nil {
@@ -89,12 +88,12 @@ func CreateNewConfig(ctx context.Context) (*AggregatorServiceImpl, error) {
 	}
 
 	go func() {
-		parabasis := &pbar.ParabasisRequest{
+		parabasis := &arv1.ObserveRequest{
 			TraceId:      traceID,
 			ParentSpanId: spanID,
 			SpanId:       spanID,
-			RequestType: &pbar.ParabasisRequest_CloseTrace{
-				CloseTrace: &pbar.CloseTraceRequest{
+			Kind: &arv1.ObserveRequest_TraceStop{
+				TraceStop: &arv1.ObserveTraceStop{
 					ResponseBody: fmt.Sprintf("user retrieved from vault: %s", vaultConfig.ElasticUsername),
 				},
 			},
@@ -127,13 +126,28 @@ func CreateNewConfig(ctx context.Context) (*AggregatorServiceImpl, error) {
 		return nil, err
 	}
 
+	eupalinosAddress := config.StringFromEnv(config.EnvEupalinosService, config.DefaultEupalinosService)
+	queue, err := stomion.NewEupalinosClient(eupalinosAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	queueHealthy := queue.WaitForHealthyState()
+	if !queueHealthy {
+		return nil, fmt.Errorf("eupalinos service not ready at %s", eupalinosAddress)
+	}
+
 	index := config.StringFromEnv(config.EnvIndex, defaultIndex)
 
 	policyName := config.StringFromEnv("HOT_POLICY_NAME", "hot_plain")
+	queueName := config.StringFromEnv(config.EnvChannel, DefaultQueueName)
 
 	return &AggregatorServiceImpl{
 		Index:      index,
 		Elastic:    elastic,
+		Queue:      queue,
+		QueueName:  queueName,
 		PolicyName: policyName,
+		Streamer:   streamer,
 	}, nil
 }

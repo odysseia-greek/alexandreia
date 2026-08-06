@@ -1,0 +1,14 @@
+{
+  "name": "irregularAdjective",
+  "type": "adjective",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "μεγάλα",
+      "ruleName": "adjective - plural - neut - nom/voc/acc",
+      "searchTerm": [
+        "μέγας"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "present",
+  "type": "present",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "-ουσι",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": ["ω"]
+    },
+    {
+      "declension": "-ουσιν",
+      "ruleName": "3rd plural - pres - ind - act",
+      "searchTerm": ["ω"]
+    }
+  ]
+}

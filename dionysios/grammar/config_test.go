@@ -1,10 +1,13 @@
 package grammar
 
 import (
-	elastic "github.com/odysseia-greek/agora/aristoteles"
-	"github.com/stretchr/testify/assert"
+	"context"
 	"os"
 	"testing"
+
+	elastic "github.com/odysseia-greek/agora/aristoteles"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestCreateElasticConfig(t *testing.T) {
@@ -20,7 +23,7 @@ func TestCreateElasticConfig(t *testing.T) {
 		mockElasticClient, err := elastic.NewMockClient(fixtureFile, mockCode)
 		assert.Nil(t, err)
 
-		declensionConfig, err := QueryRuleSet(mockElasticClient, "dionysios")
+		declensionConfig, err := QueryRuleSet(t.Context(), mockElasticClient, "dionysios")
 		assert.NotNil(t, declensionConfig)
 		assert.Nil(t, err)
 
@@ -39,7 +42,7 @@ func TestCreateElasticConfig(t *testing.T) {
 		mockElasticClient, err := elastic.NewMockClient(fixtureFile, mockCode)
 		assert.Nil(t, err)
 
-		declensionConfig, err := QueryRuleSet(mockElasticClient, "dionysios")
+		declensionConfig, err := QueryRuleSet(t.Context(), mockElasticClient, "dionysios")
 		assert.NotNil(t, declensionConfig)
 		assert.Nil(t, err)
 
@@ -57,10 +60,23 @@ func TestCreateElasticConfig(t *testing.T) {
 		mockElasticClient, err := elastic.NewMockClient(fixtureFile, mockCode)
 		assert.Nil(t, err)
 
-		declensionConfig, err := QueryRuleSet(mockElasticClient, "dionysios")
+		declensionConfig, err := QueryRuleSet(t.Context(), mockElasticClient, "dionysios")
 		assert.Nil(t, declensionConfig)
 		assert.NotNil(t, err)
 
 		os.Setenv("ENV", "")
 	})
+}
+
+func TestQueryRuleSetHonorsCancellation(t *testing.T) {
+	mockElasticClient, err := elastic.NewMockClient("declensionsDionysos", 200)
+	require.NoError(t, err)
+
+	ctx, cancel := context.WithCancel(t.Context())
+	cancel()
+
+	declensionConfig, err := QueryRuleSet(ctx, mockElasticClient, "dionysios")
+
+	assert.Nil(t, declensionConfig)
+	assert.ErrorIs(t, err, context.Canceled)
 }

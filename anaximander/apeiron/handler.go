@@ -1,14 +1,16 @@
 package apeiron
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
+	"time"
+
 	elastic "github.com/odysseia-greek/agora/aristoteles"
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/models"
 	"github.com/odysseia-greek/delphi/aristides/diplomat"
-	"strings"
-	"time"
 )
 
 type AnaximanderHandler struct {
@@ -20,7 +22,10 @@ type AnaximanderHandler struct {
 }
 
 func (a *AnaximanderHandler) DeleteIndexAtStartUp() error {
-	deleted, err := a.Elastic.Index().Delete(a.Index)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	deleted, err := a.Elastic.Index().DeleteWithContext(ctx, a.Index)
 	logging.Info(fmt.Sprintf("deleted index: %s success: %v", a.Index, deleted))
 	if err != nil {
 		if deleted {
@@ -38,8 +43,11 @@ func (a *AnaximanderHandler) DeleteIndexAtStartUp() error {
 }
 
 func (a *AnaximanderHandler) CreateIndexAtStartup() error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
 	indexMapping := a.Elastic.Builder().GrammarIndex(a.PolicyName)
-	created, err := a.Elastic.Index().Create(a.Index, indexMapping)
+	created, err := a.Elastic.Index().CreateWithContext(ctx, a.Index, indexMapping)
 	if err != nil {
 		return err
 	}
@@ -50,12 +58,15 @@ func (a *AnaximanderHandler) CreateIndexAtStartup() error {
 }
 
 func (a *AnaximanderHandler) AddToElastic(declension models.Declension) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
 	upload, err := json.Marshal(declension)
 	if err != nil {
 		return err
 	}
 
-	doc, err := a.Elastic.Index().CreateDocument(a.Index, upload)
+	doc, err := a.Elastic.Index().CreateDocumentWithContext(ctx, a.Index, upload)
 	logging.Info(fmt.Sprintf("created document: %s %v", a.Index, doc))
 	a.Created++
 	if err != nil {

@@ -1,0 +1,42 @@
+{
+  "name": "irregular",
+  "type": "irregular",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "εἶναι",
+      "ruleName": "inf - pres - inf - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἔσεσθαι",
+      "ruleName": "inf - fut - inf - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "γίγνεσθαι",
+      "ruleName": "inf - pres - inf - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενήσεσθαι",
+      "ruleName": "inf - fut - inf - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενέσθαι",
+      "ruleName": "inf - aor - inf - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    }
+  ]
+}

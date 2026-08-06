@@ -1,0 +1,469 @@
+{
+  "name": "irregular",
+  "type": "irregular",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "ἔσομαι",
+      "ruleName": "1st sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἔσῃ",
+      "ruleName": "2nd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἔσεται",
+      "ruleName": "3rd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἔσται",
+      "ruleName": "3rd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἐσόμεθα",
+      "ruleName": "1st plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἔσεσθε",
+      "ruleName": "2nd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἔσονται",
+      "ruleName": "3rd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "γενήσομαι",
+      "ruleName": "1st sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενήσῃ",
+      "ruleName": "2nd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενήσεται",
+      "ruleName": "3rd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενησόμεθα",
+      "ruleName": "1st plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενήσεσθε",
+      "ruleName": "2nd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενήσονται",
+      "ruleName": "3rd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "φήσω",
+      "ruleName": "1st sing - fut - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φήσεις",
+      "ruleName": "2nd sing - fut - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φήσει",
+      "ruleName": "3rd sing - fut - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φήσομεν",
+      "ruleName": "1st plural - fut - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φήσετε",
+      "ruleName": "2nd plural - fut - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φήσουσι",
+      "ruleName": "3rd plural - fut - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "φήσουσιν",
+      "ruleName": "3rd plural - fut - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "ὄψομαι",
+      "ruleName": "1st sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "ὄψῃ",
+      "ruleName": "2nd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "ὄψεται",
+      "ruleName": "3rd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "ὀψόμεθα",
+      "ruleName": "1st plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "ὄψεσθε",
+      "ruleName": "2nd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "ὄψονται",
+      "ruleName": "3rd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "ὁράω"
+      ]
+    },
+    {
+      "declension": "ἕξω",
+      "ruleName": "1st sing - fut - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἕξεις",
+      "ruleName": "2nd sing - fut - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἕξει",
+      "ruleName": "3rd sing - fut - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἕξομεν",
+      "ruleName": "1st plural - fut - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἕξετε",
+      "ruleName": "2nd plural - fut - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἕξουσι",
+      "ruleName": "3rd plural - fut - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "ἕξουσιν",
+      "ruleName": "3rd plural - fut - ind - act",
+      "searchTerm": [
+        "ἔχω"
+      ]
+    },
+    {
+      "declension": "οἴσω",
+      "ruleName": "1st sing - fut - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "οἴσεις",
+      "ruleName": "2nd sing - fut - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "οἴσει",
+      "ruleName": "3rd sing - fut - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "οἴσομεν",
+      "ruleName": "1st plural - fut - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "οἴσετε",
+      "ruleName": "2nd plural - fut - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "οἴσουσι",
+      "ruleName": "3rd plural - fut - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "οἴσουσιν",
+      "ruleName": "3rd plural - fut - ind - act",
+      "searchTerm": [
+        "φέρω"
+      ]
+    },
+    {
+      "declension": "εἶμι",
+      "ruleName": "1st sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "εἶ",
+      "ruleName": "2nd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "εἶσι",
+      "ruleName": "3rd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "εἶσιν",
+      "ruleName": "3rd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "ἴμεν",
+      "ruleName": "1st plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "ἴτε",
+      "ruleName": "2nd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "ἴασι",
+      "ruleName": "3rd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "ἴασιν",
+      "ruleName": "3rd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "ἔρχομαι"
+      ]
+    },
+    {
+      "declension": "λήψομαι",
+      "ruleName": "1st sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "λήψῃ",
+      "ruleName": "2nd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "λήψεται",
+      "ruleName": "3rd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "ληψόμεθα",
+      "ruleName": "1st plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "λήψεσθε",
+      "ruleName": "2nd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "λήψονται",
+      "ruleName": "3rd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "λαμβάνω"
+      ]
+    },
+    {
+      "declension": "πίομαι",
+      "ruleName": "1st sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "πίῃ",
+      "ruleName": "2nd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "πίεται",
+      "ruleName": "3rd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "πιόμεθα",
+      "ruleName": "1st plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "πίεσθε",
+      "ruleName": "2nd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "πίονται",
+      "ruleName": "3rd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "πίνω"
+      ]
+    },
+    {
+      "declension": "δραμοῦμαι",
+      "ruleName": "1st sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    },
+    {
+      "declension": "δραμεῖ",
+      "ruleName": "2nd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    },
+    {
+      "declension": "δραμεῖται",
+      "ruleName": "3rd sing - fut - ind - mid/pas",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    },
+    {
+      "declension": "δραμούμεθα",
+      "ruleName": "1st plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    },
+    {
+      "declension": "δραμεῖσθε",
+      "ruleName": "2nd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    },
+    {
+      "declension": "δραμοῦνται",
+      "ruleName": "3rd plural - fut - ind - mid/pas",
+      "searchTerm": [
+        "τρέχω"
+      ]
+    }
+  ]
+}

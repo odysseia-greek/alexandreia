@@ -1,0 +1,301 @@
+{
+  "name": "irregular",
+  "type": "irregular",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "ὤν",
+      "ruleName": "nom sing masc - pres - part - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "οὖσα",
+      "ruleName": "nom sing fem - pres - part - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ὄν",
+      "ruleName": "nom sing neut - pres - part - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἐσόμενος",
+      "ruleName": "nom sing masc - fut - part - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἐσομένη",
+      "ruleName": "nom sing fem - fut - part - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἐσόμενον",
+      "ruleName": "nom sing neut - fut - part - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "γιγνόμενος",
+      "ruleName": "nom sing masc - pres - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γιγνομένη",
+      "ruleName": "nom sing fem - pres - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γιγνόμενον",
+      "ruleName": "nom sing neut - pres - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενησόμενος",
+      "ruleName": "nom sing masc - fut - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενησομένη",
+      "ruleName": "nom sing fem - fut - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενησόμενον",
+      "ruleName": "nom sing neut - fut - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμενος",
+      "ruleName": "nom sing masc - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένου",
+      "ruleName": "gen sing masc - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένῳ",
+      "ruleName": "dat sing masc - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμενον",
+      "ruleName": "acc sing masc - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμενε",
+      "ruleName": "voc sing masc - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμενοι",
+      "ruleName": "nom plural masc - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένων",
+      "ruleName": "gen plural masc - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένοις",
+      "ruleName": "dat plural masc - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένους",
+      "ruleName": "acc plural masc - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμενοι",
+      "ruleName": "voc plural masc - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένη",
+      "ruleName": "nom sing fem - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένης",
+      "ruleName": "gen sing fem - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένῃ",
+      "ruleName": "dat sing fem - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένην",
+      "ruleName": "acc sing fem - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένη",
+      "ruleName": "voc sing fem - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμεναι",
+      "ruleName": "nom plural fem - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένων",
+      "ruleName": "gen plural fem - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομέναις",
+      "ruleName": "dat plural fem - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένας",
+      "ruleName": "acc plural fem - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμεναι",
+      "ruleName": "voc plural fem - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμενον",
+      "ruleName": "nom sing neut - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένου",
+      "ruleName": "gen sing neut - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένῳ",
+      "ruleName": "dat sing neut - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμενον",
+      "ruleName": "acc sing neut - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμενον",
+      "ruleName": "voc sing neut - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμενα",
+      "ruleName": "nom plural neut - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένων",
+      "ruleName": "gen plural neut - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενομένοις",
+      "ruleName": "dat plural neut - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμενα",
+      "ruleName": "acc plural neut - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "γενόμενα",
+      "ruleName": "voc plural neut - aor - part - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    }
+  ]
+}

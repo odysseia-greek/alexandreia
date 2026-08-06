@@ -1,0 +1,441 @@
+{
+  "name": "irregular",
+  "type": "irregular",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "ἦ",
+      "ruleName": "1st sing - impf - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἦν",
+      "ruleName": "1st sing - impf - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἦσθα",
+      "ruleName": "2nd sing - impf - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἦν",
+      "ruleName": "3rd sing - impf - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἦμεν",
+      "ruleName": "1st plural - impf - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἦτε",
+      "ruleName": "2nd plural - impf - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἦσαν",
+      "ruleName": "3rd plural - impf - ind - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἐγιγνόμην",
+      "ruleName": "1st sing - impf - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "ἐγίγνου",
+      "ruleName": "2nd sing - impf - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "ἐγίγνετο",
+      "ruleName": "3rd sing - impf - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "ἐγιγνόμεθα",
+      "ruleName": "1st plural - impf - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "ἐγίγνεσθε",
+      "ruleName": "2nd plural - impf - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "ἐγίγνοντο",
+      "ruleName": "3rd plural - impf - ind - mid/pas",
+      "searchTerm": [
+        "γίγνομαι"
+      ]
+    },
+    {
+      "declension": "ἔφην",
+      "ruleName": "1st sing - impf - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "ἔφης",
+      "ruleName": "2nd sing - impf - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "ἔφη",
+      "ruleName": "3rd sing - impf - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "ἔφην",
+      "ruleName": "3rd sing - impf - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "ἔφαμεν",
+      "ruleName": "1st plural - impf - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "ἔφατε",
+      "ruleName": "2nd plural - impf - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "ἔφασαν",
+      "ruleName": "3rd plural - impf - ind - act",
+      "searchTerm": [
+        "φημί"
+      ]
+    },
+    {
+      "declension": "ᾔδη",
+      "ruleName": "1st sing - plup - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "ᾔδησθα",
+      "ruleName": "2nd sing - plup - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "ᾔδει",
+      "ruleName": "3rd sing - plup - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "ᾖσμεν",
+      "ruleName": "1st plural - plup - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "ᾖστε",
+      "ruleName": "2nd plural - plup - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "ᾖσαν",
+      "ruleName": "3rd plural - plup - ind - act",
+      "searchTerm": [
+        "οἶδα"
+      ]
+    },
+    {
+      "declension": "ἧν",
+      "ruleName": "1st sing - impf - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἧς",
+      "ruleName": "2nd sing - impf - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἧ",
+      "ruleName": "3rd sing - impf - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἴεμεν",
+      "ruleName": "1st plural - impf - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἴετε",
+      "ruleName": "2nd plural - impf - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἴεσαν",
+      "ruleName": "3rd plural - impf - ind - act",
+      "searchTerm": [
+        "ἵημι"
+      ]
+    },
+    {
+      "declension": "ἐδίδουν",
+      "ruleName": "1st sing - impf - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἐδίδους",
+      "ruleName": "2nd sing - impf - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἐδίδου",
+      "ruleName": "3rd sing - impf - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἐδίδομεν",
+      "ruleName": "1st plural - impf - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἐδίδοτε",
+      "ruleName": "2nd plural - impf - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἐδίδοσαν",
+      "ruleName": "3rd plural - impf - ind - act",
+      "searchTerm": [
+        "δίδωμι"
+      ]
+    },
+    {
+      "declension": "ἐτίθην",
+      "ruleName": "1st sing - impf - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἐτίθεις",
+      "ruleName": "2nd sing - impf - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἐτίθει",
+      "ruleName": "3rd sing - impf - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἐτίθεμεν",
+      "ruleName": "1st plural - impf - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἐτίθετε",
+      "ruleName": "2nd plural - impf - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἐτίθεσαν",
+      "ruleName": "3rd plural - impf - ind - act",
+      "searchTerm": [
+        "τίθημι"
+      ]
+    },
+    {
+      "declension": "ἵστην",
+      "ruleName": "1st sing - impf - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἵστης",
+      "ruleName": "2nd sing - impf - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἵστη",
+      "ruleName": "3rd sing - impf - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἵσταμεν",
+      "ruleName": "1st plural - impf - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἵστατε",
+      "ruleName": "2nd plural - impf - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ἵστασαν",
+      "ruleName": "3rd plural - impf - ind - act",
+      "searchTerm": [
+        "ἵστημι"
+      ]
+    },
+    {
+      "declension": "ᾖα",
+      "ruleName": "1st sing - impf - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "ᾔεις",
+      "ruleName": "2nd sing - impf - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "ᾔει",
+      "ruleName": "3rd sing - impf - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "ᾖμεν",
+      "ruleName": "1st plural - impf - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "ᾖτε",
+      "ruleName": "2nd plural - impf - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "ᾖσαν",
+      "ruleName": "3rd plural - impf - ind - act",
+      "searchTerm": [
+        "εἶμι"
+      ]
+    },
+    {
+      "declension": "ἐκείμην",
+      "ruleName": "1st sing - impf - ind - mid/pas",
+      "searchTerm": [
+        "κεῖμαι"
+      ]
+    },
+    {
+      "declension": "ἔκεισο",
+      "ruleName": "2nd sing - impf - ind - mid/pas",
+      "searchTerm": [
+        "κεῖμαι"
+      ]
+    },
+    {
+      "declension": "ἔκειτο",
+      "ruleName": "3rd sing - impf - ind - mid/pas",
+      "searchTerm": [
+        "κεῖμαι"
+      ]
+    },
+    {
+      "declension": "ἐκείμεθα",
+      "ruleName": "1st plural - impf - ind - mid/pas",
+      "searchTerm": [
+        "κεῖμαι"
+      ]
+    },
+    {
+      "declension": "ἔκεισθε",
+      "ruleName": "2nd plural - impf - ind - mid/pas",
+      "searchTerm": [
+        "κεῖμαι"
+      ]
+    },
+    {
+      "declension": "ἔκειντο",
+      "ruleName": "3rd plural - impf - ind - mid/pas",
+      "searchTerm": [
+        "κεῖμαι"
+      ]
+    }
+  ]
+}

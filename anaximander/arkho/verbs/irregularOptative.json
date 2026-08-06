@@ -1,0 +1,112 @@
+{
+  "name": "irregular",
+  "type": "irregular",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "εἴην",
+      "ruleName": "1st sing - pres - opt - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "εἴης",
+      "ruleName": "2nd sing - pres - opt - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "εἴη",
+      "ruleName": "3rd sing - pres - opt - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "εἶμεν",
+      "ruleName": "1st plural - pres - opt - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "εἴημεν",
+      "ruleName": "1st plural - pres - opt - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "εἶτε",
+      "ruleName": "2nd plural - pres - opt - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "εἴητε",
+      "ruleName": "2nd plural - pres - opt - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "εἶεν",
+      "ruleName": "3rd plural - pres - opt - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "εἴησαν",
+      "ruleName": "3rd plural - pres - opt - act",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἐσοίμην",
+      "ruleName": "1st sing - fut - opt - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἔσοιο",
+      "ruleName": "2nd sing - fut - opt - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἔσοιτο",
+      "ruleName": "3rd sing - fut - opt - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἐσοίμεθα",
+      "ruleName": "1st plural - fut - opt - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἔσοισθε",
+      "ruleName": "2nd plural - fut - opt - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    },
+    {
+      "declension": "ἔσοιντο",
+      "ruleName": "3rd plural - fut - opt - mid/pas",
+      "searchTerm": [
+        "εἰμί"
+      ]
+    }
+  ]
+}

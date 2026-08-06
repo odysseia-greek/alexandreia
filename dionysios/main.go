@@ -5,16 +5,25 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
+	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/models"
+	v1 "github.com/odysseia-greek/alexandreia/dionysios/gen/go/v1"
 	"github.com/odysseia-greek/alexandreia/dionysios/grammar"
+	"github.com/odysseia-greek/attike/aristophanes/comedy"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 const standardPort = ":5000"
+const standardGrpcPort = ":50060"
 
 func main() {
 	port := os.Getenv("PORT")
@@ -38,23 +47,27 @@ func main() {
 	logging.System("starting up.....")
 	logging.System("starting up and getting env variables")
 
-	ctx := context.Background()
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 	dionysiosConfig, err := grammar.CreateNewConfig(ctx)
 	if err != nil {
 		logging.Error(err.Error())
 		log.Fatal("death has found me")
 	}
 
-	declensionConfig, err := grammar.QueryRuleSet(dionysiosConfig.Elastic, dionysiosConfig.Index)
+	declensionConfig, err := grammar.QueryRuleSet(ctx, dionysiosConfig.Elastic, dionysiosConfig.Index)
 	if err != nil {
 		logging.Error(err.Error())
 		log.Fatal("death has found me")
 	}
+	dionysiosConfig.DeclensionMu.Lock()
 	dionysiosConfig.DeclensionConfig = *declensionConfig
+	dionysiosConfig.DeclensionMu.Unlock()
 
 	// Start a goroutine to periodically update the grammar config
 	logging.Debug("starting goroutine to periodically update the grammar config")
-	go updateGrammarConfig(dionysiosConfig)
+	go updateGrammarConfig(ctx, dionysiosConfig)
+	go startGrpcServer(dionysiosConfig)
 
 	srv := grammar.InitRoutes(dionysiosConfig)
 
@@ -65,22 +78,61 @@ func main() {
 	}
 }
 
+func startGrpcServer(dionysiosConfig *grammar.DionysosHandler) {
+	port := os.Getenv("GRPC_PORT")
+	if port == "" {
+		port = standardGrpcPort
+	}
+
+	listener, err := net.Listen("tcp", port)
+	if err != nil {
+		log.Fatalf("failed to listen for grpc: %v", err)
+	}
+
+	server := grpc.NewServer(
+		grpc.UnaryInterceptor(
+			comedy.UnaryServerInterceptor(
+				dionysiosConfig.Streamer,
+				comedy.WithHeaderKey(config.HeaderKey),
+				comedy.WithContextKeyName(config.DefaultTracingName),
+				comedy.WithCloseHop(),
+			),
+		),
+	)
+
+	reflection.Register(server)
+	v1.RegisterDionysiosServiceServer(server, dionysiosConfig)
+
+	logging.Info(fmt.Sprintf("gRPC server listening on %s", port))
+	if err := server.Serve(listener); err != nil {
+		log.Fatalf("failed to serve grpc: %v", err)
+	}
+}
+
 // updateGrammarConfig periodically fetches the grammar config from Elasticsearch
 // and updates the provided dionysiosConfig if there is any difference.
-func updateGrammarConfig(dionysiosConfig *grammar.DionysosHandler) {
+func updateGrammarConfig(ctx context.Context, dionysiosConfig *grammar.DionysosHandler) {
 	ticker := time.NewTicker(2 * time.Minute)
+	defer ticker.Stop()
 	for {
 		select {
+		case <-ctx.Done():
+			return
 		case <-ticker.C:
-			declensionConfig, err := grammar.QueryRuleSet(dionysiosConfig.Elastic, dionysiosConfig.Index)
+			declensionConfig, err := grammar.QueryRuleSet(ctx, dionysiosConfig.Elastic, dionysiosConfig.Index)
 			if err != nil {
 				logging.Debug(fmt.Sprintf("failed to fetch updated declension config: %s", err.Error()))
 				continue // Retry on the next tick
 			}
 
-			if !isSameDeclensionConfig(*declensionConfig, dionysiosConfig.DeclensionConfig) {
+			dionysiosConfig.DeclensionMu.RLock()
+			same := isSameDeclensionConfig(*declensionConfig, dionysiosConfig.DeclensionConfig)
+			dionysiosConfig.DeclensionMu.RUnlock()
+			if !same {
 				logging.Debug("Detected a difference in the grammar config. Updating...")
+				dionysiosConfig.DeclensionMu.Lock()
 				dionysiosConfig.DeclensionConfig = *declensionConfig
+				dionysiosConfig.DeclensionMu.Unlock()
 			}
 		}
 	}

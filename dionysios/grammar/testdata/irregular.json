@@ -1,0 +1,12 @@
+{
+  "name": "irregular",
+  "type": "irregular",
+  "dialect": "attic",
+  "declensions": [
+    {
+      "declension": "ἦσαν",
+      "ruleName": "3rd plural - impf - ind - act",
+      "searchTerm": ["εἰμί"]
+    }
+  ]
+}

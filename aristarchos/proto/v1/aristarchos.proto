@@ -1,6 +1,5 @@
 syntax = "proto3";
 option go_package = "github.com/odysseia-greek/alexanderia/aristarchos/gen/go/v1;aristarchosv1";
-import "google/protobuf/empty.proto";
 
 package aristarchos.v1;
 

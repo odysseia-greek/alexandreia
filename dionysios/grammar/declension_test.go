@@ -1,21 +1,141 @@
 package grammar
 
 import (
+	"encoding/json"
+	"os"
+	"path/filepath"
+	"testing"
+
 	"github.com/odysseia-greek/agora/plato/models"
 	"github.com/stretchr/testify/assert"
-	"testing"
+	"github.com/stretchr/testify/require"
 )
+
+func declensionConfigFromFixture(t *testing.T, names ...string) *models.DeclensionConfig {
+	t.Helper()
+
+	config := &models.DeclensionConfig{}
+	for _, name := range names {
+		payload, err := os.ReadFile(filepath.Join("testdata", name+".json"))
+		require.NoError(t, err)
+
+		var declension models.Declension
+		require.NoError(t, json.Unmarshal(payload, &declension))
+		config.Declensions = append(config.Declensions, declension)
+	}
+	return config
+}
+
+func TestGrammarInputLowercasesCapitalizedGreekWithoutMovingAccent(t *testing.T) {
+	assert.Equal(t, "ἀρχὴ", normalizeGrammarInput("Ἀρχὴ"))
+}
+
+func TestExactArticleWinsOverAccentInsensitiveConjunction(t *testing.T) {
+	handler := DionysosHandler{DeclensionConfig: models.DeclensionConfig{Declensions: []models.Declension{
+		{
+			Type: "conjunction",
+			Declensions: []models.DeclensionElement{
+				{Declension: "ἤ", RuleName: "conjunction", SearchTerm: []string{"ἤ"}},
+			},
+		},
+		{
+			Type: "article",
+			Declensions: []models.DeclensionElement{
+				{Declension: "ἡ", RuleName: "article - sing - fem - nom", SearchTerm: []string{"ὁ"}},
+			},
+		},
+	}}}
+
+	isMisc, form := handler.isAWordWithoutDeclensions("ἡ")
+	assert.False(t, isMisc)
+	assert.Nil(t, form)
+}
+
+func TestExactAccentedEndingDistinguishesNominativeFromDative(t *testing.T) {
+	assert.True(t, matchesExactEnding("ἀρχή", "-ή"))
+	assert.False(t, matchesExactEnding("ἀρχή", "-ῃ"))
+	assert.True(t, matchesExactEnding("ἀρχῇ", "-ῇ"))
+}
+
+func TestFeminineGenitiveCanReconstructFinalSigmaLemma(t *testing.T) {
+	handler := DionysosHandler{}
+	form := models.DeclensionElement{
+		Declension: "-ης",
+		RuleName:   "noun - sing - fem - gen",
+		SearchTerm: []string{""},
+	}
+
+	rules := handler.loopOverDeclensions("πάσης", form, false, "firstDeclension")
+	require.Len(t, rules.Rules, 1)
+	require.Len(t, rules.Rules[0].SearchTerms, 1)
+	assert.Equal(t, "πας", normalizeDictionaryTerm(rules.Rules[0].SearchTerms[0]))
+	assert.Equal(t, "πᾶς", canonicalizeFinalSigma("πᾶσ"))
+}
+
+func TestExplicitAdjectiveFormsUseCanonicalDictionaryLemmas(t *testing.T) {
+	handler := DionysosHandler{}
+	tests := []struct {
+		word         string
+		form         models.DeclensionElement
+		expected     string
+		expectedRule string
+	}{
+		{
+			word: "μεγάλα",
+			form: models.DeclensionElement{
+				Declension: "μεγάλα",
+				RuleName:   "adjective - plural - neut - nom/voc/acc",
+				SearchTerm: []string{"μέγας"},
+			},
+			expected:     "μέγας",
+			expectedRule: "adjective - plural - neut - nom/voc/acc",
+		},
+		{
+			word: "θωμαστά",
+			form: models.DeclensionElement{
+				Declension: "θωμαστά",
+				RuleName:   "adjective - plural - neut - nom/voc/acc (ionic)",
+				SearchTerm: []string{"θαυμαστός"},
+			},
+			expected:     "θαυμαστός",
+			expectedRule: "adjective - plural - neut - nom/voc/acc (ionic)",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.word, func(t *testing.T) {
+			rules := handler.loopOverDeclensions(test.word, test.form, false, "adjective")
+			require.Len(t, rules.Rules, 1)
+			assert.Equal(t, test.expectedRule, rules.Rules[0].Rule)
+			require.Len(t, rules.Rules[0].SearchTerms, 1)
+			assert.Equal(t, test.expected, normalizeDictionaryTerm(rules.Rules[0].SearchTerms[0]))
+		})
+	}
+}
+
+func TestContractedPresentMiddleInfinitiveReconstructsEpsilonContractLemma(t *testing.T) {
+	handler := DionysosHandler{}
+	form := models.DeclensionElement{
+		Declension: "-εῖσθαι",
+		RuleName:   "inf - pres - mid (contracted -έω)",
+		SearchTerm: []string{"έω"},
+	}
+
+	rules := handler.loopOverDeclensions("αἱρεῖσθαι", form, false, "infinitive")
+	require.Len(t, rules.Rules, 1)
+	require.Len(t, rules.Rules[0].SearchTerms, 1)
+	assert.Equal(t, "αιρέω", rules.Rules[0].SearchTerms[0])
+}
 
 func TestCheckGrammarEndPointIrregularVerb(t *testing.T) {
 	numberOfRules := 1
 
 	t.Run("HappyPathIrregularVerb", func(t *testing.T) {
-		searchWord := "ᾖσαν"
-		expected := "3th plural - impf - ind - act"
+		searchWord := "ἦσαν"
+		expected := "3rd plural - impf - ind - act"
 		expectedSearchResult := "εἰμί"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "irregular")
 
 		handler := DionysosHandler{}
 
@@ -34,7 +154,6 @@ func TestCheckGrammarEndPointIrregularVerb(t *testing.T) {
 			}
 		}
 
-		assert.Nil(t, err)
 		assert.True(t, len(foundRules.Rules) == numberOfRules)
 		expectedRuleFound := false
 		for _, rule := range foundRules.Rules {
@@ -47,12 +166,11 @@ func TestCheckGrammarEndPointIrregularVerb(t *testing.T) {
 	})
 
 	t.Run("FullPathIrregularVerb", func(t *testing.T) {
-		searchWord := "ᾖσαν"
-		expected := "3th plural - impf - ind - act"
+		searchWord := "ἦσαν"
+		expected := "3rd plural - impf - ind - act"
 		expectedSearchResult := "εἰμί"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "irregular")
 
 		handler := DionysosHandler{
 			DeclensionConfig: *declensionConfig,
@@ -62,7 +180,7 @@ func TestCheckGrammarEndPointIrregularVerb(t *testing.T) {
 		assert.Nil(t, err)
 
 		assert.Nil(t, err)
-		assert.True(t, len(foundRules.Rules) == 4)
+		assert.Len(t, foundRules.Rules, numberOfRules)
 		expectedRuleFound := false
 		for _, rule := range foundRules.Rules {
 			if rule.Rule == expected {
@@ -83,8 +201,7 @@ func TestDeclensionImperfectumResult(t *testing.T) {
 		expected := "1st sing - impf - ind - act"
 		expectedSearchResult := "φερω"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "imperfect")
 
 		handler := DionysosHandler{}
 
@@ -122,15 +239,14 @@ func TestDeclensionAoristResult(t *testing.T) {
 	numberOfRules := 1
 	multipleSearchResults := 4
 	contraction := true
-	name := "firstAorist"
+	name := "aorist"
 
 	t.Run("HappyPathFirstAoristPsi", func(t *testing.T) {
 		searchWord := "ἔγρᾰψᾰ"
 		expected := "1st sing - aorist - ind - act"
 		expectedSearchResult := "γραφω"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "aorist")
 
 		handler := DionysosHandler{}
 		var foundRules models.FoundRules
@@ -150,7 +266,7 @@ func TestDeclensionAoristResult(t *testing.T) {
 			}
 		}
 
-		assert.Equal(t, numberOfRules, len(foundRules.Rules))
+		require.Len(t, foundRules.Rules, numberOfRules)
 		assert.Equal(t, expected, foundRules.Rules[0].Rule)
 		assert.Equal(t, expectedSearchResult, foundRules.Rules[0].SearchTerms[0])
 	})
@@ -160,8 +276,7 @@ func TestDeclensionAoristResult(t *testing.T) {
 		expected := "1st plural - aorist - ind - act"
 		expectedSearchResult := "λυω"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "aorist")
 
 		handler := DionysosHandler{}
 		var foundRules models.FoundRules
@@ -181,7 +296,7 @@ func TestDeclensionAoristResult(t *testing.T) {
 			}
 		}
 
-		assert.Equal(t, numberOfRules, len(foundRules.Rules))
+		require.Len(t, foundRules.Rules, numberOfRules)
 		assert.Equal(t, expected, foundRules.Rules[0].Rule)
 		assert.Equal(t, expectedSearchResult, foundRules.Rules[0].SearchTerms[0])
 	})
@@ -191,8 +306,7 @@ func TestDeclensionAoristResult(t *testing.T) {
 		expected := "3th sing - aorist - ind - act"
 		expectedSearchResult := "πλεκω"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "aorist")
 
 		handler := DionysosHandler{}
 		var foundRules models.FoundRules
@@ -212,7 +326,7 @@ func TestDeclensionAoristResult(t *testing.T) {
 			}
 		}
 
-		assert.Equal(t, numberOfRules, len(foundRules.Rules))
+		require.Len(t, foundRules.Rules, numberOfRules)
 		assert.Equal(t, expected, foundRules.Rules[0].Rule)
 		assert.Equal(t, multipleSearchResults, len(foundRules.Rules[0].SearchTerms))
 		found := false
@@ -230,8 +344,7 @@ func TestDeclensionAoristResult(t *testing.T) {
 		expected := "2nd plural - aorist - ind - act"
 		expectedSearchResult := "διδασκω"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "aorist")
 
 		handler := DionysosHandler{}
 		var foundRules models.FoundRules
@@ -250,7 +363,7 @@ func TestDeclensionAoristResult(t *testing.T) {
 				continue
 			}
 		}
-		assert.Equal(t, numberOfRules, len(foundRules.Rules))
+		require.Len(t, foundRules.Rules, numberOfRules)
 		assert.Equal(t, expected, foundRules.Rules[0].Rule)
 		assert.Equal(t, multipleSearchResults, len(foundRules.Rules[0].SearchTerms))
 		found := false
@@ -268,8 +381,7 @@ func TestDeclensionAoristResult(t *testing.T) {
 		expected := "3th plural - aorist - ind - act"
 		expectedSearchResult := "λεγω"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "aorist")
 
 		handler := DionysosHandler{}
 		var foundRules models.FoundRules
@@ -289,7 +401,7 @@ func TestDeclensionAoristResult(t *testing.T) {
 			}
 		}
 
-		assert.Equal(t, numberOfRules, len(foundRules.Rules))
+		require.Len(t, foundRules.Rules, numberOfRules)
 		assert.Equal(t, expected, foundRules.Rules[0].Rule)
 		assert.Equal(t, multipleSearchResults, len(foundRules.Rules[0].SearchTerms))
 		found := false
@@ -307,8 +419,7 @@ func TestDeclensionAoristResult(t *testing.T) {
 		expected := "2nd sing - aorist - ind - act"
 		expectedSearchResult := "αρχω"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "aorist")
 
 		handler := DionysosHandler{}
 		var foundRules models.FoundRules
@@ -328,7 +439,7 @@ func TestDeclensionAoristResult(t *testing.T) {
 			}
 		}
 
-		assert.Equal(t, numberOfRules, len(foundRules.Rules))
+		require.Len(t, foundRules.Rules, numberOfRules)
 		assert.Equal(t, expected, foundRules.Rules[0].Rule)
 		assert.Equal(t, 2*multipleSearchResults, len(foundRules.Rules[0].SearchTerms))
 		found := false
@@ -351,8 +462,7 @@ func TestDeclensionParticiplesResult(t *testing.T) {
 		expected := "pres act part - sing - masc - nom"
 		expectedSearchResult := "λυω"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "participle")
 
 		handler := DionysosHandler{}
 
@@ -360,7 +470,7 @@ func TestDeclensionParticiplesResult(t *testing.T) {
 
 		for _, declension := range declensionConfig.Declensions {
 			switch declension.Type {
-			case "participia":
+			case "participle":
 				for _, element := range declension.Declensions {
 					rules := handler.loopOverDeclensions(searchWord, element, contraction, "")
 					for _, rule := range rules.Rules {
@@ -389,8 +499,7 @@ func TestDeclensionParticiplesResult(t *testing.T) {
 		expected := "pres act part - plural - fem - dat"
 		expectedSearchResult := "λυω"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "participle")
 
 		handler := DionysosHandler{}
 
@@ -398,7 +507,7 @@ func TestDeclensionParticiplesResult(t *testing.T) {
 
 		for _, declension := range declensionConfig.Declensions {
 			switch declension.Type {
-			case "participia":
+			case "participle":
 				for _, element := range declension.Declensions {
 					rules := handler.loopOverDeclensions(searchWord, element, contraction, "")
 					for _, rule := range rules.Rules {
@@ -427,8 +536,7 @@ func TestDeclensionParticiplesResult(t *testing.T) {
 		expected := "pres act part - sing - neut - gen"
 		expectedSearchResult := "λυω"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "participle")
 
 		handler := DionysosHandler{}
 
@@ -436,7 +544,7 @@ func TestDeclensionParticiplesResult(t *testing.T) {
 
 		for _, declension := range declensionConfig.Declensions {
 			switch declension.Type {
-			case "participia":
+			case "participle":
 				for _, element := range declension.Declensions {
 					rules := handler.loopOverDeclensions(searchWord, element, contraction, "")
 					for _, rule := range rules.Rules {
@@ -463,11 +571,10 @@ func TestDeclensionParticiplesResult(t *testing.T) {
 	t.Run("HappyPathParticpleAndVerbaResult", func(t *testing.T) {
 		searchWord := "λυουσι"
 		expected := "pres act part - plural - masc - dat"
-		expectedVerba := "3th plural - pres - ind - act"
+		expectedVerba := "3rd plural - pres - ind - act"
 		expectedSearchResult := "λυω"
 
-		declensionConfig, err := QueryRuleSet(nil, "dionysios")
-		assert.Nil(t, err)
+		declensionConfig := declensionConfigFromFixture(t, "participle", "present")
 
 		handler := DionysosHandler{
 			DeclensionConfig: *declensionConfig,
@@ -476,7 +583,7 @@ func TestDeclensionParticiplesResult(t *testing.T) {
 		foundRules, err := handler.searchForDeclensions(searchWord)
 		assert.Nil(t, err)
 
-		assert.Equal(t, 3, len(foundRules.Rules))
+		assert.Len(t, foundRules.Rules, 2)
 		expectedRuleFound := false
 		expectedVerbaFound := false
 		for _, rule := range foundRules.Rules {

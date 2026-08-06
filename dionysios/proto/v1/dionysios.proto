@@ -1,0 +1,189 @@
+syntax = "proto3";
+
+package dionysios.v1;
+
+option go_package = "github.com/odysseia-greek/alexandreia/dionysios/gen/go/v1;dionysiosv1";
+
+service DionysiosService {
+  rpc Health(HealthRequest) returns (HealthResponse);
+  rpc CheckGrammar(CheckGrammarRequest) returns (CheckGrammarResponse);
+  rpc Research(ResearchRequest) returns (ResearchResponse);
+
+  // TextMode is intended for heavier scholar workflows. Implementations should
+  // require session_id and rate-limit by both session_id and the upstream IP
+  // observed from gRPC peer/metadata. Resource-exhausted should be returned
+  // when either identity has sent a request inside the configured window.
+  rpc TextMode(TextModeRequest) returns (TextModeResponse);
+}
+
+message HealthRequest {}
+
+message HealthResponse {
+  bool healthy = 1;
+  string time = 2;
+  string version = 3;
+  DatabaseHealth database_health = 4;
+  ComponentHealth tracer = 5;
+  CacheHealth cache = 6;
+  MappingHealth mapping = 7;
+  repeated ComponentHealth dependencies = 8;
+  ComponentHealth elasticsearch = 9;
+}
+
+message ComponentHealth {
+  string name = 1;
+  bool configured = 2;
+  bool healthy = 3;
+  string status = 4;
+  string message = 5;
+  uint64 latency_ms = 6;
+}
+
+message CacheHealth {
+  bool configured = 1;
+  bool healthy = 2;
+  string implementation = 3;
+  string status = 4;
+  string message = 5;
+  uint64 key_count = 6;
+  int64 lsm_size_bytes = 7;
+  int64 value_log_size_bytes = 8;
+  int64 total_size_bytes = 9;
+  CacheMetrics block_cache = 10;
+  CacheMetrics index_cache = 11;
+}
+
+message CacheMetrics {
+  uint64 hits = 1;
+  uint64 misses = 2;
+  uint64 keys_added = 3;
+  uint64 keys_updated = 4;
+  uint64 keys_evicted = 5;
+  uint64 cost_added = 6;
+  uint64 cost_evicted = 7;
+}
+
+message MappingHealth {
+  bool loaded = 1;
+  uint32 declension_count = 2;
+  uint32 rule_count = 3;
+}
+
+message DatabaseHealth {
+  bool healthy = 1;
+  string cluster_name = 2;
+  string server_name = 3;
+  string server_version = 4;
+}
+
+message CheckGrammarRequest {
+  string word = 1;
+  bool include_audit = 2;
+}
+
+message CheckGrammarResponse {
+  repeated DeclensionResult results = 1;
+  GrammarAudit audit = 2;
+}
+
+message DeclensionResult {
+  string word = 1;
+  string rule = 2;
+  string root_word = 3;
+  repeated string translation = 4;
+}
+
+message GrammarAudit {
+  string request_id = 1;
+  string word = 2;
+  string outcome = 3;
+  string source = 4;
+  string reason = 5;
+  repeated GrammarAuditEvent events = 6;
+}
+
+message GrammarAuditEvent {
+  string step = 1;
+  string status = 2;
+  string reason = 3;
+  string source = 4;
+  string rule = 5;
+  string root_word = 6;
+  string search_term = 7;
+  uint32 result_count = 8;
+  uint32 candidate_count = 9;
+  repeated string details = 10;
+}
+
+message ResearchRequest {
+  string rootword = 1;
+  uint32 limit = 2;
+}
+
+message ResearchResponse {
+  string rootword = 1;
+  string part_of_speech = 2;
+  repeated Conjugation conjugations = 3;
+  repeated AnalyzeResult results = 4;
+}
+
+message Conjugation {
+  string word = 1;
+  string rule = 2;
+}
+
+message AnalyzeResult {
+  string reference_link = 1;
+  string author = 2;
+  string book = 3;
+  string reference = 4;
+  Rhema text = 5;
+}
+
+message Rhema {
+  string greek = 1;
+  repeated string translations = 2;
+  string section = 3;
+}
+
+message TextModeRequest {
+  string text = 1;
+  string session_id = 2;
+  bool include_audit = 3;
+}
+
+message TextModeResponse {
+  string session_id = 1;
+  RateLimitInfo rate_limit = 2;
+  repeated TextToken tokens = 3;
+  GrammarAudit audit = 4;
+  string original_text = 5;
+  string literal_translation = 6;
+  TextSearchStatus text_search = 7;
+}
+
+message TextSearchStatus {
+  bool searched = 1;
+  bool found = 2;
+  string status = 3;
+  string message = 4;
+  repeated AnalyzeResult matches = 5;
+  uint32 match_count = 6;
+  string query = 7;
+}
+
+message RateLimitInfo {
+  string upstream_ip = 1;
+  uint32 window_seconds = 2;
+  string next_allowed_time = 3;
+}
+
+message TextToken {
+  string token = 1;
+  // Zero-based position in the normalized token sequence.
+  uint32 position = 2;
+  repeated DeclensionResult results = 3;
+  string gloss = 4;
+  bool resolved = 5;
+  string message = 6;
+}

@@ -1,0 +1,14 @@
+{
+  "name": "ionicAdjective",
+  "type": "adjective",
+  "dialect": "ionic",
+  "declensions": [
+    {
+      "declension": "θωμαστά",
+      "ruleName": "adjective - plural - neut - nom/voc/acc (ionic)",
+      "searchTerm": [
+        "θαυμαστός"
+      ]
+    }
+  ]
+}

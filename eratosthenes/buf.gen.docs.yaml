@@ -1,0 +1,8 @@
+version: v2
+plugins:
+  - local: protoc-gen-doc
+    out: eratosthenes/docs
+    opt: html,docs.html
+  - local: protoc-gen-doc
+    out: eratosthenes/docs
+    opt: markdown,docs.md

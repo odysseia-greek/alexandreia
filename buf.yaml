@@ -2,6 +2,9 @@
 version: v2
 modules:
   - path: aristarchos/proto
+  - path: dionysios/proto
+  - path: eratosthenes/proto
+  - path: kallimachos/proto
 lint:
   use: [DEFAULT]
 breaking:
