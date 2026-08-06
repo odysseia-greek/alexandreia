@@ -11,7 +11,7 @@ require (
 	github.com/odysseia-greek/agora/plato v0.2.16
 	github.com/odysseia-greek/alexandreia/aristarchos v0.3.0
 	github.com/odysseia-greek/alexandreia/eratosthenes v0.1.0
-	github.com/odysseia-greek/alexandreia/kallimachos v0.1.0
+	github.com/odysseia-greek/alexandreia/kallimachos v0.1.1
 	github.com/odysseia-greek/attike/aristophanes v0.8.0
 	github.com/odysseia-greek/delphi/aristides v0.0.1
 	github.com/stretchr/testify v1.11.1
