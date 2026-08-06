@@ -3,7 +3,7 @@ module github.com/odysseia-greek/alexandreia/galenos
 go 1.26.5
 
 require (
-	github.com/odysseia-greek/alexandreia/dionysios v0.0.0
+	github.com/odysseia-greek/alexandreia/dionysios v0.3.3
 	github.com/onsi/ginkgo/v2 v2.32.0
 	github.com/onsi/gomega v1.42.1
 	google.golang.org/grpc v1.83.0
@@ -25,5 +25,3 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 )
-
-replace github.com/odysseia-greek/alexandreia/dionysios => ../dionysios

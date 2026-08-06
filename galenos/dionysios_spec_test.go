@@ -1,4 +1,4 @@
-package dionysios_test
+package main
 
 import (
 	"context"

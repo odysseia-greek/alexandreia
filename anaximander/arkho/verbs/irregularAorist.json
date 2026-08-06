@@ -632,6 +632,146 @@
       "searchTerm": [
         "ἵστημι"
       ]
+    },
+    {
+      "declension": "ἔβαλον",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": ["βάλλω"]
+    },
+    {
+      "declension": "ἔβαλες",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": ["βάλλω"]
+    },
+    {
+      "declension": "ἔβαλε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": ["βάλλω"]
+    },
+    {
+      "declension": "ἔβαλεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": ["βάλλω"]
+    },
+    {
+      "declension": "ἐβάλομεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": ["βάλλω"]
+    },
+    {
+      "declension": "ἐβάλετε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": ["βάλλω"]
+    },
+    {
+      "declension": "ἔβαλον",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": ["βάλλω"]
+    },
+    {
+      "declension": "ἔμαθον",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": ["μανθάνω"]
+    },
+    {
+      "declension": "ἔμαθες",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": ["μανθάνω"]
+    },
+    {
+      "declension": "ἔμαθε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": ["μανθάνω"]
+    },
+    {
+      "declension": "ἔμαθεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": ["μανθάνω"]
+    },
+    {
+      "declension": "ἐμάθομεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": ["μανθάνω"]
+    },
+    {
+      "declension": "ἐμάθετε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": ["μανθάνω"]
+    },
+    {
+      "declension": "ἔμαθον",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": ["μανθάνω"]
+    },
+    {
+      "declension": "ἔπαθον",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": ["πάσχω"]
+    },
+    {
+      "declension": "ἔπαθες",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": ["πάσχω"]
+    },
+    {
+      "declension": "ἔπαθε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": ["πάσχω"]
+    },
+    {
+      "declension": "ἔπαθεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": ["πάσχω"]
+    },
+    {
+      "declension": "ἐπάθομεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": ["πάσχω"]
+    },
+    {
+      "declension": "ἐπάθετε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": ["πάσχω"]
+    },
+    {
+      "declension": "ἔπαθον",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": ["πάσχω"]
+    },
+    {
+      "declension": "ἔφυγον",
+      "ruleName": "1st sing - aor - ind - act",
+      "searchTerm": ["φεύγω"]
+    },
+    {
+      "declension": "ἔφυγες",
+      "ruleName": "2nd sing - aor - ind - act",
+      "searchTerm": ["φεύγω"]
+    },
+    {
+      "declension": "ἔφυγε",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": ["φεύγω"]
+    },
+    {
+      "declension": "ἔφυγεν",
+      "ruleName": "3rd sing - aor - ind - act",
+      "searchTerm": ["φεύγω"]
+    },
+    {
+      "declension": "ἐφύγομεν",
+      "ruleName": "1st plural - aor - ind - act",
+      "searchTerm": ["φεύγω"]
+    },
+    {
+      "declension": "ἐφύγετε",
+      "ruleName": "2nd plural - aor - ind - act",
+      "searchTerm": ["φεύγω"]
+    },
+    {
+      "declension": "ἔφυγον",
+      "ruleName": "3rd plural - aor - ind - act",
+      "searchTerm": ["φεύγω"]
     }
   ]
 }

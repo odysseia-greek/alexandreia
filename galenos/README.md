@@ -1,33 +1,43 @@
 # Galenos
 
-Galenos contains integration and system tests for the Alexandrian services. The
-first suite exercises the public Dionysios gRPC contract with Ginkgo.
+Galenos is the Ginkgo integration-test suite for the Dionysios gRPC API. Its
+suite is kept at the module root so it can be compiled into one test binary,
+matching the deployment model used by Dareios.
 
-The baseline deliberately checks only externally useful guarantees:
+## Configure the endpoint
 
-- service health and loaded grammar mappings;
-- representative grammar analysis and audit output;
-- request validation for grammar, research, and text mode;
-- a Herodotus reference passage that exercises grammar, canonical dictionary
+Set `DIONYSIOS_GRPC_ADDRESS` to the Dionysios gRPC address. It defaults to
+`localhost:50060`.
+
+```shell
+export DIONYSIOS_GRPC_ADDRESS=localhost:50060
+```
+
+## Run locally
+
+```shell
+go test -v ./...
+```
+
+Or with the Ginkgo CLI:
+
+```shell
+ginkgo -v
+```
+
+## Build and run the container
+
+```shell
+docker build -f Containerfile -t galenos .
+docker run --rm \
+  -e DIONYSIOS_GRPC_ADDRESS=host.docker.internal:50060 \
+  galenos
+```
+
+The suite exercises the public Dionysios contract and checks:
+
+- Service health and loaded grammar mappings.
+- Representative grammar analysis and audit output.
+- Request validation for grammar, research, and text mode.
+- A Herodotus reference passage that exercises grammar, canonical dictionary
   resolution, known-text discovery, and the evidence intended for Demosthenes.
-
-## Run
-
-Start Dionysios and its dependencies, then run from the repository root:
-
-```sh
-go test ./galenos/...
-```
-
-The suite uses `localhost:50060` by default. Override the target when testing a
-container or cluster deployment:
-
-```sh
-DIONYSIOS_GRPC_ADDRESS=dionysios.example:50060 go test ./galenos/...
-```
-
-To use Ginkgo's reporting and filtering, install its CLI and run:
-
-```sh
-ginkgo -r ./galenos
-```
