@@ -12,7 +12,6 @@ import (
 
 	"github.com/odysseia-greek/agora/aristoteles/models"
 	"github.com/odysseia-greek/agora/plato/logging"
-	ariv1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	v1 "github.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1"
 	"github.com/odysseia-greek/attike/aristophanes/comedy"
 	"google.golang.org/grpc/codes"
@@ -50,17 +49,15 @@ func (l *ScholarServiceImpl) Analyze(ctx context.Context, request *v1.AnalyzeReq
 	limit := sanitizeLimit(request.GetLimit())
 
 	response := &v1.AnalyzeResponse{
-		Rootword: rootword,
+		Rootword:     rootword,
+		PartOfSpeech: request.GetPartOfSpeech(),
+		Conjugations: request.GetConjugations(),
 		DirectResult: &v1.DirectResult{
 			RequestedWord: rootword,
 		},
 	}
 
-	entry, words, conjugations := l.resolveForms(ctx, rootword)
-	if entry != nil {
-		response.PartOfSpeech = entry.PartOfSpeech.String()
-	}
-	response.Conjugations = conjugations
+	words := analyzeWords(rootword, request.GetConjugations())
 
 	directQuery := createGreekTextQuery([]string{rootword}, limit)
 	directResponse, directHits, err := l.queryTexts(ctx, directQuery)
@@ -284,47 +281,26 @@ func sanitizeLimit(limit uint32) uint32 {
 	return limit
 }
 
-func (l *ScholarServiceImpl) resolveForms(ctx context.Context, rootword string) (*ariv1.RootWordResponse, []string, []*v1.Conjugation) {
-	entry, err := l.Aggregator.RetrieveEntry(ctx, &ariv1.AggregatorRequest{RootWord: rootword})
-	if err != nil {
-		logging.Error(fmt.Sprintf("failed to retrieve entry for %s: %s", rootword, err.Error()))
-		return nil, []string{rootword}, nil
-	}
-
-	var rootWordFound bool
-	words := make([]string, 0)
+func analyzeWords(rootword string, conjugations []*v1.Conjugation) []string {
+	words := make([]string, 0, len(conjugations)+1)
 	wordSet := make(map[string]struct{})
-	conjugations := make([]*v1.Conjugation, 0)
-
-	for _, category := range entry.Categories {
-		for _, form := range category.Forms {
-			if form.Word == entry.RootWord {
-				rootWordFound = true
-			}
-
-			if _, exists := wordSet[form.Word]; !exists {
-				wordSet[form.Word] = struct{}{}
-				words = append(words, form.Word)
-			}
-
-			conjugations = append(conjugations, &v1.Conjugation{
-				Word: form.Word,
-				Rule: form.Rule,
-			})
+	for _, conjugation := range conjugations {
+		if conjugation == nil {
+			continue
+		}
+		word := strings.TrimSpace(conjugation.GetWord())
+		if word == "" {
+			continue
+		}
+		if _, exists := wordSet[word]; !exists {
+			wordSet[word] = struct{}{}
+			words = append(words, word)
 		}
 	}
-
-	if !rootWordFound {
-		if _, exists := wordSet[rootword]; !exists {
-			words = append(words, rootword)
-		}
-	}
-
-	if len(words) == 0 {
+	if _, exists := wordSet[rootword]; !exists {
 		words = append(words, rootword)
 	}
-
-	return entry, words, conjugations
+	return words
 }
 
 func (l *ScholarServiceImpl) queryTexts(ctx context.Context, query map[string]interface{}) (*models.Response, int64, error) {

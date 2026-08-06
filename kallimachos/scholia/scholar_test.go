@@ -2,13 +2,11 @@ package scholia
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"testing"
 
 	elastic "github.com/odysseia-greek/agora/aristoteles"
 	esmodels "github.com/odysseia-greek/agora/aristoteles/models"
-	ariv1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	v1 "github.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
@@ -111,26 +109,14 @@ const (
 	}`
 )
 
-type fakeAggregatorResolver struct {
-	entry *ariv1.RootWordResponse
-	err   error
-}
-
-func (f *fakeAggregatorResolver) RetrieveEntry(ctx context.Context, request *ariv1.AggregatorRequest) (*ariv1.RootWordResponse, error) {
-	if f.err != nil {
-		return nil, f.err
-	}
-	return f.entry, nil
-}
-
 func TestAnalyzeReturnsDirectAndExpandedResults(t *testing.T) {
-	service := newTestScholarService(t, newRootWordEntry(), directTextHit, expandedTextHit)
+	service := newTestScholarService(t, directTextHit, expandedTextHit)
 
-	response, err := service.Analyze(context.Background(), &v1.AnalyzeRequest{Rootword: "λόγος", Limit: 5})
+	response, err := service.Analyze(context.Background(), newAnalyzeRequest())
 
 	assert.Nil(t, err)
 	assert.Equal(t, "λόγος", response.Rootword)
-	assert.Equal(t, ariv1.PartOfSpeech_NOUN.String(), response.PartOfSpeech)
+	assert.Equal(t, "NOUN", response.PartOfSpeech)
 	assert.Len(t, response.Conjugations, 2)
 	assert.Equal(t, "λόγος", response.DirectResult.RequestedWord)
 	assert.Len(t, response.DirectResult.Texts, 1)
@@ -149,7 +135,7 @@ func TestAnalyzeRequiresRootword(t *testing.T) {
 }
 
 func TestFindTextReturnsMatchingSection(t *testing.T) {
-	service := newTestScholarService(t, nil, directTextHit)
+	service := newTestScholarService(t, directTextHit)
 
 	response, err := service.FindText(context.Background(), &v1.FindTextRequest{
 		Text:  "ὁ λόγος καλός.",
@@ -167,7 +153,7 @@ func TestFindTextReturnsMatchingSection(t *testing.T) {
 }
 
 func TestFindTextReturnsFoundFalseWhenPhraseIsAbsent(t *testing.T) {
-	service := newTestScholarService(t, nil, emptyTextHit, emptyTextHit, emptyTextHit)
+	service := newTestScholarService(t, emptyTextHit, emptyTextHit, emptyTextHit)
 
 	response, err := service.FindText(context.Background(), &v1.FindTextRequest{Text: "τοῦτο τὸ χωρίον οὐκ ἔστιν"})
 
@@ -199,7 +185,7 @@ func TestCreateFindTextQueryUsesNestedPhraseMatch(t *testing.T) {
 }
 
 func TestFindTextUsesNormalizedPhraseFallback(t *testing.T) {
-	service := newTestScholarService(t, nil, emptyTextHit, directTextHit)
+	service := newTestScholarService(t, emptyTextHit, directTextHit)
 
 	response, err := service.FindText(context.Background(), &v1.FindTextRequest{Text: "ὁ λόγος καλός!"})
 
@@ -236,16 +222,15 @@ func TestTextWindowsUsesContiguousSlidingPhrases(t *testing.T) {
 }
 
 func TestAnalyzeReturnsDirectOnlyWhenNoExpandedWords(t *testing.T) {
-	entry := &ariv1.RootWordResponse{
-		RootWord:     "λόγος",
-		PartOfSpeech: ariv1.PartOfSpeech_NOUN,
-		Categories: []*ariv1.GrammaticalCategory{
-			{Forms: []*ariv1.GrammaticalForm{{Word: "λόγος", Rule: "noun - sing - masc - nom"}}},
-		},
-	}
-	service := newTestScholarService(t, entry, directTextHit)
+	service := newTestScholarService(t, directTextHit)
 
-	response, err := service.Analyze(context.Background(), &v1.AnalyzeRequest{Rootword: "λόγος", Limit: 5})
+	response, err := service.Analyze(context.Background(), &v1.AnalyzeRequest{
+		Rootword: "λόγος",
+		Limit:    5,
+		Conjugations: []*v1.Conjugation{
+			{Word: "λόγος", Rule: "noun - sing - masc - nom"},
+		},
+	})
 
 	assert.Nil(t, err)
 	assert.Len(t, response.DirectResult.Texts, 1)
@@ -253,47 +238,29 @@ func TestAnalyzeReturnsDirectOnlyWhenNoExpandedWords(t *testing.T) {
 }
 
 func TestAnalyzeReturnsErrorWhenNoHits(t *testing.T) {
-	service := newTestScholarService(t, newRootWordEntry(), emptyTextHit, emptyTextHit)
+	service := newTestScholarService(t, emptyTextHit, emptyTextHit)
 
-	response, err := service.Analyze(context.Background(), &v1.AnalyzeRequest{Rootword: "λόγος", Limit: 5})
+	response, err := service.Analyze(context.Background(), newAnalyzeRequest())
 
 	assert.Nil(t, response)
 	assert.EqualError(t, err, `no hits for rootword "λόγος"`)
 }
 
-func TestResolveFormsFallsBackToRootwordWhenAggregatorFails(t *testing.T) {
-	service := ScholarServiceImpl{
-		Aggregator: &fakeAggregatorResolver{err: fmt.Errorf("not found")},
-	}
-
-	entry, words, conjugations := service.resolveForms(context.Background(), "λόγος")
-
-	assert.Nil(t, entry)
-	assert.ElementsMatch(t, []string{"λόγος"}, words)
-	assert.Nil(t, conjugations)
+func TestAnalyzeWordsFallsBackToRootword(t *testing.T) {
+	words := analyzeWords("λόγος", nil)
+	assert.Equal(t, []string{"λόγος"}, words)
 }
 
-func TestResolveFormsDeduplicatesWordsAndAddsMissingRoot(t *testing.T) {
-	entry := &ariv1.RootWordResponse{
-		RootWord: "λόγος",
-		Categories: []*ariv1.GrammaticalCategory{
-			{Forms: []*ariv1.GrammaticalForm{
-				{Word: "λόγον", Rule: "noun - sing - masc - acc"},
-				{Word: "λόγον", Rule: "duplicate"},
-			}},
-		},
-	}
-	service := ScholarServiceImpl{Aggregator: &fakeAggregatorResolver{entry: entry}}
-
-	resolvedEntry, words, conjugations := service.resolveForms(context.Background(), "λόγος")
-
-	assert.Equal(t, entry, resolvedEntry)
+func TestAnalyzeWordsDeduplicatesWordsAndAddsMissingRoot(t *testing.T) {
+	words := analyzeWords("λόγος", []*v1.Conjugation{
+		{Word: "λόγον", Rule: "noun - sing - masc - acc"},
+		{Word: "λόγον", Rule: "duplicate"},
+	})
 	assert.ElementsMatch(t, []string{"λόγον", "λόγος"}, words)
-	assert.Len(t, conjugations, 2)
 }
 
 func TestQueryTextsReturnsHitsTotal(t *testing.T) {
-	service := newTestScholarService(t, newRootWordEntry(), directTextHit)
+	service := newTestScholarService(t, directTextHit)
 
 	response, hits, err := service.queryTexts(context.Background(), createGreekTextQuery([]string{"λόγος"}, 5))
 
@@ -403,20 +370,19 @@ func TestSanitizeLimit(t *testing.T) {
 	assert.Equal(t, uint32(20), sanitizeLimit(200))
 }
 
-func newRootWordEntry() *ariv1.RootWordResponse {
-	return &ariv1.RootWordResponse{
-		RootWord:     "λόγος",
-		PartOfSpeech: ariv1.PartOfSpeech_NOUN,
-		Categories: []*ariv1.GrammaticalCategory{
-			{Forms: []*ariv1.GrammaticalForm{
-				{Word: "λόγος", Rule: "noun - sing - masc - nom"},
-				{Word: "λόγον", Rule: "noun - sing - masc - acc"},
-			}},
+func newAnalyzeRequest() *v1.AnalyzeRequest {
+	return &v1.AnalyzeRequest{
+		Rootword:     "λόγος",
+		Limit:        5,
+		PartOfSpeech: "NOUN",
+		Conjugations: []*v1.Conjugation{
+			{Word: "λόγος", Rule: "noun - sing - masc - nom"},
+			{Word: "λόγον", Rule: "noun - sing - masc - acc"},
 		},
 	}
 }
 
-func newTestScholarService(t *testing.T, entry *ariv1.RootWordResponse, fixtures ...string) *ScholarServiceImpl {
+func newTestScholarService(t *testing.T, fixtures ...string) *ScholarServiceImpl {
 	t.Helper()
 
 	rawFixtures := make([][]byte, 0, len(fixtures))
@@ -428,8 +394,7 @@ func newTestScholarService(t *testing.T, entry *ariv1.RootWordResponse, fixtures
 	assert.Nil(t, err)
 
 	return &ScholarServiceImpl{
-		Elastic:    mockElasticClient,
-		Index:      testScholarIndex,
-		Aggregator: &fakeAggregatorResolver{entry: entry},
+		Elastic: mockElasticClient,
+		Index:   testScholarIndex,
 	}
 }

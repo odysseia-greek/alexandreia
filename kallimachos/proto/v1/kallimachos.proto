@@ -29,6 +29,9 @@ message DatabaseHealth {
 message AnalyzeRequest {
   string rootword = 1;
   uint32 limit = 2;
+  // Lexical metadata prepared by the orchestrating service.
+  string part_of_speech = 3;
+  repeated Conjugation conjugations = 4;
 }
 
 message FindTextRequest {

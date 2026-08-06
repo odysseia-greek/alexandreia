@@ -194,9 +194,12 @@ func (x *DatabaseHealth) GetServerVersion() string {
 }
 
 type AnalyzeRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Rootword      string                 `protobuf:"bytes,1,opt,name=rootword,proto3" json:"rootword,omitempty"`
-	Limit         uint32                 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Rootword string                 `protobuf:"bytes,1,opt,name=rootword,proto3" json:"rootword,omitempty"`
+	Limit    uint32                 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
+	// Lexical metadata prepared by the orchestrating service.
+	PartOfSpeech  string         `protobuf:"bytes,3,opt,name=part_of_speech,json=partOfSpeech,proto3" json:"part_of_speech,omitempty"`
+	Conjugations  []*Conjugation `protobuf:"bytes,4,rep,name=conjugations,proto3" json:"conjugations,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -243,6 +246,20 @@ func (x *AnalyzeRequest) GetLimit() uint32 {
 		return x.Limit
 	}
 	return 0
+}
+
+func (x *AnalyzeRequest) GetPartOfSpeech() string {
+	if x != nil {
+		return x.PartOfSpeech
+	}
+	return ""
+}
+
+func (x *AnalyzeRequest) GetConjugations() []*Conjugation {
+	if x != nil {
+		return x.Conjugations
+	}
+	return nil
 }
 
 type FindTextRequest struct {
@@ -705,10 +722,12 @@ const file_proto_v1_kallimachos_proto_rawDesc = "" +
 	"\fcluster_name\x18\x02 \x01(\tR\vclusterName\x12\x1f\n" +
 	"\vserver_name\x18\x03 \x01(\tR\n" +
 	"serverName\x12%\n" +
-	"\x0eserver_version\x18\x04 \x01(\tR\rserverVersion\"B\n" +
+	"\x0eserver_version\x18\x04 \x01(\tR\rserverVersion\"\xa9\x01\n" +
 	"\x0eAnalyzeRequest\x12\x1a\n" +
 	"\brootword\x18\x01 \x01(\tR\brootword\x12\x14\n" +
-	"\x05limit\x18\x02 \x01(\rR\x05limit\";\n" +
+	"\x05limit\x18\x02 \x01(\rR\x05limit\x12$\n" +
+	"\x0epart_of_speech\x18\x03 \x01(\tR\fpartOfSpeech\x12?\n" +
+	"\fconjugations\x18\x04 \x03(\v2\x1b.kallimachos.v1.ConjugationR\fconjugations\";\n" +
 	"\x0fFindTextRequest\x12\x12\n" +
 	"\x04text\x18\x01 \x01(\tR\x04text\x12\x14\n" +
 	"\x05limit\x18\x02 \x01(\rR\x05limit\"\xb2\x01\n" +
@@ -775,23 +794,24 @@ var file_proto_v1_kallimachos_proto_goTypes = []any{
 }
 var file_proto_v1_kallimachos_proto_depIdxs = []int32{
 	2,  // 0: kallimachos.v1.HealthResponse.database_health:type_name -> kallimachos.v1.DatabaseHealth
-	8,  // 1: kallimachos.v1.FindTextResponse.matches:type_name -> kallimachos.v1.AnalyzeResult
-	7,  // 2: kallimachos.v1.AnalyzeResponse.conjugations:type_name -> kallimachos.v1.Conjugation
-	9,  // 3: kallimachos.v1.AnalyzeResponse.direct_result:type_name -> kallimachos.v1.DirectResult
-	8,  // 4: kallimachos.v1.AnalyzeResponse.results:type_name -> kallimachos.v1.AnalyzeResult
-	10, // 5: kallimachos.v1.AnalyzeResult.text:type_name -> kallimachos.v1.Rhema
-	8,  // 6: kallimachos.v1.DirectResult.texts:type_name -> kallimachos.v1.AnalyzeResult
-	3,  // 7: kallimachos.v1.KallimachosService.Analyze:input_type -> kallimachos.v1.AnalyzeRequest
-	4,  // 8: kallimachos.v1.KallimachosService.FindText:input_type -> kallimachos.v1.FindTextRequest
-	0,  // 9: kallimachos.v1.KallimachosService.Health:input_type -> kallimachos.v1.HealthRequest
-	6,  // 10: kallimachos.v1.KallimachosService.Analyze:output_type -> kallimachos.v1.AnalyzeResponse
-	5,  // 11: kallimachos.v1.KallimachosService.FindText:output_type -> kallimachos.v1.FindTextResponse
-	1,  // 12: kallimachos.v1.KallimachosService.Health:output_type -> kallimachos.v1.HealthResponse
-	10, // [10:13] is the sub-list for method output_type
-	7,  // [7:10] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	7,  // 1: kallimachos.v1.AnalyzeRequest.conjugations:type_name -> kallimachos.v1.Conjugation
+	8,  // 2: kallimachos.v1.FindTextResponse.matches:type_name -> kallimachos.v1.AnalyzeResult
+	7,  // 3: kallimachos.v1.AnalyzeResponse.conjugations:type_name -> kallimachos.v1.Conjugation
+	9,  // 4: kallimachos.v1.AnalyzeResponse.direct_result:type_name -> kallimachos.v1.DirectResult
+	8,  // 5: kallimachos.v1.AnalyzeResponse.results:type_name -> kallimachos.v1.AnalyzeResult
+	10, // 6: kallimachos.v1.AnalyzeResult.text:type_name -> kallimachos.v1.Rhema
+	8,  // 7: kallimachos.v1.DirectResult.texts:type_name -> kallimachos.v1.AnalyzeResult
+	3,  // 8: kallimachos.v1.KallimachosService.Analyze:input_type -> kallimachos.v1.AnalyzeRequest
+	4,  // 9: kallimachos.v1.KallimachosService.FindText:input_type -> kallimachos.v1.FindTextRequest
+	0,  // 10: kallimachos.v1.KallimachosService.Health:input_type -> kallimachos.v1.HealthRequest
+	6,  // 11: kallimachos.v1.KallimachosService.Analyze:output_type -> kallimachos.v1.AnalyzeResponse
+	5,  // 12: kallimachos.v1.KallimachosService.FindText:output_type -> kallimachos.v1.FindTextResponse
+	1,  // 13: kallimachos.v1.KallimachosService.Health:output_type -> kallimachos.v1.HealthResponse
+	11, // [11:14] is the sub-list for method output_type
+	8,  // [8:11] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_proto_v1_kallimachos_proto_init() }

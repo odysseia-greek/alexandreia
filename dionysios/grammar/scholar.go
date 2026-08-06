@@ -12,6 +12,7 @@ import (
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/models"
 	"github.com/odysseia-greek/agora/plato/service"
+	pba "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	v1 "github.com/odysseia-greek/alexandreia/dionysios/gen/go/v1"
 	sv1 "github.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1"
 	"google.golang.org/grpc/codes"
@@ -71,10 +72,7 @@ func (d *DionysosHandler) Research(ctx context.Context, request *v1.ResearchRequ
 	outCtx, cancel := d.outgoingCtx(ctx)
 	defer cancel()
 
-	scholarRequest := &sv1.AnalyzeRequest{
-		Rootword: rootword,
-		Limit:    limit,
-	}
+	scholarRequest := d.scholarAnalyzeRequest(outCtx, rootword, limit)
 	results, err := d.ScholarService.Client.Analyze(outCtx, scholarRequest)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "research failed: %v", err)
@@ -87,6 +85,34 @@ func (d *DionysosHandler) Research(ctx context.Context, request *v1.ResearchRequ
 		Conjugations: mapResearchConjugations(results.Conjugations),
 		Results:      mappedResults,
 	}, nil
+}
+
+func (d *DionysosHandler) scholarAnalyzeRequest(ctx context.Context, rootword string, limit uint32) *sv1.AnalyzeRequest {
+	request := &sv1.AnalyzeRequest{Rootword: rootword, Limit: limit}
+	if d.AggregatorClient == nil {
+		return request
+	}
+
+	entry, err := d.AggregatorClient.RetrieveEntry(ctx, &pba.AggregatorRequest{RootWord: rootword})
+	if err != nil {
+		logging.Error(fmt.Sprintf("failed to retrieve forms for %s: %s", rootword, err.Error()))
+		return request
+	}
+	if entry == nil {
+		return request
+	}
+
+	request.PartOfSpeech = entry.GetPartOfSpeech().String()
+	for _, category := range entry.GetCategories() {
+		for _, form := range category.GetForms() {
+			request.Conjugations = append(request.Conjugations, &sv1.Conjugation{
+				Word: form.GetWord(),
+				Rule: form.GetRule(),
+			})
+		}
+	}
+
+	return request
 }
 
 func limitResearchResults(results []*v1.AnalyzeResult, limit uint32) []*v1.AnalyzeResult {

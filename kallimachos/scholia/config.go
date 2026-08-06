@@ -12,7 +12,6 @@ import (
 	"github.com/odysseia-greek/agora/plato/config"
 	"github.com/odysseia-greek/agora/plato/logging"
 	"github.com/odysseia-greek/agora/plato/service"
-	aristarchos "github.com/odysseia-greek/alexandreia/aristarchos/scholar"
 	aristophanes "github.com/odysseia-greek/attike/aristophanes/comedy"
 	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"github.com/odysseia-greek/delphi/aristides/diplomat"
@@ -132,25 +131,12 @@ func CreateNewConfig(ctx context.Context) (*ScholarServiceImpl, error) {
 
 	index := config.StringFromEnv(config.EnvIndex, defaultIndex)
 
-	aggregatorAddress := config.StringFromEnv(config.EnvAggregatorAddress, config.DefaultAggregatorAddress)
-	aggregator, err := aristarchos.NewClientAggregator(aggregatorAddress)
-	if err != nil {
-		return nil, err
-	}
-
-	healthy = aggregator.WaitForHealthyState()
-	if !healthy {
-		logging.Info("aggregator service not ready - restarting seems the only option")
-		os.Exit(1)
-	}
-
 	version := os.Getenv(config.EnvVersion)
 
 	return &ScholarServiceImpl{
-		Index:      index,
-		Elastic:    elastic,
-		Aggregator: aggregator,
-		Streamer:   streamer,
-		Version:    version,
+		Index:    index,
+		Elastic:  elastic,
+		Streamer: streamer,
+		Version:  version,
 	}, nil
 }

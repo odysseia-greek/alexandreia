@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/odysseia-greek/agora/aristoteles"
-	ariv1 "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	v1 "github.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1"
 	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"google.golang.org/grpc"
@@ -19,20 +18,15 @@ type ScholarService interface {
 	FindText(ctx context.Context, request *v1.FindTextRequest) (*v1.FindTextResponse, error)
 }
 
-type AggregatorResolver interface {
-	RetrieveEntry(ctx context.Context, request *ariv1.AggregatorRequest) (*ariv1.RootWordResponse, error)
-}
-
 const (
 	DEFAULTADDRESS = "localhost:50060"
 )
 
 type ScholarServiceImpl struct {
-	Elastic    aristoteles.Client
-	Index      string
-	Version    string
-	Streamer   arv1.TraceService_ChorusClient
-	Aggregator AggregatorResolver
+	Elastic  aristoteles.Client
+	Index    string
+	Version  string
+	Streamer arv1.TraceService_ChorusClient
 	v1.UnimplementedKallimachosServiceServer
 }
 

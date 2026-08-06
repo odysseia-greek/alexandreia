@@ -387,10 +387,7 @@ func (d *DionysosHandler) researchWord(w http.ResponseWriter, req *http.Request)
 	md := metadata.New(map[string]string{service.HeaderKey: requestId})
 	ctx = metadata.NewOutgoingContext(ctx, md)
 
-	request := &sv1.AnalyzeRequest{
-		Rootword: analyzeTextRequest.Rootword,
-		Limit:    5,
-	}
+	request := d.scholarAnalyzeRequest(ctx, analyzeTextRequest.Rootword, 5)
 	results, err := d.ScholarService.Client.Analyze(ctx, request)
 	if err != nil {
 		middleware.ResponseWithCustomCode(w, http.StatusBadRequest, "something went wrong")

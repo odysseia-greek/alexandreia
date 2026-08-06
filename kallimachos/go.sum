@@ -71,8 +71,6 @@ github.com/odysseia-greek/agora/eupalinos v0.3.1 h1:fAnB9oeny6D02WJk1ktpLG6BxyOl
 github.com/odysseia-greek/agora/eupalinos v0.3.1/go.mod h1:4ymuUtZRDXlZpbiNBWFfQ6j+b9AnD/Dud3SMg8DMZ0o=
 github.com/odysseia-greek/agora/plato v0.2.16 h1:FUb51WxE1NThsj9DUroaCIx53VVLaOdL0QGxWg6Jgto=
 github.com/odysseia-greek/agora/plato v0.2.16/go.mod h1:8Y89JmcuT7XH9OHi9aIxTu8BXZNV/C4QbWdlfWuzm0E=
-github.com/odysseia-greek/alexandreia/aristarchos v0.0.7 h1:CI41hIzetUl15b6FXE7FUV5fa3W4pO48kh3+oFxPwCU=
-github.com/odysseia-greek/alexandreia/aristarchos v0.0.7/go.mod h1:kqQnJJodQ8XhZtLhdqGyuHI2wXa2mWB+x5KjeWgKnwo=
 github.com/odysseia-greek/attike/aristophanes v0.8.0 h1:PsLWTLWXXxUbKP/uB4ysaQnxmajFQrO+gcvVp0qV9Wg=
 github.com/odysseia-greek/attike/aristophanes v0.8.0/go.mod h1:vTOK5FnkKpD9qRUiX8i2O8DqlbwLZJwmtHKfwzY+9sg=
 github.com/odysseia-greek/delphi/aristides v0.0.1 h1:cr1bWw3po+WLNIfrg/CK2ey2uVk2RZLD767zwSdktWk=
