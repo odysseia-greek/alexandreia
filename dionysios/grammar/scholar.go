@@ -15,6 +15,8 @@ import (
 	pba "github.com/odysseia-greek/alexandreia/aristarchos/gen/go/v1"
 	v1 "github.com/odysseia-greek/alexandreia/dionysios/gen/go/v1"
 	sv1 "github.com/odysseia-greek/alexandreia/kallimachos/gen/go/v1"
+	"github.com/odysseia-greek/attike/aristophanes/comedy"
+	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
@@ -72,8 +74,18 @@ func (d *DionysosHandler) Research(ctx context.Context, request *v1.ResearchRequ
 	outCtx, cancel := d.outgoingCtx(ctx)
 	defer cancel()
 
+	dionysiosSpan := &arv1.ObserveRequest{
+		Kind: &arv1.ObserveRequest_Action{Action: &arv1.ObserveAction{
+			Action: "researchText",
+			Status: fmt.Sprintf("querying Kallimachos for rootword: %s", rootword),
+		}},
+	}
+	outCtx, finishSpan := comedy.ServiceToServiceSpanWithCtx(outCtx, dionysiosSpan, d.Streamer)
+
 	scholarRequest := d.scholarAnalyzeRequest(outCtx, rootword, limit)
+	started := time.Now()
 	results, err := d.ScholarService.Client.Analyze(outCtx, scholarRequest)
+	finishSpan(err, time.Since(started).Milliseconds())
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "research failed: %v", err)
 	}

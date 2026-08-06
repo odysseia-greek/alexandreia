@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 	"unicode"
 	"unicode/utf8"
 
@@ -11,6 +12,8 @@ import (
 	"github.com/odysseia-greek/agora/plato/models"
 	erv1 "github.com/odysseia-greek/alexandreia/eratosthenes/gen/go/v1"
 	"github.com/odysseia-greek/alexandreia/eratosthenes/library"
+	"github.com/odysseia-greek/attike/aristophanes/comedy"
+	arv1 "github.com/odysseia-greek/attike/aristophanes/gen/go/v1"
 	"golang.org/x/text/runes"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
@@ -28,17 +31,27 @@ func (d *DionysosHandler) queryLibrary(ctx context.Context, term string) (*erv1.
 	defer cancel()
 	term = normalizeDictionaryTerm(term)
 
+	eratosthenesSpan := &arv1.ObserveRequest{
+		Kind: &arv1.ObserveRequest_Action{Action: &arv1.ObserveAction{
+			Action: "resolveDictionaryTerm",
+			Status: fmt.Sprintf("querying Eratosthenes for term: %s", term),
+		}},
+	}
+	outCtx, finishSpan := comedy.ServiceToServiceSpanWithCtx(outCtx, eratosthenesSpan, d.Streamer)
+
 	var grpcResponse *erv1.ResolveResponse
 
 	request := &erv1.ResolveRequest{
 		Term:  term,
 		Limit: 5,
 	}
+	started := time.Now()
 	err := d.LibraryService.CallWithReconnect(func(client *library.LibraryClient) error {
 		var innerErr error
 		grpcResponse, innerErr = client.Resolve(outCtx, request)
 		return innerErr
 	})
+	finishSpan(err, time.Since(started).Milliseconds())
 	if err != nil {
 		return nil, err
 	}
