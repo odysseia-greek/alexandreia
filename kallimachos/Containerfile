@@ -1,5 +1,5 @@
 # Base build
-FROM golang:1.26-alpine as base
+FROM golang:1.26-alpine AS base
 
 ARG project_name
 ARG TARGETOS
@@ -14,14 +14,11 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 # Build binary with Go
-FROM base as builder
+FROM base AS builder
 ENV CGO_ENABLED=0
 
 ARG project_name
 ENV project_name=${project_name}
-
-RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o /app/${project_name}
-
 
 RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o /app/${project_name}
 # Dev image
@@ -41,7 +38,7 @@ USER 65532:65532
 ENTRYPOINT ["/app/kallimachos"]
 
 # Production build
-FROM alpine:3.24.0 as prod
+FROM alpine:3.24.0 AS prod
 WORKDIR /app
 
 ARG project_name
@@ -49,4 +46,4 @@ ENV project_name=${project_name}
 
 COPY --from=builder /app/${project_name} .
 ENV TMPDIR=/tmp
-ENTRYPOINT [ "sh", "-c", "/app/${project_name}" ]
+ENTRYPOINT ["sh", "-c", "/app/${project_name}"]

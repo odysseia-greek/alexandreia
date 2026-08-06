@@ -46,4 +46,4 @@ ENV project_name=${project_name}
 
 COPY --from=builder /app/${project_name} .
 ENV TMPDIR=/tmp
-ENTRYPOINT [ "sh", "-c", "/app/${project_name}" ]
+ENTRYPOINT ["sh", "-c", "/app/${project_name}"]
