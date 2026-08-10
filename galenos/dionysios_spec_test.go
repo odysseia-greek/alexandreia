@@ -98,7 +98,9 @@ var _ = Describe("Dionysios gRPC endpoints", func() {
 		Expect(response.GetOriginalText()).To(Equal(herodotusReferenceText))
 		Expect(response.GetTokens()).To(HaveLen(15))
 		Expect(response.GetLiteralTranslation()).NotTo(BeEmpty())
-		Expect(resolvedTokenCount(response.GetTokens())).To(BeNumerically(">=", 12))
+		// Dictionary snapshots can differ after a reset, so allow a small number of
+		// words to be unresolved while still requiring useful passage-wide coverage.
+		Expect(resolvedTokenCount(response.GetTokens())).To(BeNumerically(">=", 10))
 
 		assertSingleTokenResult(response.GetTokens(), "μεγάλα", "μέγας", "adjective - plural - neut - nom/voc/acc")
 		assertSingleTokenResult(response.GetTokens(), "θωμαστά", "θαυμαστός", "adjective - plural - neut - nom/voc/acc (ionic)")
