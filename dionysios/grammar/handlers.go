@@ -171,8 +171,7 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 		})
 	}
 	if cacheItem != nil {
-		var cache models.DeclensionTranslationResults
-		err := json.Unmarshal(cacheItem, &cache)
+		cache, cachedAudit, err := decodeGrammarCacheEntry(cacheItem)
 		if err != nil {
 			auditLog.Add(GrammarAuditEvent{
 				Step:   "cache.unmarshal",
@@ -211,6 +210,7 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 			middleware.ResponseWithJson(w, e)
 			return
 		}
+		auditLog.AddCachedHistory(cachedAudit)
 		auditLog.Add(GrammarAuditEvent{
 			Step:        "cache.return",
 			Status:      "ok",
@@ -218,7 +218,7 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 			Source:      "cache",
 			ResultCount: len(cache.Results),
 		})
-		err = d.sendWordsToAggregator(ctx, &cache, requestId)
+		err = d.sendWordsToAggregator(ctx, cache, requestId)
 		if err != nil {
 			auditLog.Add(GrammarAuditEvent{
 				Step:   "aggregator.send",
@@ -237,7 +237,7 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 			})
 		}
 		auditLog.Complete("success", "cache", "cache hit satisfied request")
-		writeResults(&cache)
+		writeResults(cache)
 		return
 	}
 
@@ -293,38 +293,8 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 		})
 	}
 
-	stringifiedDeclension, _ := json.Marshal(declensions)
-	ttl := time.Hour
-	if d.Cache == nil {
-		auditLog.Add(GrammarAuditEvent{
-			Step:   "cache.write",
-			Status: "skipped",
-			Reason: "cache client is not configured",
-			Source: "cache",
-		})
-	} else {
-		err = d.Cache.SetWithTTL(grammarCacheKey(queryWord), string(stringifiedDeclension), ttl)
-
-		if err != nil {
-			auditLog.Add(GrammarAuditEvent{
-				Step:   "cache.write",
-				Status: "failed",
-				Reason: err.Error(),
-				Source: "cache",
-			})
-			logging.Error(fmt.Sprintf("error setting cache: %s", err.Error()))
-		} else {
-			auditLog.Add(GrammarAuditEvent{
-				Step:   "cache.write",
-				Status: "ok",
-				Reason: "stored generated results in cache",
-				Source: "cache",
-				Details: []string{
-					fmt.Sprintf("ttl=%s", ttl),
-				},
-			})
-		}
-	}
+	auditLog.Complete("success", "rule-engine", "rule engine generated the final result set")
+	d.cacheGrammarResults(queryWord, declensions, auditLog)
 
 	if traceCall {
 		// this span is meant to give insight into the working of StartFindingRules and should be expanded
@@ -350,7 +320,6 @@ func (d *DionysosHandler) checkGrammar(w http.ResponseWriter, req *http.Request)
 		}
 	}
 
-	auditLog.Complete("success", "rule-engine", "rule engine generated the final result set")
 	writeResults(declensions)
 }
 

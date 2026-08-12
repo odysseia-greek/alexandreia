@@ -40,6 +40,14 @@ type GrammarAuditResponse struct {
 	Audit   GrammarAuditLog `json:"audit"`
 }
 
+// GrammarCacheEntry keeps the result and the decision trail that produced it.
+// Audit is optional so cache entries written before the envelope was introduced
+// remain readable (their top-level results field has the same shape).
+type GrammarCacheEntry struct {
+	Results []models.Result  `json:"results"`
+	Audit   *GrammarAuditLog `json:"audit,omitempty"`
+}
+
 func newGrammarAuditLog(requestID, word string) *GrammarAuditLog {
 	return &GrammarAuditLog{
 		RequestID: requestID,
@@ -85,6 +93,25 @@ func (g *GrammarAuditLog) Emit() {
 	}
 
 	logging.Info(string(payload))
+}
+
+func (g *GrammarAuditLog) AddCachedHistory(cached *GrammarAuditLog) {
+	if g == nil || cached == nil {
+		return
+	}
+
+	g.Add(GrammarAuditEvent{
+		Step:   "cache.history",
+		Status: "ok",
+		Reason: "restored the audit history that produced the cached result",
+		Source: "cache",
+		Details: []string{
+			"original_request_id=" + cached.RequestID,
+			"original_outcome=" + cached.Outcome,
+			"original_decision_source=" + cached.DecisionSource,
+		},
+	})
+	g.Events = append(g.Events, cached.Events...)
 }
 
 func auditRequested(queryValue string) bool {
