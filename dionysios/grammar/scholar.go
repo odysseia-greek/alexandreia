@@ -154,8 +154,8 @@ func (d *DionysosHandler) checkGrammarResults(ctx context.Context, word, request
 			},
 		})
 		if cacheItem != nil {
-			var cache models.DeclensionTranslationResults
-			if err := json.Unmarshal(cacheItem, &cache); err != nil {
+			cache, cachedAudit, err := decodeGrammarCacheEntry(cacheItem)
+			if err != nil {
 				auditLog.Add(GrammarAuditEvent{
 					Step:   "cache.unmarshal",
 					Status: "failed",
@@ -164,6 +164,7 @@ func (d *DionysosHandler) checkGrammarResults(ctx context.Context, word, request
 				})
 				return nil, status.Errorf(codes.Internal, "cached payload could not be parsed: %v", err)
 			}
+			auditLog.AddCachedHistory(cachedAudit)
 			auditLog.Add(GrammarAuditEvent{
 				Step:        "cache.return",
 				Status:      "ok",
@@ -171,9 +172,9 @@ func (d *DionysosHandler) checkGrammarResults(ctx context.Context, word, request
 				Source:      "cache",
 				ResultCount: len(cache.Results),
 			})
-			_ = d.sendWordsToAggregator(ctx, &cache, requestID)
+			_ = d.sendWordsToAggregator(ctx, cache, requestID)
 			auditLog.Complete("success", "cache", "cache hit satisfied request")
-			return &cache, nil
+			return cache, nil
 		}
 	}
 
@@ -217,8 +218,8 @@ func (d *DionysosHandler) checkGrammarResults(ctx context.Context, word, request
 		})
 	}
 
-	d.cacheGrammarResults(word, declensions, auditLog)
 	auditLog.Complete("success", "rule-engine", "rule engine generated the final result set")
+	d.cacheGrammarResults(word, declensions, auditLog)
 
 	return declensions, nil
 }
@@ -234,38 +235,49 @@ func (d *DionysosHandler) cacheGrammarResults(word string, results *models.Decle
 		return
 	}
 
-	stringifiedDeclension, err := json.Marshal(results)
+	auditLog.Add(GrammarAuditEvent{
+		Step:   "cache.write",
+		Status: "ok",
+		Reason: "stored generated results and audit history in cache",
+		Source: "cache",
+		Details: []string{
+			fmt.Sprintf("ttl=%s", time.Hour),
+		},
+	})
+	auditLog.Complete(auditLog.Outcome, auditLog.DecisionSource, auditLog.DecisionReason)
+
+	entry := GrammarCacheEntry{Results: results.Results, Audit: auditLog}
+	stringifiedDeclension, err := json.Marshal(entry)
 	if err != nil {
-		auditLog.Add(GrammarAuditEvent{
-			Step:   "cache.write",
-			Status: "failed",
-			Reason: err.Error(),
-			Source: "cache",
-		})
+		markLastCacheWriteFailed(auditLog, err)
 		return
 	}
 
 	ttl := time.Hour
 	if err := d.Cache.SetWithTTL(grammarCacheKey(word), string(stringifiedDeclension), ttl); err != nil {
-		auditLog.Add(GrammarAuditEvent{
-			Step:   "cache.write",
-			Status: "failed",
-			Reason: err.Error(),
-			Source: "cache",
-		})
+		markLastCacheWriteFailed(auditLog, err)
 		logging.Error(fmt.Sprintf("error setting cache: %s", err.Error()))
 		return
 	}
+}
 
-	auditLog.Add(GrammarAuditEvent{
-		Step:   "cache.write",
-		Status: "ok",
-		Reason: "stored generated results in cache",
-		Source: "cache",
-		Details: []string{
-			fmt.Sprintf("ttl=%s", ttl),
-		},
-	})
+func decodeGrammarCacheEntry(payload []byte) (*models.DeclensionTranslationResults, *GrammarAuditLog, error) {
+	var entry GrammarCacheEntry
+	if err := json.Unmarshal(payload, &entry); err != nil {
+		return nil, nil, err
+	}
+	return &models.DeclensionTranslationResults{Results: entry.Results}, entry.Audit, nil
+}
+
+func markLastCacheWriteFailed(auditLog *GrammarAuditLog, err error) {
+	if auditLog == nil || len(auditLog.Events) == 0 {
+		return
+	}
+	event := &auditLog.Events[len(auditLog.Events)-1]
+	if event.Step == "cache.write" {
+		event.Status = "failed"
+		event.Reason = err.Error()
+	}
 }
 
 func grammarCacheKey(word string) string {
